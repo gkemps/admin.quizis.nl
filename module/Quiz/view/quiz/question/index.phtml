@@ -1,0 +1,133 @@
+<?php
+/** @var \Quiz\Entity\User $user */
+/** @var \Quiz\Entity\Question[] $questions */
+/** @var \Quiz\Entity\Quiz[] $futureQuizzes  */
+?>
+
+<div class="row">
+<!--    <div class="input-group col-md-3 pull-left">-->
+<!--        <input type="text" class="form-control">-->
+<!--        <span class="input-group-btn">-->
+<!--            <input type="submit" class="btn btn-default" value="zoeken"/>-->
+<!--        </span>-->
+<!--    </div>-->
+    <div class="pull-right">
+        <a href="<?php echo $this->url('question/form'); ?>" style="z-index: 1000; position: relative">
+            <button type="button" class="btn btn-primary" >Vraag toevoegen</button>
+        </a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <tbody>
+                <?php foreach ($questions as $question): ?>
+                <tr>
+                    <td>
+                        <span class="<?php echo $question->getCategory()->getIcon(); ?>"></span>
+                    </td>
+                    <td>
+                        <div class="row">
+                            <a href="<?php echo $this->url('question/detail', ['questionId' => $question->getId()]); ?>">
+                                <?php echo $question->getQuestion(); ?>
+                            </a>
+                        </div>
+                        <div class="row">
+                            <?php foreach ($question->getQuestionTags() as $questionTag): ?>
+                                <div class="badge">
+                                    <?php echo $questionTag->getTag()->getName(); ?>
+                                </div>
+                            <?php endforeach ?>
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <?php if ($question->hasImage()): ?>
+                            <span class="label label-primary label-as-badge">
+                                <i class="fa fa-image"></i>
+                            </span>
+                        <?php endif ?>
+<!--                        <span class="label label-primary label-as-badge">-->
+<!--                            <i class="fa fa-music"></i>-->
+<!--                        </span>-->
+                        <?php if (!$question->hasSource()): ?>
+                            <span class="label label-danger label-as-badge" title="Bron ontbreekt">
+                                <i class="fa fa-unlink"></i>
+                            </span>
+                        <?php endif ?>
+                        <?php if ($question->getQuestionLikes()->count() > 0): ?>
+                            <span class="label label-success label-as-badge" title="Aantal likes">
+                                <?php echo $question->getQuestionLikes()->count(); ?>
+                                <i class="fa fa-thumbs-up"></i>
+                            </span>
+                        <?php endif ?>
+                        <?php if ($question->getQuizRoundQuestions()->count() > 0): ?>
+                            <span class="label label-warning label-as-badge" title="Aantal keer gesteld">
+                                <?php echo $question->getQuizRoundQuestions()->count(); ?>
+                                <i class="fa fa-microphone"></i>
+                            </span>
+                        <?php endif ?>
+<!--                        <span class="label label-info label-as-badge">-->
+<!--                            3-->
+<!--                            <i class="fa fa-tags"></i>-->
+<!--                        </span>-->
+                    </td>
+                    <td>
+                        <!-- Edit button -->
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <span class="fa fa-cogs"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right" role="menu">
+                                <li>
+                                    <a href="<?php echo $this->url('question/form', [], ['query' => ['id' => $question->getId()]]); ?>">
+                                        <span class="fa fa-pencil"></span>
+                                        Aanpassen
+                                    </a>
+                                </li>
+                                <?php if (!$question->userHasLiked($user)): ?>
+                                    <li>
+                                        <a href="<?php echo $this->url('question/like', ['questionId' => $question->getId()]); ?>">
+                                            <span class="fa fa-thumbs-up"></span>
+                                            Liken
+                                        </a>
+                                    </li>
+                                <?php else: ?>
+                                    <li>
+                                        <a href="<?php echo $this->url('question/unlike', ['questionId' => $question->getId()]); ?>">
+                                            <span class="fa fa-thumbs-down"></span>
+                                            Unliken
+                                        </a>
+                                    </li>
+                                <?php endif ?>
+                                <?php foreach ($futureQuizzes as $quiz): ?>
+                                    <?php if (!$quiz->containsQuestion($question)): ?>
+                                        <li class="divider" />
+                                        <?php foreach ($quiz->getQuizRounds() as $quizRound): ?>
+                                            <?php if (!$quizRound->isFull()): ?>
+                                                <li>
+                                                    <a href="<?php echo $this->url('question/add-to-quiz-round',
+                                                                                   [
+                                                                                       'questionId' => $question->getId(),
+                                                                                       'quizRoundId' => $quizRound->getId()
+                                                                                   ]); ?>">
+                                                        <span class="fa fa-plus"></span>
+                                                        <?php echo $quiz->getName().
+                                                            " - Ronde ".
+                                                            $quizRound->getNumber().
+                                                            " (".$quizRound->getPercentageFull()."%)"; ?>
+                                                    </a>
+                                                </li>
+                                            <?php endif ?>
+                                        <?php endforeach ?>
+                                    <?php endif ?>
+                                <?php endforeach ?>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+            </tbody>
+        </table>
+    </div>
+</div>

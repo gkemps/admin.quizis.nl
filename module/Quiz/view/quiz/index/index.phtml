@@ -1,0 +1,38 @@
+<?php
+    /** @var \Quiz\Entity\Category[] $categories */
+
+    $labels = [];
+    $data = [];
+    foreach ($categories as $category) {
+        $labels[] = $category->getName();
+        $data[] = count($category->getQuestions());
+    }
+?>
+
+<h1>Vragen per categorie</h1>
+
+<canvas id="myChart" width="800" height="400"></canvas>
+
+<script type="text/javascript">
+    var data = {
+        labels: [<?php echo '"'.implode('","', $labels).'"'; ?>],
+        datasets: [
+            {
+                label: "My First dataset",
+                fillColor: "rgba(120,120,120,0.5)",
+                strokeColor: "rgba(120,120,120,0.8)",
+                highlightFill: "rgba(120,120,120,0.75)",
+                highlightStroke: "rgba(120,120,120,1)",
+                data: [<?php echo implode(',', $data); ?>]
+            }
+        ]
+    };
+
+    window.onload = function(){
+        var ctx = document.getElementById("myChart").getContext("2d");
+        window.myLine = new Chart(ctx).Bar(data, {
+            barShowStroke: false
+        });
+    }
+
+</script>

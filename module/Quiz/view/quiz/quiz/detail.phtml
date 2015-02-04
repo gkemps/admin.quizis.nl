@@ -1,0 +1,43 @@
+<?php
+/** @var \Quiz\Entity\Quiz $quiz */
+?>
+
+<h1><?php echo $quiz->getName(); ?></h1>
+<div>
+    <?php foreach ($quiz->getQuizRounds() as $quizRound): ?>
+        <h2>
+            Ronde <?php echo $quizRound->getNumber(); ?>
+            <?php if ($quizRound->getTheme() != ""): ?>
+             (<?php echo $quizRound->getTheme(); ?>)
+            <?php endif ?>
+        </h2>
+        <ol class="list-group sortable">
+            <?php foreach ($quizRound->getQuizRoundQuestions() as $quizRoundQuestion): ?>
+                    <li class="list-group-item" data-quizquestionid="<?php echo $quizRoundQuestion->getId(); ?>">
+                        <span class="<?php echo $quizRoundQuestion->getQuestion()->getCategory()->getIcon(); ?>"></span>
+                        <?php echo $quizRoundQuestion->getQuestion()->getQuestion(); ?>
+                        <?php if ($quizRoundQuestion->getQuestion()->hasImage()): ?>
+                            <span class="label label-primary label-as-badge">
+                                    <i class="fa fa-image"></i>
+                            </span>
+                        <?php endif ?>
+                    </li>
+            <?php endforeach ?>
+        </ol>
+    <?php endforeach ?>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".sortable").sortable({
+            update:  function (event, ui) {
+                var id = $(ui.item).data('quizquestionid');
+                var newPos = ui.item.index() + 1;
+                alert(newPos);
+                $.ajax({
+                    url:"/reset-quiz-round-question-number/" + id + "/" + newPos
+                });
+            }
+        });
+    });
+</script>

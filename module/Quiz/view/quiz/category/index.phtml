@@ -1,0 +1,33 @@
+<?php
+/** @var \Quiz\Entity\Category[] $categories */
+?>
+<div class="row">
+    <div class="col-md-6">
+        <table class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th class="col-md-11">Naam</th>
+                <th>#vragen</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($categories as $category): ?>
+                <tr>
+                    <td>
+                        <span class="<?php echo $category->getIcon(); ?>"></span>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url('question/cats', ['catId' => $category->getId()]); ?>">
+                            <?php echo $category->getName(); ?>
+                        </a>
+                    </td>
+                    <td>
+                        <?php echo count($category->getQuestions()); ?>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+            </tbody>
+        </table>
+    </div>
+</div>

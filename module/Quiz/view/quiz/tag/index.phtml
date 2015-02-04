@@ -1,0 +1,41 @@
+<?php
+/** @var \Quiz\Entity\Tag[] $tags */
+?>
+
+<div class="col-md-6">
+    <div class="row">
+        <div class="pull-right">
+            <a href="<?php echo $this->url('tag/form'); ?>" style="z-index: 1000; position: relative">
+                <button type="button" class="btn btn-primary" >Tag toevoegen</button>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th class="col-md-10">Tag</th>
+                    <th>#vragen</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($tags as $tag): ?>
+                    <tr>
+                        <td></td>
+                        <td class="col-md-10">
+                            <?php echo $tag->getName(); ?>
+                        </td>
+                        <td>
+                            <a href="<?php echo $this->url('tag/form', [], ['query' => ['id' => $tag->getId()]]); ?>">
+                                <span class="fa fa-edit"></span>
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

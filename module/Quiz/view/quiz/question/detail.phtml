@@ -1,0 +1,52 @@
+<?php
+/** @var $question \Quiz\Entity\Question */
+$image = $question->getImage();
+?>
+<div class="jumbotron">
+    <div class="row">
+        <?php if (!empty($image)): ?>
+            <div class="col-md-3 text-center">
+                <img src="data:image/png;base64,<?php echo $question->getImage(); ?>" height="150px" />
+            </div>
+        <?php endif ?>
+        <div class="col-md-<?php echo (empty($image)) ? "9" : "6"; ?> text-center">
+            <h3>
+                "<?php echo $question->getQuestion(); ?>"
+            </h3>
+            <p>
+                <button id="answer-button" class="btn btn-primary btn-lg" role="button">
+                    Antwoord (<?php echo $question->getPoints();?>pt)
+                </button>
+                <div id="answer" class="hidden alert alert-success">
+                    <?php echo $question->getAnswer(); ?>
+                </div>
+            </p>
+        </div>
+        <div class="col-md-3 text-center">
+            <span class="<?php echo $question->getCategory()->getIcon(); ?> fa-3x"></span>
+            <br />
+            <span><?php echo $question->getCategory()->getName(); ?></span>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="col-md-12">
+        <?php echo $question->getDateCreated()->format('d F Y'); ?>, <?php echo $question->getCreatedBy()->getDisplayName(); ?>
+    </div>
+    <?php if ($question->getSource() !== ""): ?>
+        <div class="col-md-12">
+            <a href="<?php echo $question->getSource(); ?>" target="_blank">
+                <?php echo $question->getSource(); ?>
+            </a>
+        </div>
+    <?php endif ?>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#answer-button").click(function(){
+            $("#answer-button").addClass('hidden');
+            $("#answer").removeClass('hidden');
+        });
+    });
+</script>
