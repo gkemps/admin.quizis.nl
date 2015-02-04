@@ -1,0 +1,181 @@
+<?xml version="1.0" ?>
+<project name="white-app" default="db:migrate">
+
+    <!-- Sets the DSTAMP, TSTAMP and TODAY properties -->
+    <tstamp/>
+
+    <exec command="whoami" outputProperty="currentuser" />
+
+    <!-- Load our configuration -->
+    <property file="${project.basedir}/config/build.properties.dist" />
+    <property file="${project.basedir}/config/build.properties" override="true" />
+    <property file="${project.basedir}/config/secure.${host.name}" override="true" />
+    <property file="${project.basedir}/config/secure.${host.name}-${currentuser}" override="true" />
+
+    <if>
+        <istrue value="${db.pass}" />
+        <then>
+            <property name="mysql-command" value="${progs.mysql} --skip-auto-rehash -h${db.host} -u${db.user} -p${db.pass} "/>
+        </then>
+        <else>
+            <property name="mysql-command" value="${progs.mysql} --skip-auto-rehash -h${db.host} -u${db.user} "/>
+        </else>
+    </if>
+
+    <!-- DB Deploy settings -->
+    <property name="build.dbDeploy.baseDir"    value="${project.basedir}/scripts"/>
+    <property name="build.dbDeploy.deployFile" value="${build.dbDeploy.baseDir}/deploy/${DSTAMP}${TSTAMP}.sql"/>
+    <property name="build.dbDeploy.undoFile"   value="${build.dbDeploy.baseDir}/undo/${DSTAMP}${TSTAMP}.sql" />
+
+    <!-- make sure the proper tables for DB Deploy are installed -->
+    <target name="db:init-changelog" hidden="true" description="Creates the change log table for DBDeploy">
+        <exec
+                command="${mysql-command} -D ${db.name} &lt; changelog.sql"
+                dir="${project.basedir}"
+                checkreturn="true"
+                passthru="true"
+                />
+    </target>
+
+    <target name="db:dump" hidden="true" description="Dumps database data to a file">
+        <exec
+                command="mysqldump
+                --skip-opt
+                --allow-keywords
+                --quote-names
+                --single-transaction
+                --tz-utc
+                --no-create-db
+                --no-create-info
+                --skip-triggers
+                --skip-comments
+                --quick
+                --complete-insert
+                --extended-insert
+                --hex-blob
+                --ignore-table=${db.name}.changelog
+                --result-file=${project.basedir}/reset.sql
+                --user=${db.user}
+                --password=${db.pass}
+                ${db.name}"
+                dir="${project.basedir}"
+                checkreturn="true"
+                passthru="true"
+                />
+    </target>
+
+    <target name="db:truncate" description="Truncates all tables">
+        <exec command="mysql --host=${db.host} --user=${db.user} --password=${db.pass} -Nse 'show tables' ${db.name} | while read table; do if [ $table = &quot;changelog&quot; ]; then continue; fi; mysql -h${db.host} -u${db.user} -p${db.pass} -e &quot;SET FOREIGN_KEY_CHECKS=0; truncate table $table; SET FOREIGN_KEY_CHECKS=1;&quot; ${db.name}; done"
+              dir="${project.basedir}"
+              checkreturn="true"
+              passthru="true"/>
+    </target>
+
+    <target name="db:load-data" description="Load data">
+        <exec command="mysql -h ${db.host} -u ${db.user} --password=${db.pass} ${db.name} &lt; ${project.basedir}/reset.sql"
+              checkreturn="true"
+              passthru="true"
+                />
+    </target>
+
+    <target name="db:migrate" description="Executes all not-yet-applied schema deltas using DBDeploy">
+        <taskdef name="dbdeploy" classname="phing.tasks.ext.dbdeploy.DbDeployTask"/>
+
+        <!-- generate the deployment scripts -->
+        <dbdeploy
+                url="mysql:host=${db.host};dbname=${db.name}"
+                userid="${db.user}"
+                password="${db.pass}"
+                dir="${project.basedir}/deltas"
+                outputfile="${build.dbDeploy.deployFile}"
+                undooutputfile="${build.dbDeploy.undoFile}" />
+
+        <exec
+                command="${mysql-command} -D ${db.name} &lt; &quot;${build.dbDeploy.deployFile}&quot;"
+                checkreturn="true"
+                passthru="true"
+                />
+    </target>
+
+    <target name="db:schema-create" description="Creates the database">
+        <echo message="Creating database ${db.name}"/>
+        <exec
+                command="${mysql-command} -e &quot;CREATE DATABASE IF NOT EXISTS ${db.name} CHARACTER SET utf8 COLLATE utf8_unicode_ci&quot;"
+                checkreturn="true"
+                passthru="true"
+                />
+    </target>
+
+    <target name="db:schema-drop" description="Drops the database">
+        <echo message="Dropping database ${db.name}"/>
+        <exec
+                command="${mysql-command} -e &quot;DROP DATABASE IF EXISTS ${db.name}&quot;"
+                checkreturn="true"
+                passthru="true"
+                />
+    </target>
+
+    <target name="db:recycle" description="Drops the database schema, recreates it, and runs schema migrations">
+        <phingcall target="db:cleanup"/>
+        <phingcall target="db:schema-drop"/>
+        <phingcall target="db:schema-create"/>
+        <phingcall target="db:init-changelog" />
+        <phingcall target="db:migrate"/>
+    </target>
+
+
+    <target name="db:recycle-with-data" description="Drops the database schema, recreates it, runs schema migrations and loads data">
+        <phingcall target="db:recycle"/>
+        <phingcall target="db:truncate"/>
+        <phingcall target="db:load-data"/>
+    </target>
+
+    <target name="db:cleanup" description="Cleans up old DB Deploy (undo) scripts">
+        <delete>
+            <fileset dir="${build.dbDeploy.baseDir}/deploy">
+                <include name="*.sql"/>
+            </fileset>
+        </delete>
+
+        <delete>
+            <fileset dir="${build.dbDeploy.baseDir}/undo">
+                <include name="*.sql"/>
+            </fileset>
+        </delete>
+    </target>
+
+    <target name="db:dump-schema" description="Creates a new initial delta">
+        <exec
+                command="mysqldump
+                --no-data
+                --ignore-table=${db.name}.changelog
+                --result-file=${project.basedir}/deltas/0001.sql
+                --user=${db.user}
+                --password=${db.pass}
+                ${db.name}"
+                dir="${project.basedir}"
+                checkreturn="true"
+                passthru="true"
+                />
+    </target>
+
+    <target name="app:classmap">
+        <exec command="vendor/bin/classmap_generator.php -l module/" />
+    </target>
+
+    <target name="app:file-permissions" description="Set folder permissions">
+        <chmod file="${project.basedir}/../data/cache" mode="0777" />
+        <chmod file="${project.basedir}/../data/DoctrineORMModule/Proxy" mode="0777" />
+    </target>
+
+    <!-- Deployment targets -->
+    <target name="build">
+        <phingcall target="app:file-permissions"/>
+        <phingcall target="orm:generate-proxies"/>
+        <phingcall target="app:classmap"/>
+    </target>
+
+    <target name="orm:generate-proxies">
+        <exec command="${project.basedir}/vendor/bin/doctrine-module orm:generate-proxies" />
+    </target>
+</project>
