@@ -126,7 +126,7 @@
 
     <target name="db:recycle-with-data" description="Drops the database schema, recreates it, runs schema migrations and loads data">
         <phingcall target="db:recycle"/>
-        <phingcall target="db:truncate"/>
+        <!--<phingcall target="db:truncate"/>-->
         <phingcall target="db:load-data"/>
     </target>
 
