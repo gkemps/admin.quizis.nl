@@ -7,7 +7,8 @@ return array(
         'TwbBundle',
         'ZfcBase',
         'ZfcUser',
-        'ZfcUserDoctrineORM'
+        'ZfcUserDoctrineORM',
+        'Kemzy\Library'
     ),
 
     'module_listener_options' => array(
@@ -16,8 +17,9 @@ return array(
             './vendor',
         ),
 
-        'config_glob_paths' => array(
-            'config/autoload/{,*.}{global,local}.php',
-        ),
+        // An array of paths from which to glob configuration files after modules are loaded.
+        'config_glob_paths' => [
+            sprintf('config/autoload/{,*.}{global,%1$s,%1$s-%2$s,local}.php', gethostname(), get_current_user())
+        ],
     ),
 );

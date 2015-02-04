@@ -2,3 +2,4 @@
 vendor
 atlassian-ide-plugin.xml
 composer.lock
+data/DoctrineORMModule
