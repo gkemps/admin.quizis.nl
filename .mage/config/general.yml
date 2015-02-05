@@ -1,0 +1,7 @@
+# global settings
+name: Quiz
+email: oirschot9@gmail.com
+notifications: true
+logging: true
+maxlogs: 30
+ssh_needs_tty: false
