@@ -1,0 +1,26 @@
+<div class="row">
+    <div class="input-group col-md-3 pull-left">
+        <input type="text" id="search-term" class="form-control" placeholder="zoeken" value="<?php echo isset($search) ? $search : ""; ?>">
+        <span class="input-group-btn">
+            <input type="submit" class="btn btn-default" value="zoeken" id="search-btn"/>
+        </span>
+    </div>
+    <div class="pull-right">
+        <a href="<?php echo $this->url('question/form'); ?>" style="z-index: 1000; position: relative">
+            <button type="button" class="btn btn-primary" >Vraag toevoegen</button>
+        </a>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#search-btn").click(function(){
+            window.location.href = "/vragen/zoeken/" + $('#search-term').val();
+        });
+
+        $('#search-term').keypress(function(e){
+            if(e.keyCode==13)
+                $('#search-btn').click();
+        });
+    });
+</script>

@@ -1,0 +1,50 @@
+<?php if ($this->pageCount && $this->pageCount > 1): ?>
+    <?php $params = isset($this->route['params']) ? $this->route['params'] : array() ?>
+    <?php $query = isset($this->query) ? $this->query : array() ?>
+
+    <ul class="pagination">
+        <!-- Previous page link -->
+        <?php if (isset($this->previous)): ?>
+            <li>
+                <a href="<?php echo $this->url($this->route['name'], $params, false, true); ?>?<?php echo http_build_query(array_merge($query, ['page' => $this->previous])); ?>">
+                    <<
+                </a>
+            </li>
+        <?php else: ?>
+            <li class="disabled">
+                <a href="#">
+                    <<
+                </a>
+            </li>
+        <?php endif; ?>
+        <!-- Numbered page links -->
+        <?php foreach ($this->pagesInRange as $page): ?>
+            <?php if ($page != $this->current): ?>
+                <li>
+                    <a href="<?php echo $this->url($this->route['name'], $params, false, true);?>?<?php echo http_build_query(array_merge($query, ['page' => $page])); ?>">
+                        <?php echo $page; ?>
+                    </a>
+                </li>
+            <?php else: ?>
+                <li class="active">
+                    <a href="#"><?php echo $page; ?></a>
+                </li>
+            <?php endif; ?>
+        <?php endforeach; ?>
+
+        <!-- Next page link -->
+        <?php if (isset($this->next)): ?>
+            <li>
+                <a href="<?php echo $this->url($this->route['name'], $params, false, true); ?>?<?php echo http_build_query(array_merge($query, ['page' => $this->next])); ?>">
+                    >>
+                </a>
+            </li>
+        <?php else: ?>
+            <li class="disabled">
+                <a href="#">
+                    >>
+                </a>
+            </li>
+        <?php endif; ?>
+    </ul>
+<?php endif; ?>

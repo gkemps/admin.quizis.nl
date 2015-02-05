@@ -50,34 +50,32 @@ class QuestionController extends AbstractCrudController
 
     public function indexAction()
     {
-        $user = $this->userAuthenticationService->getIdentity();
-        $questions = $this->questionService->getAllQuestions();
-        $futureQuizzes = $this->quizService->findFutureQuizzes();
+        $questions = $this->questionService->getQuestions();
+        if ($questions->count() == 0) {
+            $this->redirect()->toRoute('question/form');
+        }
+        $questions->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
+        $questions->setDefaultItemCountPerPage(10);
 
-        return new ViewModel(
-            [
-                'user' => $user,
-                'questions' => $questions,
-                'futureQuizzes' => $futureQuizzes
-            ]
-        );
+        $view = $this->getBasicView();
+        $view->setVariable('questions', $questions);
+
+        return $view;
     }
 
     public function searchAction()
     {
-        $search = $this->getRequest()->getPost('search');
+        $search = $this->params('term');
 
-        $user = $this->userAuthenticationService->getIdentity();
-        $futureQuizzes = $this->quizService->findFutureQuizzes();
         $questions = $this->questionService->searchQuestions($search);
+        $questions->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
+        $questions->setDefaultItemCountPerPage(10);
 
-        return new ViewModel(
-            [
-                'user' => $user,
-                'questions' => $questions,
-                'futureQuizzes' => $futureQuizzes
-            ]
-        );
+        $view = $this->getBasicView();
+        $view->setVariable('questions', $questions);
+        $view->setVariable('search', $search);
+
+        return $view;
     }
 
     public function detailAction()
@@ -134,18 +132,12 @@ class QuestionController extends AbstractCrudController
         $categoryId = $this->params('catId');
         $category = $this->categoryService->getCategoryById($categoryId);
 
-        $user = $this->userAuthenticationService->getIdentity();
         $questions = $this->questionService->getQuestionsByCategory($category);
-        $futureQuizzes = $this->quizService->findFutureQuizzes();
+        $questions->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
+        $questions->setDefaultItemCountPerPage(10);
 
-        $view = new ViewModel(
-            [
-                'user' => $user,
-                'questions' => $questions,
-                'futureQuizzes' => $futureQuizzes
-            ]
-        );
-        $view->setTemplate('quiz/question/index.phtml');
+        $view = $this->getBasicView();
+        $view->setVariable('questions', $questions);
 
         return $view;
     }
@@ -187,6 +179,19 @@ class QuestionController extends AbstractCrudController
         $this->questionForm->bind($question);
 
         return $this->questionForm;
+    }
+
+    protected function getBasicView()
+    {
+        $user = $this->userAuthenticationService->getIdentity();
+        $futureQuizzes = $this->quizService->findFutureQuizzes();
+
+        return new ViewModel(
+            [
+                'user' => $user,
+                'futureQuizzes' => $futureQuizzes
+            ]
+        );
     }
 
     protected function getCrudSuccessResponse()

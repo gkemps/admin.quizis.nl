@@ -2,6 +2,7 @@
 namespace Quiz\Service;
 
 use DateTime;
+use Kemzy\Library\Service\AbstractService;
 use Quiz\Entity\Question as QuestionEntity;
 use Quiz\Entity\Category as CategoryEntity;
 use Quiz\Entity\QuestionLike as QuestionLikeEntity;
@@ -9,7 +10,7 @@ use Quiz\Entity\User as UserEntity;
 use Doctrine\ORM\EntityManager;
 use Zend\Authentication\AuthenticationService;
 
-class Question
+class Question extends AbstractService
 {
     /** @var EntityManager  */
     protected $em;
@@ -34,34 +35,46 @@ class Question
     }
 
     /**
-     * @param $id
-     * @return null|QuestionEntity
+     * @return \Doctrine\ORM\EntityRepository
      */
-    public function getQuestionById($id)
+    protected function getRepository()
     {
-        return $this->questionRepository->find($id);
+        return $this->questionRepository;
     }
 
     /**
-     * @return QuestionEntity[]
+     * @return \Zend\Paginator\Paginator|QuestionEntity[]
      */
-    public function getAllQuestions()
+    public function getQuestions()
     {
-        return $this->questionRepository->findBy([], ['dateCreated' => 'DESC']);
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('q')
+            ->from('\Quiz\Entity\Question', 'q')
+            ->orderBy('q.dateCreated', 'DESC');
+
+        return $this->returnPaginatedSetFromQueryBuilder($qb);
     }
 
     /**
      * @param CategoryEntity $category
-     * @return QuestionEntity[]
+     * @return \Zend\Paginator\Paginator|QuestionEntity[]
      */
     public function getQuestionsByCategory(CategoryEntity $category)
     {
-        return $this->questionRepository->findBy(['category' => $category->getId()], ['dateCreated' => 'DESC']);
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('q')
+            ->from('\Quiz\Entity\Question', 'q')
+            ->where($qb->expr()->eq('q.category', ':category'))
+            ->orderBy('q.dateCreated', 'DESC');
+
+        $qb->setParameter('category', $category);
+
+        return $this->returnPaginatedSetFromQueryBuilder($qb);
     }
 
     /**
      * @param $search
-     * @return QuestionEntity[]
+     * @return \Zend\Paginator\Paginator|QuestionEntity[]
      */
     public function searchQuestions($search)
     {
@@ -69,12 +82,15 @@ class Question
 
         $qb->select('q')
             ->from('Quiz\Entity\Question', 'q')
-            ->where($qb->expr()->like('q.question', ':search'))
+            ->where($qb->expr()->orX(
+                    $qb->expr()->like('q.question', ':search'),
+                    $qb->expr()->like('q.answer', ':search')
+                ))
             ->orderBy('q.dateCreated', 'DESC');
 
         $qb->setParameter('search', '%'.$search.'%');
 
-        return $qb->getQuery()->getResult();
+        return $this->returnPaginatedSetFromQueryBuilder($qb);
     }
 
     /**
@@ -134,15 +150,6 @@ class Question
     protected function removeQuestionLike(QuestionLikeEntity $questionLike)
     {
         $this->em->remove($questionLike);
-        $this->em->flush();
-    }
-
-    /**
-     * @param QuestionEntity $question
-     */
-    protected function persist(QuestionEntity $question)
-    {
-        $this->em->persist($question);
         $this->em->flush();
     }
 

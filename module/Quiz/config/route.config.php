@@ -14,17 +14,6 @@ return [
                 ],
             ],
 
-            'search' => [
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => [
-                    'route'    => '/',
-                    'defaults' => [
-                        'controller' => 'Quiz\Controller\Question',
-                        'action'     => 'index',
-                    ],
-                ],
-            ],
-
             'category' => [
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => [
@@ -87,6 +76,16 @@ return [
                     ],
                 ],
                 'child_routes' => [
+                    'search' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route'    => '/zoeken/:term',
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\Question',
+                                'action'     => 'search',
+                            ],
+                        ],
+                    ],
                     'detail' => [
                         'type' => 'Segment',
                         'may_terminate' => true,
