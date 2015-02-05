@@ -82,7 +82,7 @@ class QuestionController extends AbstractCrudController
     {
         $questionId = $this->params('questionId');
 
-        $question = $this->questionService->getQuestionById($questionId);
+        $question = $this->questionService->getById($questionId);
 
         return new ViewModel(
             [
@@ -95,7 +95,7 @@ class QuestionController extends AbstractCrudController
     {
         $questionId = $this->params('questionId');
 
-        $question = $this->questionService->getQuestionById($questionId);
+        $question = $this->questionService->getById($questionId);
 
         $this->questionService->likeQuestion($question);
 
@@ -107,7 +107,7 @@ class QuestionController extends AbstractCrudController
         $user = $this->userAuthenticationService->getIdentity();
 
         $questionId = $this->params('questionId');
-        $question = $this->questionService->getQuestionById($questionId);
+        $question = $this->questionService->getById($questionId);
 
         $this->questionService->unlikeQuestion($question, $user);
 
@@ -119,7 +119,7 @@ class QuestionController extends AbstractCrudController
         $questionId = $this->params('questionId');
         $quizRoundId = $this->params('quizRoundId');
 
-        $question = $this->questionService->getQuestionById($questionId);
+        $question = $this->questionService->getById($questionId);
         $quizRound = $this->quizService->getQuizRoundById($quizRoundId);
 
         $this->quizService->addQuestionToQuizRound($question, $quizRound);
@@ -169,7 +169,7 @@ class QuestionController extends AbstractCrudController
         $request = $this->getRequest();
 
         if ($request->getQuery('id')) {
-            $question = $this->questionService->getQuestionById($request->getQuery('id'));
+            $question = $this->questionService->getById($request->getQuery('id'));
         }
 
         if (empty($question)) {
