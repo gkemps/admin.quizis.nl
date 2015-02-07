@@ -135,7 +135,6 @@
             update:  function (event, ui) {
                 var id = $(ui.item).data('quizquestionid');
                 var newPos = ui.item.index() + 1;
-                alert(newPos);
                 $.ajax({
                     url:"/reset-quiz-round-question-number/" + id + "/" + newPos
                 });
