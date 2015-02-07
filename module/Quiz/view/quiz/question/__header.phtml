@@ -7,7 +7,9 @@
     </div>
     <div class="pull-right">
         <a href="<?php echo $this->url('question/form'); ?>" style="z-index: 1000; position: relative">
-            <button type="button" class="btn btn-primary" >Vraag toevoegen</button>
+            <button type="button" class="btn btn-primary" >
+                Vraag <?php echo ($nrOfQuestions + 1); ?> toevoegen
+            </button>
         </a>
     </div>
 </div>

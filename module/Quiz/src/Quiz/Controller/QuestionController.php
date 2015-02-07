@@ -257,11 +257,13 @@ class QuestionController extends AbstractCrudController
     {
         $user = $this->userAuthenticationService->getIdentity();
         $futureQuizzes = $this->quizService->findFutureQuizzes();
+        $nrOfQuestions = $this->questionService->getNumberOfQuestions();
 
         return new ViewModel(
             [
                 'user' => $user,
-                'futureQuizzes' => $futureQuizzes
+                'futureQuizzes' => $futureQuizzes,
+                'nrOfQuestions' => $nrOfQuestions
             ]
         );
     }

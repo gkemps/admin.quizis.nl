@@ -56,6 +56,20 @@ class Question extends AbstractService
     }
 
     /**
+     * @return int
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getNumberOfQuestions()
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('COUNT(q)')
+            ->from('\Quiz\Entity\Question', 'q');
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
      * @param CategoryEntity $category
      * @return \Zend\Paginator\Paginator|QuestionEntity[]
      */
