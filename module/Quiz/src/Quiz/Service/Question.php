@@ -94,6 +94,98 @@ class Question extends AbstractService
     }
 
     /**
+     * @return \Zend\Paginator\Paginator
+     */
+    public function yourQuestions(UserEntity $user)
+    {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select('q')
+            ->from('Quiz\Entity\Question', 'q')
+            ->where($qb->expr()->eq(
+                    'q.createdBy', ':user'
+                ))
+            ->orderBy('q.dateCreated', 'DESC');
+
+        $qb->setParameter('user', $user);
+
+        return $this->returnPaginatedSetFromQueryBuilder($qb);
+    }
+
+    /**
+     * @return \Zend\Paginator\Paginator
+     */
+    public function likedQuestions(UserEntity $user)
+    {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select('q')
+            ->from('Quiz\Entity\Question', 'q')
+            ->join('q.questionLikes', 'ql')
+            ->where($qb->expr()->eq(
+                    'ql.user', ':user'
+                ))
+            ->orderBy('q.dateCreated', 'DESC');
+
+        $qb->setParameter('user', $user);
+
+        return $this->returnPaginatedSetFromQueryBuilder($qb);
+    }
+
+    /**
+     * @return \Zend\Paginator\Paginator
+     */
+    public function likesQuestions()
+    {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select('q')
+            ->from('Quiz\Entity\Question', 'q')
+            ->join('q.questionLikes', 'ql')
+            ->orderBy('q.dateCreated', 'DESC');
+
+        return $this->returnPaginatedSetFromQueryBuilder($qb);
+    }
+
+    /**
+     * @return \Zend\Paginator\Paginator
+     */
+    public function notAskedQuestions()
+    {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select('q')
+            ->from('Quiz\Entity\Question', 'q')
+            ->leftJoin('q.quizRoundQuestions', 'qrq')
+            ->having($qb->expr()->eq(
+                    'COUNT(qrq.id)',
+                    0
+                ))
+            ->groupBy('q.id')
+            ->orderBy('q.dateCreated', 'DESC');
+
+        return $this->returnPaginatedSetFromQueryBuilder($qb);
+    }
+
+    /**
+     * @return \Zend\Paginator\Paginator
+     */
+    public function noSourceQuestions()
+    {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select('q')
+            ->from('Quiz\Entity\Question', 'q')
+            ->where($qb->expr()->eq(
+                    $qb->expr()->length('q.source'),
+                    0
+                ))
+            ->orderBy('q.dateCreated', 'DESC');
+
+        return $this->returnPaginatedSetFromQueryBuilder($qb);
+    }
+
+    /**
      * @param QuestionEntity $question
      * @return QuestionEntity
      */

@@ -78,6 +78,75 @@ class QuestionController extends AbstractCrudController
         return $view;
     }
 
+    public function yoursAction()
+    {
+        $user = $this->userAuthenticationService->getIdentity();
+
+        $questions = $this->questionService->yourQuestions($user);
+        $questions->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
+        $questions->setDefaultItemCountPerPage(10);
+
+        $view = $this->getBasicView();
+        $view->setVariable('questions', $questions);
+        $view->setTemplate('quiz/question/index');
+
+        return $view;
+    }
+
+    public function likedAction()
+    {
+        $user = $this->userAuthenticationService->getIdentity();
+
+        $questions = $this->questionService->likedQuestions($user);
+        $questions->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
+        $questions->setDefaultItemCountPerPage(10);
+
+        $view = $this->getBasicView();
+        $view->setVariable('questions', $questions);
+        $view->setTemplate('quiz/question/index');
+
+        return $view;
+    }
+
+    public function likesAction()
+    {
+        $questions = $this->questionService->likesQuestions();
+        $questions->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
+        $questions->setDefaultItemCountPerPage(10);
+
+        $view = $this->getBasicView();
+        $view->setVariable('questions', $questions);
+        $view->setTemplate('quiz/question/index');
+
+        return $view;
+    }
+
+    public function noSourceAction()
+    {
+        $questions = $this->questionService->noSourceQuestions();
+        $questions->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
+        $questions->setDefaultItemCountPerPage(10);
+
+        $view = $this->getBasicView();
+        $view->setVariable('questions', $questions);
+        $view->setTemplate('quiz/question/index');
+
+        return $view;
+    }
+
+    public function notAskedAction()
+    {
+        $questions = $this->questionService->notAskedQuestions();
+        $questions->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
+        $questions->setDefaultItemCountPerPage(10);
+
+        $view = $this->getBasicView();
+        $view->setVariable('questions', $questions);
+        $view->setTemplate('quiz/question/index');
+
+        return $view;
+    }
+
     public function detailAction()
     {
         $questionId = $this->params('questionId');

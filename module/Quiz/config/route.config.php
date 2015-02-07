@@ -76,6 +76,61 @@ return [
                     ],
                 ],
                 'child_routes' => [
+                    'yours' => [
+                        'type' => 'Literal',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/jouw-vragen',
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\Question',
+                                'action'     => 'yours',
+                            ],
+                        ],
+                    ],
+                    'liked' => [
+                        'type' => 'Literal',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/geliket',
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\Question',
+                                'action'     => 'liked',
+                            ],
+                        ],
+                    ],
+                    'likes' => [
+                        'type' => 'Literal',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/met-likes',
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\Question',
+                                'action'     => 'likes',
+                            ],
+                        ],
+                    ],
+                    'not-asked' => [
+                        'type' => 'Literal',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/niet-gesteld',
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\Question',
+                                'action'     => 'notAsked',
+                            ],
+                        ],
+                    ],
+                    'no-source' => [
+                        'type' => 'Literal',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/geen-bron',
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\Question',
+                                'action'     => 'noSource',
+                            ],
+                        ],
+                    ],
                     'search' => [
                         'type' => 'Segment',
                         'options' => [
