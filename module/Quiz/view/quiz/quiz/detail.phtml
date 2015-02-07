@@ -32,6 +32,15 @@
         </div>
         <div class="row">
             <div class="col-md-6">
+                Aantal vragen:
+            </div>
+            <div class="col-md-6">
+                <?php echo $quiz->getMaxNumberOfQuestions(); ?>
+                (<?php echo $quiz->getNumberOfQuestions(); ?> gevuld)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
                 Totaal aantal punten:
             </div>
             <div class="col-md-6">
@@ -47,8 +56,30 @@
                         Ronde <?php echo $quizRound->getNumber(); ?>
                     </a>
                 </div>
-                <div class="col-md-1 text-right">
-                    <?php echo $quizRound->getNumberOfPoints(); ?>
+                <div class="col-md-6 text-right">
+                    <div class="progress">
+                        <?php
+                            $maxQuestions = $quizRound->getMaxNumberOfQuestions();
+                            $nrOfQuestions = $quizRound->getNumberOfQuestions();
+                            $percentage = round($nrOfQuestions/$maxQuestions * 100);
+                            $class = '';
+                            if ($percentage < 50) {
+                                $class = 'progress-bar-danger';
+                            } elseif ($percentage < 70) {
+                                $class = 'progress-bar-warning';
+                            } elseif ($percentage < 100) {
+                                $class = 'progress-bar-info';
+                            } else {
+                                $class = 'progress-bar-success';
+                            }
+                        ?>
+                        <div class="progress-bar <?php echo $class; ?>" role="progressbar"
+                             aria-valuenow="<?php echo $percentage; ?>"
+                             aria-valuemin="0" aria-valuemax="100"
+                             style="width: <?php echo $percentage; ?>%;">
+                            <?php echo $percentage; ?>%
+                        </div>
+                    </div>
                 </div>
             </div>
         <?php endforeach ?>

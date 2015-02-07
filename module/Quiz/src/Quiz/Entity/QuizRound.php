@@ -194,6 +194,9 @@ class QuizRound
         return $this->quizRoundQuestions;
     }
 
+    /**
+     * @return int
+     */
     public function getNumberOfPoints()
     {
         $total = 0;
@@ -202,6 +205,22 @@ class QuizRound
         }
 
         return $total;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxNumberOfQuestions()
+    {
+        return self::MAX_QUESTIONS;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfQuestions()
+    {
+        return count($this->quizRoundQuestions);
     }
 
     /**

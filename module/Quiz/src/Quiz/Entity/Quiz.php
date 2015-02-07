@@ -184,11 +184,44 @@ class Quiz
         return $this->quizRounds;
     }
 
+    /**
+     * @return int
+     */
     public function getNumberOfRounds()
     {
         return count($this->quizRounds);
     }
 
+
+    /**
+     * @return int
+     */
+    public function getMaxNumberOfQuestions()
+    {
+        $total = 0;
+        foreach ($this->getQuizRounds() as $round) {
+            $total += $round->getMaxNumberOfQuestions();
+        }
+
+        return $total;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfQuestions()
+    {
+        $total = 0;
+        foreach ($this->getQuizRounds() as $round) {
+            $total += $round->getNumberOfQuestions();
+        }
+
+        return $total;
+    }
+
+    /**
+     * @return int
+     */
     public function getTotalPoints()
     {
         $total = 0;
