@@ -7,43 +7,53 @@
     <div class="col-md-4">
         <h1><?php echo $quiz->getName(); ?></h1>
         <div class="row">
-            <div class="col-md-6">
-                Plaats:
+            <div class="col-md-6 col-xs-6">
+                <strong>
+                    Plaats:
+                </strong>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 col-xs-6">
                 <?php echo $quiz->getLocation(); ?>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
-                Datum:
+            <div class="col-md-6 col-xs-6">
+                <strong>
+                    Datum:
+                </strong>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 col-xs-6">
                 <?php echo $quiz->getDate()->format('d-m-Y H:i:s'); ?>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
-                Aantal rondes:
+            <div class="col-md-6 col-xs-6">
+                <strong>
+                    Aantal rondes:
+                </strong>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 col-xs-6">
                 <?php echo $quiz->getNumberOfRounds(); ?>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
-                Aantal vragen:
+            <div class="col-md-6 col-xs-6">
+                <strong>
+                    Aantal vragen:
+                </strong>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 col-xs-6">
                 <?php echo $quiz->getMaxNumberOfQuestions(); ?>
                 (<?php echo $quiz->getNumberOfQuestions(); ?> gevuld)
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
-                Totaal aantal punten:
+            <div class="col-md-6 col-xs-6">
+                <strong>
+                    Totaal aantal punten:
+                </strong>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 col-xs-6">
                 <?php echo $quiz->getTotalPoints(); ?>
             </div>
         </div>
