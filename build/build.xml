@@ -64,6 +64,29 @@
                 />
     </target>
 
+    <target name="db:dump-backup" hidden="true" description="Dumps full database data to a file">
+        <exec
+                command="mysqldump
+                --skip-opt
+                --allow-keywords
+                --quote-names
+                --single-transaction
+                --tz-utc
+                --quick
+                --complete-insert
+                --extended-insert
+                --hex-blob
+                --ignore-table=${db.name}.changelog
+                --result-file=${project.basedir}/backup/${DSTAMP}${TSTAMP}.sql
+                --user=${db.user}
+                --password=${db.pass}
+                ${db.name}"
+                dir="${project.basedir}"
+                checkreturn="true"
+                passthru="true"
+                />
+    </target>
+
     <target name="db:truncate" description="Truncates all tables">
         <exec command="mysql --host=${db.host} --user=${db.user} --password=${db.pass} -Nse 'show tables' ${db.name} | while read table; do if [ $table = &quot;changelog&quot; ]; then continue; fi; mysql -h${db.host} -u${db.user} -p${db.pass} -e &quot;SET FOREIGN_KEY_CHECKS=0; truncate table $table; SET FOREIGN_KEY_CHECKS=1;&quot; ${db.name}; done"
               dir="${project.basedir}"
