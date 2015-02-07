@@ -168,7 +168,8 @@ class QuestionController extends AbstractCrudController
 
         $this->questionService->likeQuestion($question);
 
-        return $this->redirect()->toRoute('question');
+        $url = $this->getRequest()->getHeader('Referer')->getUri();
+        return $this->redirect()->toUrl($url);
     }
 
     public function unlikeAction()
@@ -180,7 +181,8 @@ class QuestionController extends AbstractCrudController
 
         $this->questionService->unlikeQuestion($question, $user);
 
-        return $this->redirect()->toRoute('question');
+        $url = $this->getRequest()->getHeader('Referer')->getUri();
+        return $this->redirect()->toUrl($url);
     }
 
     public function addToQuizRoundAction()
@@ -193,7 +195,8 @@ class QuestionController extends AbstractCrudController
 
         $this->quizService->addQuestionToQuizRound($question, $quizRound);
 
-        return $this->redirect()->toRoute('question');
+        $url = $this->getRequest()->getHeader('Referer')->getUri();
+        return $this->redirect()->toUrl($url);
     }
 
     public function questionsByCategoryAction()
