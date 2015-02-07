@@ -194,6 +194,16 @@ class QuizRound
         return $this->quizRoundQuestions;
     }
 
+    public function getNumberOfPoints()
+    {
+        $total = 0;
+        foreach ($this->getQuizRoundQuestions() as $quizQuestion) {
+            $total += $quizQuestion->getQuestion()->getPoints();
+        }
+
+        return $total;
+    }
+
     /**
      * @param Collection $quizRoundQuestions
      */

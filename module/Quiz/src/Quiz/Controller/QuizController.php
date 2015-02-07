@@ -44,9 +44,25 @@ class QuizController extends AbstractCrudController
 
         $quiz = $this->quizService->getQuizById($quizId);
 
+        $labels = [];
+        $data = [];
+
+        foreach ($quiz->getQuizRounds() as $round) {
+            foreach ($round->getQuizRoundQuestions() as $question) {
+                $cat = $question->getQuestion()->getCategory();
+                if (!isset($data[$cat->getId()])) {
+                    $labels[$cat->getId()] = $cat->getName();
+                    $data[$cat->getId()] = 0;
+                }
+                $data[$cat->getId()] += $question->getQuestion()->getPoints();
+            }
+        }
+
         return new ViewModel(
             [
-                'quiz' => $quiz
+                'quiz' => $quiz,
+                'labels' => $labels,
+                'data' => $data
             ]
         );
     }
@@ -68,6 +84,17 @@ class QuizController extends AbstractCrudController
         $this->quizRoundQuestionService->resetQuestionNumber($quizRoundQuestion, $newPosition);
 
         die();
+    }
+
+    public function removeQuizRoundQuestionAction()
+    {
+        $quizRoundQuestionId = $this->params('quizRoundQuestionId');
+        $quizRoundQuestion = $this->quizRoundQuestionService->getQuizRoundQuestionById($quizRoundQuestionId);
+        $quizId = $quizRoundQuestion->getQuizRound()->getQuiz()->getId();
+
+        $this->quizRoundQuestionService->remove($quizRoundQuestion);
+
+        return $this->redirect()->toRoute('quiz/detail', ['quizId' => $quizId]);
     }
 
     /**

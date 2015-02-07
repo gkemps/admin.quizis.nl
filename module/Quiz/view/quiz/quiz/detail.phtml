@@ -2,10 +2,66 @@
 /** @var \Quiz\Entity\Quiz $quiz */
 ?>
 
-<h1><?php echo $quiz->getName(); ?></h1>
+<div class="row">
+
+    <div class="col-md-4">
+        <h1><?php echo $quiz->getName(); ?></h1>
+        <div class="row">
+            <div class="col-md-6">
+                Plaats:
+            </div>
+            <div class="col-md-6">
+                <?php echo $quiz->getLocation(); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                Datum:
+            </div>
+            <div class="col-md-6">
+                <?php echo $quiz->getDate()->format('d-m-Y H:i:s'); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                Aantal rondes:
+            </div>
+            <div class="col-md-6">
+                <?php echo $quiz->getNumberOfRounds(); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                Totaal aantal punten:
+            </div>
+            <div class="col-md-6">
+                <?php echo $quiz->getTotalPoints(); ?>
+            </div>
+        </div>
+
+        <br />
+        <?php foreach($quiz->getQuizRounds() as $quizRound): ?>
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="#round<?php echo $quizRound->getId(); ?>">
+                        Ronde <?php echo $quizRound->getNumber(); ?>
+                    </a>
+                </div>
+                <div class="col-md-1 text-right">
+                    <?php echo $quizRound->getNumberOfPoints(); ?>
+                </div>
+            </div>
+        <?php endforeach ?>
+
+    </div>
+    <div class="col-md-8">
+        <canvas id="pieChart" width="500" height="500"></canvas>
+    </div>
+</div>
+
 <div>
     <?php foreach ($quiz->getQuizRounds() as $quizRound): ?>
-        <h2>
+        <h2 id="round<?php echo $quizRound->getId(); ?>">
             Ronde <?php echo $quizRound->getNumber(); ?>
             <?php if ($quizRound->getTheme() != ""): ?>
              (<?php echo $quizRound->getTheme(); ?>)
@@ -21,6 +77,11 @@
                                     <i class="fa fa-image"></i>
                             </span>
                         <?php endif ?>
+                        <span class="pull-right">
+                            <a href="<?php echo $this->url('quiz/remove-question', ['quizRoundQuestionId' => $quizRoundQuestion->getId()]); ?>" style="color: #ff0000">
+                                <i class="fa fa-close"></i>
+                            </a>
+                        </span>
                     </li>
             <?php endforeach ?>
         </ol>
@@ -40,4 +101,33 @@
             }
         });
     });
+</script>
+
+<script type="text/javascript">
+    var data = {
+        labels: ["<?php echo implode('", "', $labels); ?>"],
+        datasets: [
+            {
+                label: "Categorie verhouding",
+                fillColor: "rgba(220,220,220,0.2)",
+                strokeColor: "rgba(220,220,220,1)",
+                pointColor: "rgba(220,220,220,1)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(220,220,220,1)",
+                data: [<?php echo implode(', ', $data); ?>]
+            },
+        ]
+    }
+
+    var options = {
+
+    }
+
+    window.onload = function(){
+        var ctx = document.getElementById("pieChart").getContext("2d");
+        //var myPieChart = new Chart(ctx[0]).Pie(data,options);
+        window.myLine = new Chart(ctx).Radar(data, options);;
+    }
+
 </script>

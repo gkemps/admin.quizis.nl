@@ -184,6 +184,20 @@ class Quiz
         return $this->quizRounds;
     }
 
+    public function getNumberOfRounds()
+    {
+        return count($this->quizRounds);
+    }
+
+    public function getTotalPoints()
+    {
+        $total = 0;
+        foreach ($this->getQuizRounds() as $round) {
+            $total += $round->getNumberOfPoints();
+        }
+        return $total;
+    }
+
     /**
      * @param QuestionEntity $question
      * @return bool

@@ -67,14 +67,6 @@
     <target name="db:dump-backup" hidden="true" description="Dumps full database data to a file">
         <exec
                 command="mysqldump
-                --skip-opt
-                --allow-keywords
-                --quote-names
-                --single-transaction
-                --tz-utc
-                --quick
-                --complete-insert
-                --extended-insert
                 --hex-blob
                 --ignore-table=${db.name}.changelog
                 --result-file=${project.basedir}/backup/${DSTAMP}${TSTAMP}.sql

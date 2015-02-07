@@ -54,4 +54,12 @@ class QuizRoundQuestion
         $this->em->persist($quizRoundQuestion);
         $this->em->flush();
     }
+
+    /**
+     * @param QuizRoundQuestionEntity $quizRoundQuestion
+     */
+    public function remove(QuizRoundQuestionEntity $quizRoundQuestion) {
+        $this->em->remove($quizRoundQuestion);
+        $this->em->flush();
+    }
 }

@@ -223,6 +223,20 @@ return [
                                 'action'     => 'nextQuiz',
                             ],
                         ],
+                    ],
+                    'remove-question' => [
+                        'type' => 'Segment',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/vraag-verwijderen/:quizRoundQuestionId',
+                            'constraints' => [
+                                'quizRoundQuestionId' => '\d+'
+                            ],
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\Quiz',
+                                'action'     => 'removeQuizRoundQuestion',
+                            ],
+                        ],
                     ]
                 ]
             ],
