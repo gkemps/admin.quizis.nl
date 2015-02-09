@@ -310,6 +310,34 @@ return [
                         'action'     => 'resetQuizRoundQuestionNumber',
                     ],
                 ],
+            ],
+
+            'comment' => [
+                'type' => 'Segment',
+                'may_terminate' => true,
+                'options' => [
+                    'route'    => '/comment/:quizRoundQuestionId',
+                    'constraints' => [
+                        'quizRoundQuestionId' => '\d+'
+                    ],
+                    'defaults' => [
+                        'controller' => 'Quiz\Controller\QuizRoundQuestionComment',
+                        'action'     => 'detail',
+                    ],
+                ],
+                'child_routes' => [
+                    'process' => [
+                        'type' => 'Segment',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/process',
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\QuizRoundQuestionComment',
+                                'action'     => 'process',
+                            ],
+                        ],
+                    ]
+                ]
             ]
 
         ],

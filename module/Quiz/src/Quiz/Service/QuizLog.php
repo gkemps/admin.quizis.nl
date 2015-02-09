@@ -92,7 +92,22 @@ class QuizLog extends AbstractService
         $quizLog = new QuizLogEntity();
         $quizLog->setQuiz($quizRoundQuestion->getQuizRound()->getQuiz());
         $quizLog->setText($text);
-        $quizLog->setIcon('fa fa-random');
+        $quizLog->setIcon('fa fa-exchange');
+
+        return $this->createNewQuizLog($quizLog);
+    }
+
+    public function createNewQuestionCommentLog(QuizRoundQuestionEntity $quizRoundQuestion)
+    {
+        /** @var \Quiz\Entity\User $user */
+        $user = $this->authenticationService->getIdentity();
+
+        $text = "Comment geplaatst bij vraag ".($quizRoundQuestion->getQuestionNumber() / 10)." uit ronde ".$quizRoundQuestion->getQuizRound()->getNumber()." door ".$user->getDisplayName()." (".$quizRoundQuestion->getQuestion()->getQuestion().")";
+
+        $quizLog = new QuizLogEntity();
+        $quizLog->setQuiz($quizRoundQuestion->getQuizRound()->getQuiz());
+        $quizLog->setText($text);
+        $quizLog->setIcon('fa fa-comment');
 
         return $this->createNewQuizLog($quizLog);
     }

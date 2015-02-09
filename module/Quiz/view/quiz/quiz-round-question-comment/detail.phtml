@@ -1,0 +1,43 @@
+<?php
+/** @var \Quiz\Form\Question $form */
+/** @var \Quiz\Entity\QuizRoundQuestion $quizRoundQuestion */
+?>
+
+<div class="row">
+    <div class="col-md-4">
+        &nbsp;
+    </div>
+    <div class="col-md-8">
+        <?php foreach($quizRoundQuestion->getComments() as $comment): ?>
+            <p class="bubble text-left">
+                <?php echo $comment->getComment(); ?>
+                <br />
+        <span style="font-size: 10px">
+            <?php
+            $createdDate = new DateTime($comment->getDateCreated()->format('Y-m-d H:i:s'), new DateTimeZone('UTC'));
+            $dateAgo = new \Smirik\PHPDateTimeAgo\DateTimeAgo();
+            $dateAgo->setTextTranslator(new \Quiz\PHPDateTimeAgo\TextTranslator\DutchTranslator());
+            ?>
+            <?php echo $dateAgo->get($createdDate); ?> door <?php echo $comment->getUser()->getDisplayName(); ?>
+        </span>
+            </p>
+        <?php endforeach ?>
+    </div>
+</div>
+
+<?php
+
+$form->setAttribute(
+    'action',
+    $this->url(
+        'comment/process',
+        [
+            'quizRoundQuestionId' => $quizRoundQuestion->getId()
+        ]
+    )
+);
+
+$this->form->prepare();
+echo $this->form()->openTag($this->form);
+echo $this->form($form, \TwbBundle\Form\View\Helper\TwbBundleForm::LAYOUT_HORIZONTAL);
+echo $this->form()->closeTag();

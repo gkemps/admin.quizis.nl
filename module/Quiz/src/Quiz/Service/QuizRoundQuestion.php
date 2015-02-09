@@ -1,29 +1,18 @@
 <?php
 namespace Quiz\Service;
 
+use Kemzy\Library\Service\AbstractService;
 use Quiz\Entity\QuizRoundQuestion as QuizRoundQuestionEntity;
 use Doctrine\ORM\EntityManager;
 
-class QuizRoundQuestion
+class QuizRoundQuestion extends AbstractService
 {
-    protected $em;
-
-    protected $quizRoundQuestionRepository;
-
-    public function __construct(
-        EntityManager $em
-    ) {
-        $this->em = $em;
-        $this->quizRoundQuestionRepository = $this->em->getRepository('Quiz\Entity\QuizRoundQuestion');
-    }
-
     /**
-     * @param $id
-     * @return QuizRoundQuestionEntity
+     * @return \Doctrine\ORM\EntityRepository
      */
-    public function getQuizRoundQuestionById($id)
+    protected function getRepository()
     {
-        return $this->quizRoundQuestionRepository->find($id);
+        return $this->em->getRepository('Quiz\Entity\QuizRoundQuestion');
     }
 
     /**
@@ -44,15 +33,6 @@ class QuizRoundQuestion
             $quizRoundQuestion->setDateUpdated(new \DateTime('now'));
             $this->persist($quizRoundQuestion);
         }
-    }
-
-    /**
-     * @param QuizRoundQuestionEntity $quizRoundQuestion
-     */
-    protected function persist(QuizRoundQuestionEntity $quizRoundQuestion)
-    {
-        $this->em->persist($quizRoundQuestion);
-        $this->em->flush();
     }
 
     /**

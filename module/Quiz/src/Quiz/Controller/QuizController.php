@@ -85,7 +85,7 @@ class QuizController extends AbstractCrudController
         $quizRoundQuestionId = $this->params('quizRoundQuestionId');
         $newPosition = $this->params('newPosition');
 
-        $quizRoundQuestion = $this->quizRoundQuestionService->getQuizRoundQuestionById($quizRoundQuestionId);
+        $quizRoundQuestion = $this->quizRoundQuestionService->getById($quizRoundQuestionId);
 
         $this->quizRoundQuestionService->resetQuestionNumber($quizRoundQuestion, $newPosition);
         $this->quizLogService->createNewQuestionChangedLog($quizRoundQuestion);
@@ -96,7 +96,7 @@ class QuizController extends AbstractCrudController
     public function removeQuizRoundQuestionAction()
     {
         $quizRoundQuestionId = $this->params('quizRoundQuestionId');
-        $quizRoundQuestion = $this->quizRoundQuestionService->getQuizRoundQuestionById($quizRoundQuestionId);
+        $quizRoundQuestion = $this->quizRoundQuestionService->getById($quizRoundQuestionId);
         $quizId = $quizRoundQuestion->getQuizRound()->getQuiz()->getId();
 
         $this->quizRoundQuestionService->remove($quizRoundQuestion);

@@ -90,7 +90,7 @@ abstract class AbstractCrudController extends AbstractActionController
                 }
             } catch (\Exception $e) {
                 error_log($e->getMessage());
-                //die($e->getMessage());
+                die($e->getMessage());
 
                 $this->processFormProcessingFailure($form);
                 break;

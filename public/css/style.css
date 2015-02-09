@@ -44,3 +44,12 @@ ol li.list-group-item {
     list-style: decimal inside;
     display: list-item;
 }
+
+.bubble {
+    background-color: #c0c0c0;
+    width: 50%;
+    padding: 10px;
+    margin: 10px;
+    font-size: 18px;
+    border-radius: 10px;
+}
