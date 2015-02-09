@@ -49,7 +49,7 @@ class QuizRoundQuestionComment extends Form
         );
 
         $submit = new Element\Submit(self::ELEM_SUBMIT);
-        $submit->setValue('Tag opslaan');
+        $submit->setValue('Comment plaatsen');
         $submit->setOptions([
                                 'label'            => ' ',
                                 'column-size'      => $inputSize,
