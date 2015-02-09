@@ -4,17 +4,17 @@ return [
     'doctrine' => [
         'configuration' => [
             'orm_default' => [
-                'metadata_cache'    => 'my_memcache',
-                'query_cache'       => 'my_memcache',
-                'result_cache'      => 'my_memcache',
-                'hydration_cache'   => 'my_memcache',
+//                'metadata_cache'    => 'my_memcache',
+//                'query_cache'       => 'my_memcache',
+//                'result_cache'      => 'my_memcache',
+//                'hydration_cache'   => 'my_memcache',
                 'generate_proxies'  => false,
             ],
         ],
         'driver' => [
             'annotation' => [
                 'class' => 'Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver',
-                'cache' => 'my_memcache',
+                //'cache' => 'my_memcache',
             ],
         ],
         'connection' => [

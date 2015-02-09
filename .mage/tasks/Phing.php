@@ -13,17 +13,17 @@ class Phing extends AbstractTask
 
     public function run()
     {
-        $command = 'vendor/bin/phing -f build.xml app:file-permissions';
-        $result = $this->runCommandRemote($command);
-        if (! $result) {
-            return false;
-        }
-
-        $command = 'vendor/bin/phing -f build.xml cache:clear';
-        $result = $this->runCommandRemote($command);
-        if (! $result) {
-            return false;
-        }
+//        $command = 'vendor/bin/phing -f build.xml app:file-permissions';
+//        $result = $this->runCommandRemote($command);
+//        if (! $result) {
+//            return false;
+//        }
+//
+//        $command = 'vendor/bin/phing -f build.xml cache:clear';
+//        $result = $this->runCommandRemote($command);
+//        if (! $result) {
+//            return false;
+//        }
 
         $command = 'vendor/bin/phing -f build/build.xml db:migrate';
         $result = $this->runCommandRemote($command);
@@ -31,11 +31,11 @@ class Phing extends AbstractTask
             return false;
         }
 
-        $command = 'vendor/bin/doctrine-module orm:generate-proxies';
-        $result = $this->runCommandRemote($command);
-        if (! $result) {
-            return false;
-        }
+//        $command = 'vendor/bin/doctrine-module orm:generate-proxies';
+//        $result = $this->runCommandRemote($command);
+//        if (! $result) {
+//            return false;
+//        }
 
         return true;
     }
