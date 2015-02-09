@@ -127,6 +127,25 @@
             <?php endforeach ?>
         </ol>
     <?php endforeach ?>
+    <h4>Quiz mutaties</h4>
+    <?php foreach($quiz->getQuizLogs() as $quizLog): ?>
+        <?php
+            $createdDate = new DateTime($quizLog->getDateCreated()->format('Y-m-d H:i:s'), new DateTimeZone('UTC'));
+            $dateAgo = new \Smirik\PHPDateTimeAgo\DateTimeAgo();
+            $dateAgo->setTextTranslator(new \Quiz\PHPDateTimeAgo\TextTranslator\DutchTranslator());
+        ?>
+        <div class="row">
+            <div class="pull-left">
+                <i class="<?php echo $quizLog->getIcon(); ?>"></i>
+            </div>
+            <div class="col-md-2">
+                <?php echo $dateAgo->get($createdDate->setTimezone(new DateTimeZone('Europe/Amsterdam'))); ?>
+            </div>
+            <div class="col-md-9 pull-left">
+                <?php echo $quizLog->getText(); ?>
+            </div>
+        </div>
+    <?php endforeach ?>
 </div>
 
 <script type="text/javascript">

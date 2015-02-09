@@ -22,9 +22,13 @@ class QuizControllerFactory implements FactoryInterface
         /** @var \Quiz\Service\QuizRoundQuestion $quizRoundQuestionService */
         $quizRoundQuestionService = $services->get('Quiz\Service\QuizRoundQuestion');
 
+        /** @var \Quiz\Service\QuizLog $quizLogService */
+        $quizLogService = $services->get('Quiz\Service\QuizLog');
+
         return new QuizController(
             $quizService,
-            $quizRoundQuestionService
+            $quizRoundQuestionService,
+            $quizLogService
         );
     }
 }

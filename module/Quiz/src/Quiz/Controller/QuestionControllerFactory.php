@@ -37,12 +37,16 @@ class QuestionControllerFactory implements FactoryInterface
         /** @var \Zend\Authentication\AuthenticationService $authenticationService */
         $authenticationService = $services->get('zfcuser_auth_service');
 
+        /** @var \Quiz\Service\QuizLog $quizLogService */
+        $quizLogService = $services->get('Quiz\Service\QuizLog');
+
         return new QuestionController(
             $questionService,
             $categoryService,
             $quizService,
             $authenticationService,
-            $questionForm
+            $questionForm,
+            $quizLogService
         );
     }
 

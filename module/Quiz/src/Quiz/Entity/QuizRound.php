@@ -236,11 +236,14 @@ class QuizRound
 
     /**
      * @param QuizRoundQuestion $quizRoundQuestion
+     * @return \Quiz\Entity\QuizRoundQuestion
      */
     public function addQuizRoundQuestion(QuizRoundQuestionEntity $quizRoundQuestion)
     {
         $quizRoundQuestion->setQuizRound($this);
         $this->quizRoundQuestions->add($quizRoundQuestion);
+
+        return $quizRoundQuestion;
     }
 
     /**

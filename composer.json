@@ -20,8 +20,10 @@
         "andres-montanez/magallanes": "1.0.1",
         "neilime/zf2-twb-bundle": "2.3.*",
         "beberlei/DoctrineExtensions": "dev-master@dev",
+        "smirik/php-datetime-ago": "1.0.*",
 
         "kemzy/library": "dev-master@dev"
+
     },
     "repositories": [
         {

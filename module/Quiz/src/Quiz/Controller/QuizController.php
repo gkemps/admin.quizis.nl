@@ -3,8 +3,8 @@ namespace Quiz\Controller;
 
 use Quiz\Service\Quiz as QuizService;
 use Quiz\Service\QuizRoundQuestion as QuizRoundQuestionService;
+use Quiz\Service\QuizLog as QuizLogService;
 use Zend\Form\FormInterface;
-use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
 class QuizController extends AbstractCrudController
@@ -15,16 +15,22 @@ class QuizController extends AbstractCrudController
     /** @var QuizRoundQuestionService  */
     protected $quizRoundQuestionService;
 
+    /** @var QuizLogService  */
+    protected $quizLogService;
+
     /**
      * @param QuizService $quizService
      * @param QuizRoundQuestionService $quizRoundQuestionService
+     * @param QuizLogService $quizLogService
      */
     public function __construct(
         QuizService $quizService,
-        QuizRoundQuestionService $quizRoundQuestionService
+        QuizRoundQuestionService $quizRoundQuestionService,
+        QuizLogService $quizLogService
     ) {
         $this->quizService = $quizService;
         $this->quizRoundQuestionService = $quizRoundQuestionService;
+        $this->quizLogService = $quizLogService;
     }
 
     public function indexAction()
@@ -82,6 +88,7 @@ class QuizController extends AbstractCrudController
         $quizRoundQuestion = $this->quizRoundQuestionService->getQuizRoundQuestionById($quizRoundQuestionId);
 
         $this->quizRoundQuestionService->resetQuestionNumber($quizRoundQuestion, $newPosition);
+        $this->quizLogService->createNewQuestionChangedLog($quizRoundQuestion);
 
         die();
     }
@@ -93,6 +100,7 @@ class QuizController extends AbstractCrudController
         $quizId = $quizRoundQuestion->getQuizRound()->getQuiz()->getId();
 
         $this->quizRoundQuestionService->remove($quizRoundQuestion);
+        $this->quizLogService->createNewQuestionRemovedLog($quizRoundQuestion);
 
         return $this->redirect()->toRoute('quiz/detail', ['quizId' => $quizId]);
     }

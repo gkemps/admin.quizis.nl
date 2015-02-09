@@ -5,6 +5,7 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Quiz\Entity\QuizRound as QuizRoundEntity;
 use Quiz\Entity\Question as QuestionEntity;
+use Quiz\Entity\QuizLog as QuizLogEntity;
 
 /**
  * @ORM\Entity
@@ -61,6 +62,12 @@ class Quiz
      * @ORM\OrderBy({"number" = "ASC"})
      **/
     protected $quizRounds;
+
+    /**
+     * @ORM\OneToMany(targetEntity="QuizLog", mappedBy="quiz")
+     * @ORM\OrderBy({"dateCreated" = "DESC"})
+     **/
+    protected $quizLogs;
 
     /**
      * @return DateTime
@@ -246,5 +253,13 @@ class Quiz
         }
 
         return false;
+    }
+
+    /**
+     * @return QuizLogEntity[]
+     */
+    public function getQuizLogs()
+    {
+        return $this->quizLogs;
     }
 }

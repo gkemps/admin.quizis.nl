@@ -59,16 +59,16 @@ class Quiz
     /**
      * @param QuestionEntity $question
      * @param QuizRoundEntity $quizRound
-     * @return \Quiz\Entity\QuizRound
+     * @return \Quiz\Entity\QuizRoundQuestion
      */
     public function addQuestionToQuizRound(QuestionEntity $question, QuizRoundEntity $quizRound)
     {
         $quizRoundQuestion = $this->createQuizRoundQuestion($question, $quizRound);
 
-        $quizRound->addQuizRoundQuestion($quizRoundQuestion);
+        $quizRoundQuestion = $quizRound->addQuizRoundQuestion($quizRoundQuestion);
         $this->storeQuizRound($quizRound);
 
-        return $quizRound;
+        return $quizRoundQuestion;
     }
 
     /**

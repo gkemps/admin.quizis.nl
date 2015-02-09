@@ -4,6 +4,7 @@ namespace Quiz\Controller;
 use Quiz\Service\Question as QuestionService;
 use Quiz\Service\Category as CategoryService;
 use Quiz\Service\Quiz as QuizService;
+use Quiz\Service\QuizLog as QuizLogService;
 use Quiz\Form\Question as QuestionForm;
 use Quiz\Entity\Question as QuestionEntity;
 use Zend\Form\FormInterface;
@@ -27,25 +28,31 @@ class QuestionController extends AbstractCrudController
     /** @var QuestionForm  */
     protected $questionForm;
 
+    /** @var QuizLogService  */
+    protected $quizLogService;
+
     /**
      * @param QuestionService $questionService
      * @param CategoryService $categoryService
      * @param QuizService $quizService
      * @param AuthenticationService $userAuthenticationService
      * @param QuestionForm $questionForm
+     * @param QuizLogService $quizLogService
      */
     public function __construct(
         QuestionService $questionService,
         CategoryService $categoryService,
         QuizService $quizService,
         AuthenticationService $userAuthenticationService,
-        QuestionForm $questionForm
+        QuestionForm $questionForm,
+        QuizLogService $quizLogService
     ) {
         $this->questionService = $questionService;
         $this->categoryService = $categoryService;
         $this->quizService = $quizService;
         $this->userAuthenticationService = $userAuthenticationService;
         $this->questionForm = $questionForm;
+        $this->quizLogService = $quizLogService;
     }
 
     public function indexAction()
@@ -193,7 +200,8 @@ class QuestionController extends AbstractCrudController
         $question = $this->questionService->getById($questionId);
         $quizRound = $this->quizService->getQuizRoundById($quizRoundId);
 
-        $this->quizService->addQuestionToQuizRound($question, $quizRound);
+        $quizRoundQuestion = $this->quizService->addQuestionToQuizRound($question, $quizRound);
+        $this->quizLogService->createNewQuestionAddedLog($quizRoundQuestion);
 
         $url = $this->getRequest()->getHeader('Referer')->getUri();
         return $this->redirect()->toUrl($url);
