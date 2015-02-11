@@ -264,6 +264,18 @@ return [
                                 'action'     => 'detail',
                             ],
                         ],
+                        'child_routes' => [
+                            'print-questions' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route'    => '/print-vragen',
+                                    'defaults' => [
+                                        'controller' => 'Quiz\Controller\Quiz',
+                                        'action'     => 'printQuestions',
+                                    ],
+                                ],
+                            ]
+                        ]
                     ],
                     'next-quiz' => [
                         'type' => 'Segment',

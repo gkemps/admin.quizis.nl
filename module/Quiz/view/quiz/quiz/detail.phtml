@@ -99,6 +99,32 @@
         <canvas id="pieChart" width="500" height="500"></canvas>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-2">
+        <a href="<?php echo $this->url('quiz/detail/print-questions', ['quizId' => $quiz->getId()]); ?>" target="_blank">
+            <button class="btn btn-info">
+                <i class="fa fa-file-text-o"></i>
+                 Vragen printen
+            </button>
+        </a>
+    </div>
+    <div class="col-md-2">
+        <a href="#" target="_blank">
+            <button class="btn btn-success">
+                <i class="fa fa-file-text-o"></i>
+                Antwoorden printen
+            </button>
+        </a>
+    </div>
+    <div class="col-md-2">
+        <a href="#" target="_blank">
+            <button class="btn btn-primary">
+                <i class="fa fa-file-text-o"></i>
+                Foto ronde printen
+            </button>
+        </a>
+    </div>
+</div>
 
 <div>
     <?php foreach ($quiz->getQuizRounds() as $quizRound): ?>

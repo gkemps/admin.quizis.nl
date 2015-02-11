@@ -105,6 +105,21 @@ class QuizController extends AbstractCrudController
         return $this->redirect()->toRoute('quiz/detail', ['quizId' => $quizId]);
     }
 
+    public function printQuestionsAction()
+    {
+        $this->layout('print/layout');
+
+        $quizId = $this->params('quizId');
+
+        $quiz = $this->quizService->getQuizById($quizId);
+
+        return new ViewModel(
+            [
+                'quiz' => $quiz
+            ]
+        );
+    }
+
     /**
      * @param FormInterface $form
      * @return mixed

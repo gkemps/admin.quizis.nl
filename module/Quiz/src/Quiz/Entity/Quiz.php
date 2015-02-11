@@ -2,6 +2,7 @@
 namespace Quiz\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Quiz\Entity\QuizRound as QuizRoundEntity;
 use Quiz\Entity\Question as QuestionEntity;
@@ -60,6 +61,8 @@ class Quiz
     /**
      * @ORM\OneToMany(targetEntity="QuizRound", mappedBy="quiz")
      * @ORM\OrderBy({"number" = "ASC"})
+     *
+     * @var ArrayCollection|QuizRoundEntity[]
      **/
     protected $quizRounds;
 
@@ -261,5 +264,15 @@ class Quiz
     public function getQuizLogs()
     {
         return $this->quizLogs;
+    }
+
+    /**
+     * @return QuizRoundEntity
+     */
+    public function getNextRound()
+    {
+        $quizRound = $this->quizRounds->current();
+        $this->quizRounds->next();
+        return $quizRound;
     }
 }

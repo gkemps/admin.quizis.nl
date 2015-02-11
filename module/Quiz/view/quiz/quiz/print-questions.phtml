@@ -1,0 +1,53 @@
+<?php
+/** @var \Quiz\Entity\Quiz $quiz */
+
+$escape = new Zend\Escaper\Escaper();
+?>
+<div class="book">
+    <div class="page">
+        <div class="subpage">
+            <div class="text-center" style="font-size: 60px; margin-top: 80px">
+                <?php echo $escape->escapeHtml($quiz->getName()); ?>
+            </div>
+            <div class="text-center">
+                <?php echo $escape->escapeHtml($quiz->getDate()->format('l j F Y')); ?>
+            </div>
+            <div class="text-center">
+                <?php echo $escape->escapeHtml($quiz->getDate()->format('H:i')); ?>
+            </div>
+            <div class="text-center" style="font-size: 60px; margin-top: 150px; text-decoration: underline">
+                Vragen
+            </div>
+        </div>
+    </div>
+    <?php for($i=0; $i < ceil($quiz->getNumberOfRounds() / 2); $i++): ?>
+        <div class="page">
+            <div class="subpage">
+                <?php for ($j=0; $j < 2; $j++): ?>
+                    <?php
+                        $quizRound = $quiz->getNextRound();
+                        if (!$quizRound) {
+                            break;
+                        }
+                    ?>
+                    <h1>
+                        Ronde <?php echo $quizRound->getNumber(); ?>
+                        <?php if ($quizRound->getTheme() != ""): ?>
+                            (<?php echo $quizRound->getTheme(); ?>)
+                        <?php endif ?>
+                    </h1>
+                    <ol>
+                        <?php foreach($quizRound->getQuizRoundQuestions() as $quizQuestion): ?>
+                            <li>
+                                <?php echo $quizQuestion->getQuestion()->getQuestion(); ?>
+                                <?php if ($quizQuestion->getQuestion()->getQuestion() > 1): ?>
+                                    (<?php echo $quizQuestion->getQuestion()->getPoints();?>pt)
+                                <?php endif ?>
+                            </li>
+                        <?php endforeach ?>
+                    </ol>
+                <?php endfor ?>
+            </div>
+        </div>
+    <?php endfor ?>
+</div>
