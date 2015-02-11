@@ -117,7 +117,7 @@
         </a>
     </div>
     <div class="col-md-2">
-        <a href="#" target="_blank">
+        <a href="<?php echo $this->url('quiz/detail/print-photos', ['quizId' => $quiz->getId()]); ?>" target="_blank">
             <button class="btn btn-primary">
                 <i class="fa fa-file-text-o"></i>
                 Foto ronde printen

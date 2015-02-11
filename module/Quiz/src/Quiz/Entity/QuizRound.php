@@ -187,7 +187,7 @@ class QuizRound
     }
 
     /**
-     * @return Collection|QuizRoundQuestionEntity[]
+     * @return ArrayCollection|QuizRoundQuestionEntity[]
      */
     public function getQuizRoundQuestions()
     {
@@ -257,5 +257,15 @@ class QuizRound
     public function getPercentageFull()
     {
         return round((count($this->quizRoundQuestions) / self::MAX_QUESTIONS) * 100);
+    }
+
+    /**
+     * @return QuizRoundQuestionEntity
+     */
+    public function getNextQuestion()
+    {
+        $question = $this->quizRoundQuestions->current();
+        $this->quizRoundQuestions->next();
+        return $question;
     }
 }

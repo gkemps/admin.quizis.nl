@@ -284,7 +284,17 @@ return [
                                         'action'     => 'printAnswers',
                                     ],
                                 ],
-                            ]
+                            ],
+                            'print-photos' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route'    => '/print-foto-ronde',
+                                    'defaults' => [
+                                        'controller' => 'Quiz\Controller\Quiz',
+                                        'action'     => 'printPhotos',
+                                    ],
+                                ],
+                            ],
                         ]
                     ],
                     'next-quiz' => [

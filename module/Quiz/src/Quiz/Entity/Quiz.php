@@ -275,4 +275,9 @@ class Quiz
         $this->quizRounds->next();
         return $quizRound;
     }
+
+    public function getPhotoRound()
+    {
+        return $this->quizRounds->get(0);
+    }
 }

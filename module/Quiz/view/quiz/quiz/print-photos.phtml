@@ -1,0 +1,49 @@
+<?php
+/** @var \Quiz\Entity\QuizRound $quizRound */
+
+$escape = new Zend\Escaper\Escaper();
+?>
+<div class="book">
+    <div class="page-landscape">
+        <div class="subpage-landscape">
+            <h1>Ronde 1</h1>
+            <?php for ($i = 0; $i < 2; $i++): ?>
+                <div class="row">
+                    <?php for ($j = 0; $j < 5; $j++): ?>
+                        <div class="border-radius" style="position: relative">
+                            <?php
+                                $quizRoundQuestion = $quizRound->getNextQuestion();
+                                if ($quizRoundQuestion):
+                            ?>
+                                <img style="height: 150px"
+                                    src="data:image/png;base64,<?php echo $quizRoundQuestion->getQuestion()->getImage(); ?>" />
+                            <?php endif ?>
+                            <div class="question-number">
+                                <?php echo $quizRoundQuestion->getQuestionNumber() / 10; ?>
+                            </div>
+                        </div>
+                    <?php endfor ?>
+                </div>
+            <?php endfor ?>
+            <?php $quizRound->getQuizRoundQuestions()->first(); ?>
+            <div class="row" style="margin-top: 20px">
+            <?php for ($i = 0; $i < 2; $i++): ?>
+                <div class="col-sm-5" style="float: left">
+                    <ol start="<?php echo ($i * 5 + 1); ?>">
+                    <?php for ($j = 0; $j < 5; $j++): ?>
+                        <li>
+                            <?php
+                                $quizRoundQuestion = $quizRound->getNextQuestion();
+                                if ($quizRoundQuestion) {
+                                    echo $quizRoundQuestion->getQuestion()->getQuestion();
+                                }
+                            ?>
+                        </li>
+                    <?php endfor ?>
+                    </ol>
+                </div>
+            <?php endfor ?>
+            </div>
+        </div>
+    </div>
+</div>

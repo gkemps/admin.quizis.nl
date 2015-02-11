@@ -120,6 +120,22 @@ class QuizController extends AbstractCrudController
         );
     }
 
+    public function printPhotosAction()
+    {
+        $this->layout('print/layout');
+
+        $quizId = $this->params('quizId');
+
+        $quiz = $this->quizService->getQuizById($quizId);
+        $quizRound = $quiz->getPhotoRound();
+
+        return new ViewModel(
+            [
+                'quizRound' => $quizRound
+            ]
+        );
+    }
+
     public function printAnswersAction()
     {
         $this->layout('print/layout');
