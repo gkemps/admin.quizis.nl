@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #FAFAFA;
-    font: 13pt "Verdana";
+    font: 11pt "Verdana";
 }
 * {
     box-sizing: border-box;
@@ -23,7 +23,7 @@ body {
     #border: 1px #D3D3D3 solid;
     border-radius: 5px;
     background: white;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    #box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     margin: 0;
     page-break-after: always;
 }

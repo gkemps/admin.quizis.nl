@@ -6,7 +6,7 @@ $escape = new Zend\Escaper\Escaper();
 <div class="book">
     <div class="page">
         <div class="subpage">
-            <div style="font-size: 60px; margin-top: 80px; text-align: center">
+            <div style="font-size: 60px; margin-top: 80px;text-align: center">
                 <?php echo $escape->escapeHtml($quiz->getName()); ?>
             </div>
             <div style="text-align: center">
@@ -16,7 +16,7 @@ $escape = new Zend\Escaper\Escaper();
                 <?php echo $escape->escapeHtml($quiz->getDate()->format('H:i')); ?>
             </div>
             <div style="font-size: 60px; margin-top: 150px; text-decoration: underline; text-align: center">
-                Vragen
+                Antwoorden
             </div>
         </div>
     </div>
@@ -25,10 +25,10 @@ $escape = new Zend\Escaper\Escaper();
             <div class="subpage">
                 <?php for ($j=0; $j < 2; $j++): ?>
                     <?php
-                        $quizRound = $quiz->getNextRound();
-                        if (!$quizRound) {
-                            break;
-                        }
+                    $quizRound = $quiz->getNextRound();
+                    if (!$quizRound) {
+                        break;
+                    }
                     ?>
                     <h1>
                         Ronde <?php echo $quizRound->getNumber(); ?>
@@ -39,7 +39,7 @@ $escape = new Zend\Escaper\Escaper();
                     <ol>
                         <?php foreach($quizRound->getQuizRoundQuestions() as $quizQuestion): ?>
                             <li>
-                                <?php echo $quizQuestion->getQuestion()->getQuestion(); ?>
+                                <?php echo $quizQuestion->getQuestion()->getAnswer(); ?>
                                 <?php if ($quizQuestion->getQuestion()->getPoints() > 1): ?>
                                     <strong>
                                         [<?php echo $quizQuestion->getQuestion()->getPoints();?>pt]
@@ -47,7 +47,7 @@ $escape = new Zend\Escaper\Escaper();
                                 <?php endif ?>
                                 <br />
                                 <small style="font-size: 6pt">
-                                    <?php echo $quizQuestion->getQuestion()->getAnswer(); ?>
+                                    <?php echo $quizQuestion->getQuestion()->getQuestion(); ?>
                                 </small>
                             </li>
                         <?php endforeach ?>

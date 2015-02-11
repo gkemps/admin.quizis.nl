@@ -274,6 +274,16 @@ return [
                                         'action'     => 'printQuestions',
                                     ],
                                 ],
+                            ],
+                            'print-answers' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route'    => '/print-antwoorden',
+                                    'defaults' => [
+                                        'controller' => 'Quiz\Controller\Quiz',
+                                        'action'     => 'printAnswers',
+                                    ],
+                                ],
                             ]
                         ]
                     ],
