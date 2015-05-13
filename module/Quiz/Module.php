@@ -1,6 +1,7 @@
 <?php
 namespace Quiz;
 
+use Locale;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Stdlib\ArrayUtils;
@@ -12,6 +13,8 @@ class Module
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+
+        Locale::setDefault('nl_NL');
     }
 
     public function getConfig()

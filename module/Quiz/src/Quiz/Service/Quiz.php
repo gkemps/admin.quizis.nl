@@ -100,7 +100,8 @@ class Quiz
 
         $qb->select('q')
             ->from('\Quiz\Entity\Quiz', 'q')
-            ->orderBy('q.date', 'ASC');
+            ->orderBy('q.date', 'DESC')
+            ->setMaxResults(1);
 
         return $qb->getQuery()->getSingleResult();
     }
