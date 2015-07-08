@@ -7,6 +7,7 @@ return [
             'Quiz\Service\Question' => 'Quiz\Service\QuestionFactory',
             'Quiz\Service\Quiz' => 'Quiz\Service\QuizFactory',
             'Quiz\Service\QuizLog' => 'Quiz\Service\QuizLogFactory',
+            'Quiz\Service\QuizRound' => 'Quiz\Service\QuizRoundFactory',
             'Quiz\Service\QuizRoundQuestion' => 'Quiz\Service\QuizRoundQuestionFactory',
 
             // ZF2 defaults

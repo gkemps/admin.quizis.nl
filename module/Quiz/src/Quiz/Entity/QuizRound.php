@@ -208,6 +208,20 @@ class QuizRound
     }
 
     /**
+     * @return bool
+     */
+    public function hasAudio()
+    {
+        foreach ($this->getQuizRoundQuestions() as $quizQuestion) {
+            if ($quizQuestion->getQuestion()->hasAudio()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @return int
      */
     public function getMaxNumberOfQuestions()

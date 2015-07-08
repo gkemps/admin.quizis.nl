@@ -133,6 +133,9 @@
             <?php if ($quizRound->getTheme() != ""): ?>
              (<?php echo $quizRound->getTheme(); ?>)
             <?php endif ?>
+            <?php if ($quizRound->hasAudio()): ?>
+                <a href="<?php echo $this->url('download-mp3-round', ['quizRoundId' => $quizRound->getId()]); ?>"><i class="fa fa-download" ></i></a>
+            <?php endif ?>
         </h2>
         <ol class="list-group sortable">
             <?php foreach ($quizRound->getQuizRoundQuestions() as $quizRoundQuestion): ?>
@@ -143,6 +146,9 @@
                             <span class="label label-primary label-as-badge">
                                     <i class="fa fa-image"></i>
                             </span>
+                        <?php endif ?>
+                        <?php if ($quizRoundQuestion->getQuestion()->hasAudio()): ?>
+                            <audio controls src="data:audio/ogg;base64,<?php echo $quizRoundQuestion->getQuestion()->getAudio(); ?>" style="width: 150px"></audio>
                         <?php endif ?>
                         <span class="pull-right">
                             <a href="<?php echo $this->url('quiz/remove-question', ['quizRoundQuestionId' => $quizRoundQuestion->getId()]); ?>" style="color: #ff0000">
@@ -157,6 +163,11 @@
                                 </span>
                             <?php endif ?>
                         </a>
+                        <?php if ($quizRoundQuestion->getQuestion()->hasAudio()): ?>
+                            <span class="pull-right" style="margin-right: 10px;">
+                                <a href="<?php echo $this->url('download-mp3', ['questionId' => $quizRoundQuestion->getQuestion()->getId()]); ?>"><i class="fa fa-download"></i></a>
+                            </span>
+                        <?php endif ?>
                     </li>
             <?php endforeach ?>
         </ol>

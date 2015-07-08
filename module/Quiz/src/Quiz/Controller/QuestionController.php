@@ -222,6 +222,24 @@ class QuestionController extends AbstractCrudController
         return $view;
     }
 
+    public function downloadMp3Action()
+    {
+        $questionId = $this->params('questionId');
+        /** @var QuestionEntity $question */
+        $question = $this->questionService->getById($questionId);
+
+        $response = $this->getResponse();
+        $response->setContent($question->getPureAudio());
+
+        $headers = $response->getHeaders();
+        $headers->clearHeaders()
+            ->addHeaderLine('Content-Type', 'audio/mpeg')
+            ->addHeaderLine('Content-Disposition', 'attachment; filename="audio_vraag_'.$question->getId().'.mp3"')
+            ->addHeaderLine('Content-Length', strlen($question->getPureAudio()));
+
+        return $this->response;
+    }
+
     /**
      * @param FormInterface $form
      * @return mixed

@@ -20,6 +20,7 @@ class Question extends Form
     const ELEM_TAGS = 'tags';
     const ELEM_SOURCE = 'source';
     const ELEM_IMAGE = 'image';
+    const ELEM_AUDIO = 'audio';
     const ELEM_SUBMIT = 'submit';
 
     /** @var CategoryService  */
@@ -187,13 +188,22 @@ class Question extends Form
                         'class' => $columnSize,
                     ],
                 ],
-//                'attributes' => [
-//                    'type'        => 'file',
-//                    'placeholder' => 'http://nl.wikipedia.org of iets betrouwbare bron',
-//                ],
             ]
         );
 
+        $this->add(
+            [
+                'type'       => 'Zend\Form\Element\File',
+                'name'       => self::ELEM_AUDIO,
+                'options'    => [
+                    'label'            => 'audio',
+                    'column-size'      => $inputSize,
+                    'label_attributes' => [
+                        'class' => $columnSize,
+                    ],
+                ],
+            ]
+        );
 
         $submit = new Element\Submit(self::ELEM_SUBMIT);
         $submit->setValue('Vraag opslaan');

@@ -63,6 +63,13 @@ class Question
     protected $image;
 
     /**
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
+    protected $audio;
+
+    /**
      * @ORM\Column(type="datetime")
      *
      * @var DateTime
@@ -297,6 +304,22 @@ class Question
     }
 
     /**
+     * @return string
+     */
+    public function getAudio()
+    {
+        return base64_encode($this->audio);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPureAudio()
+    {
+        return $this->audio;
+    }
+
+    /**
      * @param string $image
      * @return Question
      */
@@ -305,6 +328,20 @@ class Question
         if (isset($image['tmp_name']) && $image['size'] > 0) {
             $image = file_get_contents($image['tmp_name']);
             $this->image = $image;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param $audio
+     * @return $this
+     */
+    public function setAudio($audio)
+    {
+        if (isset($audio['tmp_name']) && $audio['size'] > 0) {
+            $audio = file_get_contents($audio['tmp_name']);
+            $this->audio = $audio;
         }
 
         return $this;
@@ -373,5 +410,13 @@ class Question
     public function hasImage()
     {
         return !empty($this->image);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAudio()
+    {
+        return !empty($this->audio);
     }
 }

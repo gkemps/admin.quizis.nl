@@ -370,6 +370,36 @@ return [
                         ],
                     ]
                 ]
+            ],
+
+            'download-mp3' => [
+                'type' => 'Segment',
+                'may_terminate' => true,
+                'options' => [
+                    'route'    => '/download-mp3/:questionId',
+                    'constraints' => [
+                        'questionId' => '\d+'
+                    ],
+                    'defaults' => [
+                        'controller' => 'Quiz\Controller\Question',
+                        'action'     => 'downloadMp3',
+                    ],
+                ],
+            ],
+
+            'download-mp3-round' => [
+                'type' => 'Segment',
+                'may_terminate' => true,
+                'options' => [
+                    'route'    => '/download-mp3-round/:quizRoundId',
+                    'constraints' => [
+                        'quizRoundId' => '\d+'
+                    ],
+                    'defaults' => [
+                        'controller' => 'Quiz\Controller\QuizRound',
+                        'action'     => 'downloadMp3',
+                    ],
+                ],
             ]
 
         ],
