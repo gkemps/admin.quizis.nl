@@ -26,7 +26,7 @@ $escape = new Zend\Escaper\Escaper();
                 </div>
             <?php endfor ?>
             <?php $quizRound->getQuizRoundQuestions()->first(); ?>
-            <div class="row" style="margin-top: 20px;">
+            <div class="row" style="margin-top: 20px; margin-right: 20px">
             <?php for ($i = 0; $i < 2; $i++): ?>
                 <div class="col-sm-5" style="float: left">
                     <ol start="<?php echo ($i * 5 + 1); ?>">
@@ -43,11 +43,10 @@ $escape = new Zend\Escaper\Escaper();
                     </ol>
                 </div>
             <?php endfor ?>
+                <div class="col-sm-2" style="margin-left: 30px; float: left">
+                    <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRgs1gdCD13jgc6j1kx0PYyJNedeWuEB8Ts1p-gNx_SWxNI3kxV4wm8Vg" />
+                </div>
             </div>
-            <p style="clear: both; float: left;">
-                <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRgs1gdCD13jgc6j1kx0PYyJNedeWuEB8Ts1p-gNx_SWxNI3kxV4wm8Vg" />
-                Verboden gebruik te maken van mobiele telefoons!
-            </p>
         </div>
     </div>
 </div>
