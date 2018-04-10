@@ -22,7 +22,8 @@
         "beberlei/DoctrineExtensions": "dev-master@dev",
         "smirik/php-datetime-ago": "1.0.*",
 
-        "kemzy/library": "dev-master@dev"
+        "kemzy/library": "dev-master@dev",
+        "doctrine/annotations": "^1.4"
 
     },
     "repositories": [
