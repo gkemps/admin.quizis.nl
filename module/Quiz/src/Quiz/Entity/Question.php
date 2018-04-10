@@ -2,12 +2,10 @@
 namespace Quiz\Entity;
 
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Quiz\Entity\Category as CategoryEntity;
 use Quiz\Entity\User as UserEntity;
-use Quiz\Entity\Tag as TagEntity;
 use Quiz\Entity\QuestionTag as QuestionTagEntity;
 use Quiz\Entity\QuizRoundQuestion as QuizRoundQuestionEntity;
 use Quiz\Entity\QuestionLike as QuestionLikeEntity;
@@ -63,11 +61,11 @@ class Question
     protected $image;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="integer")
      *
-     * @var string
+     * @var bool
      */
-    protected $audio;
+    protected $audioQuestion;
 
     /**
      * @ORM\Column(type="datetime")
@@ -304,19 +302,19 @@ class Question
     }
 
     /**
-     * @return string
+     * @return boolean
      */
-    public function getAudio()
+    public function isAudioQuestion()
     {
-        return base64_encode($this->audio);
+        return $this->audioQuestion;
     }
 
     /**
-     * @return string
+     * @param boolean $audioQuestion
      */
-    public function getPureAudio()
+    public function setAudioQuestion($audioQuestion)
     {
-        return $this->audio;
+        $this->audioQuestion = $audioQuestion;
     }
 
     /**
@@ -328,20 +326,6 @@ class Question
         if (isset($image['tmp_name']) && $image['size'] > 0) {
             $image = file_get_contents($image['tmp_name']);
             $this->image = $image;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param $audio
-     * @return $this
-     */
-    public function setAudio($audio)
-    {
-        if (isset($audio['tmp_name']) && $audio['size'] > 0) {
-            $audio = file_get_contents($audio['tmp_name']);
-            $this->audio = $audio;
         }
 
         return $this;
@@ -410,13 +394,5 @@ class Question
     public function hasImage()
     {
         return !empty($this->image);
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasAudio()
-    {
-        return !empty($this->audio);
     }
 }

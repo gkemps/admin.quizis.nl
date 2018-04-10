@@ -44,6 +44,10 @@ class AuthenticationListener implements ListenerAggregateInterface
     {
         /** @var MvcEvent $event */
 
+        if (php_sapi_name() == "cli") {
+            return;
+        }
+
         $sm = $event->getApplication()->getServiceManager();
         $auth = $sm->get('zfcuser_auth_service');
         if ($auth->hasIdentity()) {

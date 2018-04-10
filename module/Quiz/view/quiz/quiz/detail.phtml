@@ -151,8 +151,11 @@
                                     <i class="fa fa-image"></i>
                             </span>
                         <?php endif ?>
-                        <?php if ($quizRoundQuestion->getQuestion()->hasAudio()): ?>
-                            <audio controls src="data:audio/ogg;base64,<?php echo $quizRoundQuestion->getQuestion()->getAudio(); ?>" style="width: 150px"></audio>
+                        <?php if ($quizRoundQuestion->getQuestion()->isAudioQuestion()): ?>
+                            <audio controls>
+                                <source src="/data/audio/<?php echo $quizRoundQuestion->getQuestion()->getId(); ?>.mp3" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
                         <?php endif ?>
                         <span class="pull-right">
                             <a href="<?php echo $this->url('quiz/remove-question', ['quizRoundQuestionId' => $quizRoundQuestion->getId()]); ?>" style="color: #ff0000">
@@ -167,7 +170,7 @@
                                 </span>
                             <?php endif ?>
                         </a>
-                        <?php if ($quizRoundQuestion->getQuestion()->hasAudio()): ?>
+                        <?php if ($quizRoundQuestion->getQuestion()->isAudioQuestion()): ?>
                             <span class="pull-right" style="margin-right: 10px;">
                                 <a href="<?php echo $this->url('download-mp3', ['questionId' => $quizRoundQuestion->getQuestion()->getId()]); ?>"><i class="fa fa-download"></i></a>
                             </span>

@@ -12,9 +12,6 @@ use Zend\Authentication\AuthenticationService;
 
 class Question extends AbstractService
 {
-    /** @var EntityManager  */
-    protected $em;
-
     /** @var \Doctrine\ORM\EntityRepository  */
     protected $questionRepository;
 
@@ -29,7 +26,8 @@ class Question extends AbstractService
         EntityManager $em,
         AuthenticationService $authenticationService
     ) {
-        $this->em = $em;
+        parent::__construct($em);
+
         $this->questionRepository = $this->em->getRepository('Quiz\Entity\Question');
         $this->authenticationService = $authenticationService;
     }

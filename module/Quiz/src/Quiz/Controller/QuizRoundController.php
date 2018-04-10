@@ -29,9 +29,10 @@ class QuizRoundController extends AbstractActionController
 
         $mp3File = "";
         foreach ($quizRound->getQuizRoundQuestions() as $quizRoundQuestion) {
-            if ($quizRoundQuestion->getQuestion()->hasAudio()) {
+            if ($quizRoundQuestion->getQuestion()->isAudioQuestion()) {
                 $silence = !empty($mp3File) ? $silenceMp3 : "";
-                $mp3File = $mp3File . $silence . $quizRoundQuestion->getQuestion()->getPureAudio();
+                $content = file_get_contents("public/data/audio/".$quizRoundQuestion->getQuestion()->getId().".mp3");
+                $mp3File = $mp3File . $silence . $content;
             }
         }
 

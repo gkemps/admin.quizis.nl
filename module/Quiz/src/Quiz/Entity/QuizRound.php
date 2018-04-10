@@ -213,7 +213,7 @@ class QuizRound
     public function hasAudio()
     {
         foreach ($this->getQuizRoundQuestions() as $quizQuestion) {
-            if ($quizQuestion->getQuestion()->hasAudio()) {
+            if ($quizQuestion->getQuestion()->isAudioQuestion()) {
                 return true;
             }
         }

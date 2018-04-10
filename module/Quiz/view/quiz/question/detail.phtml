@@ -1,7 +1,6 @@
 <?php
 /** @var $question \Quiz\Entity\Question */
 $image = $question->getImage();
-$audio = $question->getAudio();
 ?>
 <div class="jumbotron">
     <div class="row">
@@ -10,12 +9,15 @@ $audio = $question->getAudio();
                 <img src="data:image/png;base64,<?php echo $question->getImage(); ?>" height="150px" />
             </div>
         <?php endif ?>
-        <?php if (!empty($audio)): ?>
+        <?php if (!empty($question->isAudioQuestion())): ?>
             <div class="col-md-3 text-center">
-                <audio controls src="data:audio/ogg;base64,<?php echo $question->getAudio(); ?>" height="150px" ></audio>
+                <audio controls>
+                    <source src="/data/audio/<?php echo $question->getId(); ?>.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
             </div>
         <?php endif ?>
-        <div class="col-md-<?php echo (empty($image) && empty($audio)) ? "9" : "6"; ?> text-center">
+        <div class="col-md-<?php echo (empty($image) && !$question->isAudioQuestion()) ? "9" : "6"; ?> text-center">
             <h3>
                 "<?php echo $question->getQuestion(); ?>"
             </h3>

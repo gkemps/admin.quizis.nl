@@ -47,6 +47,8 @@ class QuestionController extends AbstractCrudController
         QuestionForm $questionForm,
         QuizLogService $quizLogService
     ) {
+        parent::__construct();
+
         $this->questionService = $questionService;
         $this->categoryService = $categoryService;
         $this->quizService = $quizService;
@@ -252,17 +254,16 @@ class QuestionController extends AbstractCrudController
     public function downloadMp3Action()
     {
         $questionId = $this->params('questionId');
-        /** @var QuestionEntity $question */
-        $question = $this->questionService->getById($questionId);
+        $content = file_get_contents("public/data/audio/".$questionId.".mp3");
 
         $response = $this->getResponse();
-        $response->setContent($question->getPureAudio());
+        $response->setContent($content);
 
         $headers = $response->getHeaders();
         $headers->clearHeaders()
             ->addHeaderLine('Content-Type', 'audio/mpeg')
-            ->addHeaderLine('Content-Disposition', 'attachment; filename="audio_vraag_'.$question->getId().'.mp3"')
-            ->addHeaderLine('Content-Length', strlen($question->getPureAudio()));
+            ->addHeaderLine('Content-Disposition', 'attachment; filename="audio_vraag_'.$questionId.'.mp3"')
+            ->addHeaderLine('Content-Length', strlen($content));
 
         return $this->response;
     }

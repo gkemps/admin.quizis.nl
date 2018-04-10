@@ -41,7 +41,7 @@ $escape = new Zend\Escaper\Escaper('utf-8');
                                 <i class="fa fa-image"></i>
                             </span>
                         <?php endif ?>
-                        <?php if ($question->hasAudio()): ?>
+                        <?php if ($question->isAudioQuestion()): ?>
                             <span class="label label-primary label-as-badge">
                                 <i class="fa fa-music"></i>
                             </span>
