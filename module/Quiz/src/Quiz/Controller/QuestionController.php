@@ -154,6 +154,33 @@ class QuestionController extends AbstractCrudController
         return $view;
     }
 
+    public function imageAction()
+    {
+        $questions = $this->questionService->imageQuestions();
+        $questions->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
+        $questions->setDefaultItemCountPerPage(10);
+
+        $view = $this->getBasicView();
+        $view->setVariable('questions', $questions);
+        $view->setTemplate('quiz/question/index');
+
+        return $view;
+    }
+
+    public function audioAction()
+    {
+        $questions = $this->questionService->audioQuestions();
+        $questions->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
+        $questions->setDefaultItemCountPerPage(10);
+
+        $view = $this->getBasicView();
+        $view->setVariable('questions', $questions);
+        $view->setTemplate('quiz/question/index');
+
+        return $view;
+    }
+
+
     public function detailAction()
     {
         $questionId = $this->params('questionId');

@@ -1,15 +1,18 @@
 <?php
 namespace Quiz\Service;
 
+use DateInterval;
 use DateTime;
+use Kemzy\Library\Service\AbstractService;
 use Quiz\Entity\Question as QuestionEntity;
 use Quiz\Entity\QuizRoundQuestion as QuizRoundQuestionEntity;
 use Quiz\Entity\Quiz as QuizEntity;
 use Quiz\Entity\QuizRound as QuizRoundEntity;
+use Quiz\Service\QuizRound as QuizRoundService;
+use Quiz\Service\QuizRoundQuestion as QuizRoundQuestionService;
 use Doctrine\ORM\EntityManager;
-use Zend\Ldap\Node\Collection;
 
-class Quiz
+class Quiz extends AbstractService
 {
     /** @var EntityManager  */
     protected $em;
@@ -17,17 +20,28 @@ class Quiz
     /** @var \Doctrine\ORM\EntityRepository  */
     protected $quizRepository;
 
-    /** @var \Doctrine\ORM\EntityRepository  */
-    protected $quizRoundRepository;
+    /** @var QuizRoundService  */
+    protected $quizRoundService;
+
+    /** @var QuizRoundQuestion  */
+    protected $quizRoundQuestionService;
 
     /**
      * @param EntityManager $em
+     * @param QuizRound $quizRoundService
+     * @param QuizRoundQuestion $quizRoundQuestionService
      */
-    public function __construct(EntityManager $em)
-    {
+    public function __construct(
+        EntityManager $em,
+        QuizRoundService $quizRoundService,
+        QuizRoundQuestionService $quizRoundQuestionService
+    ) {
+        parent::__construct($em);
+
         $this->em = $em;
         $this->quizRepository = $this->em->getRepository('Quiz\Entity\Quiz');
-        $this->quizRoundRepository = $this->em->getRepository('Quiz\Entity\QuizRound');
+        $this->quizRoundService = $quizRoundService;
+        $this->quizRoundQuestionService = $quizRoundQuestionService;
     }
 
     /**
@@ -42,7 +56,7 @@ class Quiz
      * @param $id
      * @return null|QuizEntity
      */
-    public function  getQuizById($id)
+    public function getQuizById($id)
     {
         return $this->quizRepository->find($id);
     }
@@ -53,7 +67,7 @@ class Quiz
      */
     public function getQuizRoundById($id)
     {
-        return $this->quizRoundRepository->find($id);
+        return $this->quizRoundService->getById($id);
     }
 
     /**
@@ -86,7 +100,10 @@ class Quiz
                 ))
         ->orderBy('q.date', 'ASC');
 
-        $qb->setParameter('date', new DateTime('now'));
+        $nowish = new DateTime('now');
+        $nowish->sub(new DateInterval("PT24H"));
+
+        $qb->setParameter('date', $nowish);
 
         return $qb->getQuery()->getResult();
     }
@@ -98,12 +115,72 @@ class Quiz
     {
         $qb = $this->em->createQueryBuilder();
 
+        $now = new DateTime('now');
+
         $qb->select('q')
             ->from('\Quiz\Entity\Quiz', 'q')
-            ->orderBy('q.date', 'DESC')
-            ->setMaxResults(1);
+            ->where($qb->expr()->gt('q.date', '?1'))
+            ->orderBy('q.date', 'ASC')
+            ->setMaxResults(1)
+            ->setParameter(1, $now->format('Y-m-d h:i:s'));
 
         return $qb->getQuery()->getSingleResult();
+    }
+
+    /**
+     * @param QuizEntity $newQuiz
+     * @return QuizEntity
+     */
+    public function createQuiz($newQuiz)
+    {
+        $newQuiz->setDateCreated(new DateTime());
+        $this->persist($newQuiz);
+
+        if (null != $newQuiz->getCopyOfQuiz()) {
+            $this->copyQuestionsFromQuiz($newQuiz);
+        } else {
+            $this->createNewStandardQuiz($newQuiz);
+        }
+
+        return $newQuiz;
+    }
+
+    /**
+     * @param QuizEntity $quiz
+     */
+    protected function copyQuestionsFromQuiz(QuizEntity $quiz)
+    {
+        /** @var QuizEntity $copyFromQuiz */
+        $copyFromQuiz = $quiz->getCopyOfQuiz();
+
+        foreach ($copyFromQuiz->getQuizRounds() as $quizRound) {
+            $newQuizRound = $this->quizRoundService->createNewQuizRound(
+                $quiz,
+                $quizRound->getNumber(),
+                $quizRound->getTheme()
+            );
+            foreach ($quizRound->getQuizRoundQuestions() as $quizRoundQuestion) {
+                $this->addQuestionToQuizRound(
+                    $quizRoundQuestion->getQuestion(),
+                    $newQuizRound
+                );
+            }
+        }
+    }
+
+    /**
+     * @param QuizEntity $quiz
+     */
+    protected function createNewStandardQuiz(QuizEntity $quiz)
+    {
+        $this->quizRoundService->createNewQuizRound($quiz, 1, "Foto ronde");
+        $this->quizRoundService->createNewQuizRound($quiz, 2);
+        $this->quizRoundService->createNewQuizRound($quiz, 3);
+        $this->quizRoundService->createNewQuizRound($quiz, 4);
+        $this->quizRoundService->createNewQuizRound($quiz, 5);
+        $this->quizRoundService->createNewQuizRound($quiz, 6);
+        $this->quizRoundService->createNewQuizRound($quiz, 7, "Muziek ronde");
+        $this->quizRoundService->createNewQuizRound($quiz, 8);
     }
 
     /**
@@ -140,5 +217,10 @@ class Quiz
         }
 
         return min(array_diff($spots, $occupied)) * 10;
+    }
+
+    protected function getRepository()
+    {
+        return $this->em->getRepository("Quiz\Entity\Quiz");
     }
 }

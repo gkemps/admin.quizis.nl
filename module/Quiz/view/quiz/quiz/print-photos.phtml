@@ -7,24 +7,33 @@ $escape = new Zend\Escaper\Escaper();
     <div class="page-landscape">
         <div class="subpage-landscape">
             <h1>Ronde 1</h1>
-            <?php for ($i = 0; $i < 2; $i++): ?>
-                <div class="row">
-                    <?php for ($j = 0; $j < 5; $j++): ?>
-                        <div class="border-radius" style="position: relative">
-                            <?php
-                                $quizRoundQuestion = $quizRound->getNextQuestion();
-                                if ($quizRoundQuestion):
-                            ?>
-                                <img style="height: 150px"
-                                    src="data:image/png;base64,<?php echo $quizRoundQuestion->getQuestion()->getImage(); ?>" />
-                            <?php endif ?>
-                            <div class="question-number">
-                                <?php echo $quizRoundQuestion->getQuestionNumber() / 10; ?>
-                            </div>
+            <div class="row">
+                <?php for ($j = 0; $j < 10; $j++): ?>
+                    <div class="border-radius" style="position: relative">
+                        <?php
+                            $quizRoundQuestion = $quizRound->getNextQuestion();
+                            if ($quizRoundQuestion):
+                        ?>
+                            <img style="height: 150px"
+                                src="data:image/png;base64,<?php echo $quizRoundQuestion->getQuestion()->getImage(); ?>" />
+                        <?php endif ?>
+                        <div class="question-number">
+                            <?php echo $quizRoundQuestion->getQuestionNumber() / 10; ?>
                         </div>
-                    <?php endfor ?>
-                </div>
-            <?php endfor ?>
+                    </div>
+                <?php endfor ?>
+<!--                <div  class="border-radius" style="position: relative; border-color: #ff0000;">-->
+<!--                    <ul>-->
+<!--                        <li>Quiz bestaat uit 8 rondes</li>-->
+<!--                        <li>Ronde 1 is foto ronde, ronde 7 is muziek ronde</li>-->
+<!--                        <li>Pauzes na ronde 4 en ronde 6</li>-->
+<!--                        <li>Foto ronde 1 inleveren na ronde 4</li>-->
+<!--                        <li>Mobiele telefoons zijn <b><u>niet</u> toegestaan</b></li>-->
+<!--                        <li>Teams bestaan uit <b>maximaal 5 personen</b></li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+            </div>
+            </div>
             <?php $quizRound->getQuizRoundQuestions()->first(); ?>
             <div class="row" style="margin-top: 20px; margin-right: 20px">
             <?php for ($i = 0; $i < 2; $i++): ?>
@@ -43,10 +52,12 @@ $escape = new Zend\Escaper\Escaper();
                     </ol>
                 </div>
             <?php endfor ?>
-                <div class="col-sm-2" style="margin-left: 30px; float: left">
-                    <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRgs1gdCD13jgc6j1kx0PYyJNedeWuEB8Ts1p-gNx_SWxNI3kxV4wm8Vg" />
+<!--                <div class="col-sm-2" style="margin-left: 30px; float: left">-->
+<!--                    <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRgs1gdCD13jgc6j1kx0PYyJNedeWuEB8Ts1p-gNx_SWxNI3kxV4wm8Vg" />-->
+<!--                </div>-->
+                <div class="col-sm-2" style="margin-left: 30px; float: left;">
+                    <img src="http://admin.quizis.nl/img/quizis.png" height="200"/>
                 </div>
-            </div>
         </div>
     </div>
 </div>

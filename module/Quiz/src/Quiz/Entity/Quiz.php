@@ -38,6 +38,12 @@ class Quiz
     protected $location;
 
     /**
+     * @ORM\OneToOne(targetEntity="Quiz")
+     * @ORM\JoinColumn(name="quiz_quiz_id", referencedColumnName="id")
+     */
+    protected $copyOfQuiz;
+
+    /**
      * @ORM\Column(type="datetime")
      *
      * @var DateTime
@@ -278,6 +284,28 @@ class Quiz
 
     public function getPhotoRound()
     {
+        foreach ($this->quizRounds as $quizRound) {
+            if (stristr($quizRound->getTheme(), "foto")) {
+                return $quizRound;
+            }
+        }
+
         return $this->quizRounds->get(0);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCopyOfQuiz()
+    {
+        return $this->copyOfQuiz;
+    }
+
+    /**
+     * @param mixed $copyOfQuiz
+     */
+    public function setCopyOfQuiz($copyOfQuiz)
+    {
+        $this->copyOfQuiz = $copyOfQuiz;
     }
 }

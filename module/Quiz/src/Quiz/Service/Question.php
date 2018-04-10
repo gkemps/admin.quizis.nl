@@ -199,6 +199,36 @@ class Question extends AbstractService
         return $this->returnPaginatedSetFromQueryBuilder($qb);
     }
 
+    public function imageQuestions()
+    {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select('q')
+            ->from('Quiz\Entity\Question', 'q')
+            ->where($qb->expr()->neq(
+                $qb->expr()->length('q.image'),
+                0
+            ))
+            ->orderBy('q.dateCreated', 'DESC');
+
+        return $this->returnPaginatedSetFromQueryBuilder($qb);
+    }
+
+    public function audioQuestions()
+    {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select('q')
+            ->from('Quiz\Entity\Question', 'q')
+            ->where($qb->expr()->neq(
+                $qb->expr()->length('q.audio'),
+                0
+            ))
+            ->orderBy('q.dateCreated', 'DESC');
+
+        return $this->returnPaginatedSetFromQueryBuilder($qb);
+    }
+
     /**
      * @param QuestionEntity $question
      * @return QuestionEntity

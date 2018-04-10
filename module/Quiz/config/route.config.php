@@ -131,6 +131,28 @@ return [
                             ],
                         ],
                     ],
+                    'image' => [
+                        'type' => 'Literal',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/afbeelding',
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\Question',
+                                'action'     => 'image',
+                            ],
+                        ],
+                    ],
+                    'audio' => [
+                        'type' => 'Literal',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/audio',
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\Question',
+                                'action'     => 'audio',
+                            ],
+                        ],
+                    ],
                     'search' => [
                         'type' => 'Segment',
                         'options' => [
@@ -324,6 +346,32 @@ return [
                                 'action'     => 'removeQuizRoundQuestion',
                             ],
                         ],
+                    ],
+                    'form' => [
+                        'type'      => 'Literal',
+                        'priority'  => 1000,
+                        'may_terminate' => true,
+                        'options'   => [
+                            'route' => '/form',
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\Quiz',
+                                'action'     => 'form',
+                            ],
+                        ],
+                        'child_routes' => [
+                            'process' => [
+                                'type'      => 'Literal',
+                                'priority'  => 1000,
+                                'may_terminate' => true,
+                                'options'   => [
+                                    'route' => '/process',
+                                    'defaults' => [
+                                        'controller' => 'Quiz\Controller\Quiz',
+                                        'action'     => 'process',
+                                    ],
+                                ],
+                            ]
+                        ]
                     ]
                 ]
             ],

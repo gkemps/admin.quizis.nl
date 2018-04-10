@@ -20,8 +20,12 @@ class QuizFactory implements FactoryInterface
         /** @var \Doctrine\ORM\EntityManagerInterface $em */
         $em = $services->get('Doctrine\ORM\EntityManager');
 
+        /** @var \Quiz\Service\Quiz $quizService */
+        $quizService = $services->get("Quiz\Service\Quiz");
+
         return new QuizForm(
-            $em
+            $em,
+            $quizService
         );
     }
 }

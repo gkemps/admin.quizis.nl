@@ -4,6 +4,8 @@ namespace Quiz\Controller;
 use Quiz\Service\Quiz as QuizService;
 use Quiz\Service\QuizRoundQuestion as QuizRoundQuestionService;
 use Quiz\Service\QuizLog as QuizLogService;
+use Quiz\Entity\Quiz as QuizEntity;
+use Quiz\Form\Quiz as QuizForm;
 use Zend\Form\FormInterface;
 use Zend\View\Model\ViewModel;
 
@@ -18,19 +20,27 @@ class QuizController extends AbstractCrudController
     /** @var QuizLogService  */
     protected $quizLogService;
 
+    /** @var QuizForm  */
+    protected $quizForm;
+
     /**
      * @param QuizService $quizService
      * @param QuizRoundQuestionService $quizRoundQuestionService
      * @param QuizLogService $quizLogService
+     * @param QuizForm $quizForm
      */
     public function __construct(
         QuizService $quizService,
         QuizRoundQuestionService $quizRoundQuestionService,
-        QuizLogService $quizLogService
+        QuizLogService $quizLogService,
+        QuizForm $quizForm
     ) {
+        parent::__construct();
+
         $this->quizService = $quizService;
         $this->quizRoundQuestionService = $quizRoundQuestionService;
         $this->quizLogService = $quizLogService;
+        $this->quizForm = $quizForm;
     }
 
     public function indexAction()
@@ -54,6 +64,9 @@ class QuizController extends AbstractCrudController
         $data = [];
 
         foreach ($quiz->getQuizRounds() as $round) {
+            if (strtolower($round->getTheme()) == "muziek ronde" || strtolower($round->getTheme()) == "muziekronde") {
+                continue;
+            }
             foreach ($round->getQuizRoundQuestions() as $question) {
                 $cat = $question->getQuestion()->getCategory();
                 if (!isset($data[$cat->getId()])) {
@@ -157,7 +170,16 @@ class QuizController extends AbstractCrudController
      */
     protected function processFormData(FormInterface $form)
     {
-        // TODO: Implement processFormData() method.
+        /** @var \Quiz\Entity\Quiz $quiz */
+        $quiz = $form->getObject();
+
+        if (!$quiz->getId()) {
+            $this->quizService->createQuiz($quiz);
+        } else {
+            //no update of quiz
+        }
+
+        return true;
     }
 
     /**
@@ -165,6 +187,29 @@ class QuizController extends AbstractCrudController
      */
     protected function getCrudForm()
     {
-        // TODO: Implement getCrudForm() method.
+        /* @var $request \Zend\Http\PhpEnvironment\Request */
+        $request = $this->getRequest();
+
+        if ($request->getQuery('id')) {
+            $question = $this->quizService->getById($request->getQuery('id'));
+        }
+
+        if (empty($question)) {
+            $question = new QuizEntity();
+        }
+
+        $this->quizForm->bind($question);
+
+        return $this->quizForm;
+    }
+
+    protected function getCrudSuccessResponse()
+    {
+        return $this->redirect()->toRoute('quiz');
+    }
+
+    protected function getCrudFailureResponse()
+    {
+        return $this->redirect()->toRoute('quiz');
     }
 }

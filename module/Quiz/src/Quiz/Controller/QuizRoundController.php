@@ -21,6 +21,8 @@ class QuizRoundController extends AbstractActionController
 
     public function downloadMp3Action()
     {
+        $silenceMp3 = file_get_contents("./data/mp3/silence.mp3");
+
         $quizRoundId = $this->params('quizRoundId');
         /** @var QuizRoundEntity $quizRound */
         $quizRound = $this->quizRoundService->getById($quizRoundId);
@@ -28,7 +30,8 @@ class QuizRoundController extends AbstractActionController
         $mp3File = "";
         foreach ($quizRound->getQuizRoundQuestions() as $quizRoundQuestion) {
             if ($quizRoundQuestion->getQuestion()->hasAudio()) {
-                $mp3File = $mp3File . $quizRoundQuestion->getQuestion()->getPureAudio();
+                $silence = !empty($mp3File) ? $silenceMp3 : "";
+                $mp3File = $mp3File . $silence . $quizRoundQuestion->getQuestion()->getPureAudio();
             }
         }
 
@@ -41,7 +44,7 @@ class QuizRoundController extends AbstractActionController
         $headers = $response->getHeaders();
         $headers->clearHeaders()
             ->addHeaderLine('Content-Type', 'audio/mpeg')
-            ->addHeaderLine('Content-Disposition', 'attachment; filename="muziek_ronde_'.$quizName.'.mp3"')
+            ->addHeaderLine('Content-Disposition', 'attachment; filename="audio_ronde_'.$quizRound->getNumber().'.mp3"')
             ->addHeaderLine('Content-Length', strlen($mp3File));
 
 

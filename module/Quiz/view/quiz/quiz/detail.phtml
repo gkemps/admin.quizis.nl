@@ -5,7 +5,10 @@
 <div class="row">
 
     <div class="col-md-4">
-        <h1><?php echo $quiz->getName(); ?></h1>
+        <h2><?php echo $quiz->getName(); ?></h2>
+        <?php if (null != $quiz->getCopyOfQuiz()): ?>
+            <h3>(kopie: <?php echo $quiz->getCopyOfQuiz()->getName(); ?>)</h3>
+        <?php endif ?>
         <div class="row">
             <div class="col-md-6 col-xs-6">
                 <strong>
@@ -139,7 +142,8 @@
         </h2>
         <ol class="list-group sortable">
             <?php foreach ($quizRound->getQuizRoundQuestions() as $quizRoundQuestion): ?>
-                    <li class="list-group-item" data-quizquestionid="<?php echo $quizRoundQuestion->getId(); ?>">
+                    <li class="list-group-item" data-quizquestionid="<?php echo $quizRoundQuestion->getId(); ?>"
+                        title="<?php echo $quizRoundQuestion->getQuestion()->getAnswer(); ?>">
                         <span class="<?php echo $quizRoundQuestion->getQuestion()->getCategory()->getIcon(); ?>"></span>
                         <?php echo $quizRoundQuestion->getQuestion()->getQuestion(); ?>
                         <?php if ($quizRoundQuestion->getQuestion()->hasImage()): ?>

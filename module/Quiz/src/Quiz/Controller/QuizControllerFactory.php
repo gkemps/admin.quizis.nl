@@ -1,6 +1,7 @@
 <?php
 namespace Quiz\Controller;
 
+use Zend\Form\FormElementManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -25,10 +26,17 @@ class QuizControllerFactory implements FactoryInterface
         /** @var \Quiz\Service\QuizLog $quizLogService */
         $quizLogService = $services->get('Quiz\Service\QuizLog');
 
+        /** @var FormElementManager $elementManager */
+        $elementManager = $services->get('FormElementManager');
+
+        /** @var \Quiz\Form\Quiz $quizForm */
+        $quizForm = $elementManager->get('Quiz\Form\Quiz');
+
         return new QuizController(
             $quizService,
             $quizRoundQuestionService,
-            $quizLogService
+            $quizLogService,
+            $quizForm
         );
     }
 }

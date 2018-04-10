@@ -21,7 +21,13 @@ class Category
      */
     public function getAllCategories()
     {
-        return $this->categoryRepository->findBy([], ['name' => 'ASC']);
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select("c")
+            ->from("Quiz\Entity\Category", "c")
+            ->orderBy("c.name");
+
+        return $qb->getQuery()->getResult();
     }
 
     /**
