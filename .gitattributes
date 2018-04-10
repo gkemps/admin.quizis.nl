@@ -1,2 +1,0 @@
-config/autoload/secure.*.php filter=git-crypt diff=git-crypt
-.mage/config/environment/*.yml filter=git-crypt diff=git-crypt
