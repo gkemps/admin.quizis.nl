@@ -2,7 +2,6 @@
 namespace Quiz\Service;
 
 use DateTime;
-use Kemzy\Library\Service\AbstractService;
 use Quiz\Entity\Question as QuestionEntity;
 use Quiz\Entity\Category as CategoryEntity;
 use Quiz\Entity\QuestionLike as QuestionLikeEntity;

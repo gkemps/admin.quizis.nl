@@ -4,7 +4,6 @@ namespace Quiz\Service;
 use DateTime;
 use Zend\Authentication\AuthenticationService;
 use Doctrine\ORM\EntityManager;
-use Kemzy\Library\Service\AbstractService;
 use Quiz\Entity\QuizLog as QuizLogEntity;
 use Quiz\Entity\QuizRoundQuestion as QuizRoundQuestionEntity;
 

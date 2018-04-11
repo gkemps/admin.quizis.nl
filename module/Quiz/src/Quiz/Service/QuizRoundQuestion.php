@@ -1,9 +1,7 @@
 <?php
 namespace Quiz\Service;
 
-use Kemzy\Library\Service\AbstractService;
 use Quiz\Entity\QuizRoundQuestion as QuizRoundQuestionEntity;
-use Doctrine\ORM\EntityManager;
 
 class QuizRoundQuestion extends AbstractService
 {

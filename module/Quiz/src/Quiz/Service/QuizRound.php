@@ -2,7 +2,6 @@
 namespace Quiz\Service;
 use DateTime;
 use Quiz\Entity\QuizRound as QuizRoundEntity;
-use Kemzy\Library\Service\AbstractService;
 
 class QuizRound extends AbstractService
 {

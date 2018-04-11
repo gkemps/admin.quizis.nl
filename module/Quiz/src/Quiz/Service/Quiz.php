@@ -3,7 +3,6 @@ namespace Quiz\Service;
 
 use DateInterval;
 use DateTime;
-use Kemzy\Library\Service\AbstractService;
 use Quiz\Entity\Question as QuestionEntity;
 use Quiz\Entity\QuizRoundQuestion as QuizRoundQuestionEntity;
 use Quiz\Entity\Quiz as QuizEntity;
