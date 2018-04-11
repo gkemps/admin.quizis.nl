@@ -8,7 +8,6 @@ return array(
         'ZfcBase',
         'ZfcUser',
         'ZfcUserDoctrineORM',
-        'Kemzy\Library'
     ),
 
     'module_listener_options' => array(
