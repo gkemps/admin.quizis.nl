@@ -8,7 +8,7 @@ return [
 //                'query_cache'       => 'my_memcache',
 //                'result_cache'      => 'my_memcache',
 //                'hydration_cache'   => 'my_memcache',
-                'generate_proxies'  => false,
+                'generate_proxies'  => true,
             ],
         ],
         'driver' => [
@@ -21,7 +21,7 @@ return [
             'orm_default' => [
                 'driverClass' => 'Doctrine\\DBAL\\Driver\\PDOMySql\\Driver',
                 'params' => [
-                    'host'     => 'localhost',
+                    'host'     => 'vps48589.public.cloudvps.com',
                     'port'     => '3306',
                     'charset'  => 'UTF8',
                 ],

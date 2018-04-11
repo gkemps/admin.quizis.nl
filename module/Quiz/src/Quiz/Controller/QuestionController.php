@@ -277,10 +277,18 @@ class QuestionController extends AbstractCrudController
         /** @var \Quiz\Entity\Question $question */
         $question = $form->getObject();
 
+        if (isset($_FILES['audio']['tmp_name']) && $_FILES['audio']['size'] > 0) {
+            $question->setAudioQuestion(true);
+        }
+
         if (!$question->getId()) {
             $this->questionService->createNewQuestion($question);
         } else {
             $this->questionService->updateQuestion($question);
+        }
+
+        if (isset($_FILES['audio']['tmp_name']) && $_FILES['audio']['size'] > 0) {
+            move_uploaded_file($_FILES['audio']['tmp_name'], "public/data/audio/".$question->getId().".mp3");
         }
 
         return true;
