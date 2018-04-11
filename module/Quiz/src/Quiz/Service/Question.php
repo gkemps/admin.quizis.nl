@@ -217,10 +217,12 @@ class Question extends AbstractService
 
         $qb->select('q')
             ->from('Quiz\Entity\Question', 'q')
-            ->where($qb->expr()->neq(
-                $qb->expr()->length('q.audio'),
-                0
-            ))
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->neq('q.audioQuestion', 0),
+                    $qb->expr()->notLike("q.question", $qb->expr()->literal("%band%"))
+                )
+            )
             ->orderBy('q.dateCreated', 'DESC');
 
         return $this->returnPaginatedSetFromQueryBuilder($qb);
