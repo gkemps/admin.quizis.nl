@@ -39,15 +39,28 @@ class Question extends AbstractService
         return $this->questionRepository;
     }
 
+
     /**
-     * @return \Zend\Paginator\Paginator|QuestionEntity[]
+     * @param bool $orderByAsked
+     * @return \Zend\Paginator\Paginator
      */
-    public function getQuestions()
+    public function getQuestions($orderByAsked = false)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('q')
             ->from('\Quiz\Entity\Question', 'q')
-            ->orderBy('q.dateCreated', 'DESC');
+            ->orderBy("q.dateCreated", "DESC");
+
+        if ($orderByAsked) {
+            $qb = $this->em->createQueryBuilder();
+            $qb->select('q', 'COUNT(qrq.id) AS HIDDEN countId')
+                ->from('Quiz\Entity\Question', 'q')
+                //->where($qb->expr()->isNull("q.image"))
+                ->leftJoin('q.quizRoundQuestions', 'qrq')
+                ->groupBy('q.id')
+                ->addOrderby('countId', 'DESC');
+
+        }
 
         return $this->returnPaginatedSetFromQueryBuilder($qb);
     }

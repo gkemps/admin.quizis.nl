@@ -59,10 +59,10 @@ class QuestionController extends AbstractCrudController
 
     public function indexAction()
     {
-        $questions = $this->questionService->getQuestions();
-        if ($questions->count() == 0) {
-            $this->redirect()->toRoute('question/form');
-        }
+        $orderByAsked = $this->params()->fromQuery("order") == "asked" ? true : false;
+
+        $questions = $this->questionService->getQuestions($orderByAsked);
+
         $questions->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
         $questions->setDefaultItemCountPerPage(10);
 
