@@ -236,12 +236,14 @@ class QuestionController extends AbstractCrudController
         return $this->redirect()->toUrl($url);
     }
 
-    public function questionsByCategoryAction()
+    public function questionsByCategoryAction($orderByAsked = false)
     {
         $categoryId = $this->params('catId');
         $category = $this->categoryService->getCategoryById($categoryId);
 
-        $questions = $this->questionService->getQuestionsByCategory($category);
+        $orderByAsked = $this->params()->fromQuery("order") == "asked" ? true : false;
+
+        $questions = $this->questionService->getQuestionsByCategory($category, $orderByAsked);
         $questions->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
         $questions->setDefaultItemCountPerPage(10);
 

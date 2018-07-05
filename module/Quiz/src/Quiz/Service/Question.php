@@ -55,7 +55,6 @@ class Question extends AbstractService
             $qb = $this->em->createQueryBuilder();
             $qb->select('q', 'COUNT(qrq.id) AS HIDDEN countId')
                 ->from('Quiz\Entity\Question', 'q')
-                //->where($qb->expr()->isNull("q.image"))
                 ->leftJoin('q.quizRoundQuestions', 'qrq')
                 ->groupBy('q.id')
                 ->addOrderby('countId', 'DESC');
@@ -81,15 +80,26 @@ class Question extends AbstractService
 
     /**
      * @param CategoryEntity $category
+     * @param bool $orderByAsked
      * @return \Zend\Paginator\Paginator|QuestionEntity[]
      */
-    public function getQuestionsByCategory(CategoryEntity $category)
+    public function getQuestionsByCategory(CategoryEntity $category, bool $orderByAsked = false)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('q')
             ->from('\Quiz\Entity\Question', 'q')
             ->where($qb->expr()->eq('q.category', ':category'))
             ->orderBy('q.dateCreated', 'DESC');
+
+        if ($orderByAsked) {
+            $qb = $this->em->createQueryBuilder();
+            $qb->select('q', 'COUNT(qrq.id) AS HIDDEN countId')
+                ->from('\Quiz\Entity\Question', 'q')
+                ->where($qb->expr()->eq('q.category', ':category'))
+                ->leftJoin('q.quizRoundQuestions', 'qrq')
+                ->groupBy('q.id')
+                ->orderBy('countId', 'DESC');
+        }
 
         $qb->setParameter('category', $category);
 
