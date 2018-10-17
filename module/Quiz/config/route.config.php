@@ -479,6 +479,18 @@ return [
                 ],
             ],
 
+            'import' => [
+                'type' => 'Segment',
+                'may_terminate' => true,
+                'options' => [
+                    'route'    => '/import',
+                    'defaults' => [
+                        'controller' => 'Quiz\Controller\Temp',
+                        'action'     => 'import',
+                    ],
+                ],
+            ],
+
             'theme-rounds' => [
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'may_terminate' => true,

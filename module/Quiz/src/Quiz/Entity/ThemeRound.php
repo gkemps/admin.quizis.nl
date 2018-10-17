@@ -1,6 +1,7 @@
 <?php
 namespace Quiz\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
@@ -47,6 +48,11 @@ class ThemeRound
      * @var Collection
      **/
     protected $themeRoundQuestions;
+
+    public function __construct()
+    {
+        $this->themeRoundQuestions = new ArrayCollection();
+    }
 
     /**
      * @return int|null
@@ -140,7 +146,6 @@ class ThemeRound
     public function addThemeRoundQuestion(ThemeRoundQuestion $themeRoundQuestion)
     {
         $themeRoundQuestion->setThemeRound($this);
-
 
         $this->themeRoundQuestions->add($themeRoundQuestion);
 

@@ -53,10 +53,13 @@ class ThemeRoundService extends AbstractService
 
     /**
      * @param ThemeRound $themeRound
+     * @return ThemeRound
      */
     public function createThemeRound(ThemeRound $themeRound)
     {
         $this->persist($themeRound);
+
+        return $themeRound;
     }
 
     /**
