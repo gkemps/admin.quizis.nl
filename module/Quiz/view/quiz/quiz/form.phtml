@@ -1,0 +1,19 @@
+<?php
+/** @var \Quiz\Form\Quiz $form */
+
+$form->setAttribute(
+    'action',
+    $this->url(
+        'quiz/form/process', [],
+        [
+            'query' => [
+                'id' => $form->getObject()->getId()
+            ]
+        ]
+    )
+);
+
+$this->form->prepare();
+echo $this->form()->openTag($this->form);
+echo $this->form($form, \TwbBundle\Form\View\Helper\TwbBundleForm::LAYOUT_HORIZONTAL);
+echo $this->form()->closeTag();

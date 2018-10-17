@@ -161,4 +161,9 @@ class ThemeRound
 
         return min(array_diff($spots, $occupied)) * 10;
     }
+
+    public function getNumberOfQuestions()
+    {
+        return count($this->getThemeRoundQuestions());
+    }
 }

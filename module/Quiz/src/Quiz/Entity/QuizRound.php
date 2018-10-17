@@ -268,6 +268,11 @@ class QuizRound
         return count($this->quizRoundQuestions) == self::MAX_QUESTIONS;
     }
 
+    public function isEmpty()
+    {
+        return count($this->quizRoundQuestions) == 0;
+    }
+
     public function getPercentageFull()
     {
         return round((count($this->quizRoundQuestions) / self::MAX_QUESTIONS) * 100);

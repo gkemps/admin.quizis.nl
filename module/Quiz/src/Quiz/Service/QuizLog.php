@@ -6,6 +6,8 @@ use Zend\Authentication\AuthenticationService;
 use Doctrine\ORM\EntityManager;
 use Quiz\Entity\QuizLog as QuizLogEntity;
 use Quiz\Entity\QuizRoundQuestion as QuizRoundQuestionEntity;
+use Quiz\Entity\ThemeRound as ThemeRoundEntity;
+use Quiz\Entity\QuizRound as QuizRoundEntity;
 
 class QuizLog extends AbstractService
 {
@@ -105,6 +107,21 @@ class QuizLog extends AbstractService
 
         $quizLog = new QuizLogEntity();
         $quizLog->setQuiz($quizRoundQuestion->getQuizRound()->getQuiz());
+        $quizLog->setText($text);
+        $quizLog->setIcon('fa fa-comment');
+
+        return $this->createNewQuizLog($quizLog);
+    }
+
+    public function createThemeRoundAddedLog(ThemeRoundEntity $themeRound, QuizRoundEntity $quizRound)
+    {
+        /** @var \Quiz\Entity\User $user */
+        $user = $this->authenticationService->getIdentity();
+
+        $text = "Thema ronde ".$themeRound->getName()." toegevoegd aan ronde ".$quizRound->getNumber()." door ".$user->getDisplayName();
+
+        $quizLog = new QuizLogEntity();
+        $quizLog->setQuiz($quizRound->getQuiz());
         $quizLog->setText($text);
         $quizLog->setIcon('fa fa-comment');
 

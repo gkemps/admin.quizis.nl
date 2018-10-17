@@ -501,6 +501,20 @@ return [
                                 'action'     => 'form',
                             ],
                         ],
+                        'child_routes' => [
+                            'process' => [
+                                'type'      => 'Literal',
+                                'priority'  => 1000,
+                                'may_terminate' => true,
+                                'options'   => [
+                                    'route' => '/process',
+                                    'defaults' => [
+                                        'controller' => 'Quiz\Controller\ThemeRound',
+                                        'action'     => 'process',
+                                    ],
+                                ],
+                            ]
+                        ]
                     ],
                     'detail' => [
                         'type' => 'Segment',
@@ -527,6 +541,20 @@ return [
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\ThemeRound',
                                 'action'     => 'removeThemeRoundQuestion',
+                            ],
+                        ],
+                    ],
+                    'add-to-quiz' => [
+                        'type' => 'Segment',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/add-to-quiz/:themeRoundId/:quizRoundId',
+                            'constraints' => [
+                                'catId' => '\d+'
+                            ],
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\ThemeRound',
+                                'action'     => 'addToQuiz',
                             ],
                         ],
                     ]

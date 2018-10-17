@@ -1,31 +1,33 @@
 <?php
 /** @var \Quiz\Entity\ThemeRound[] $themeRounds */
+/** @var \Quiz\Entity\Quiz[] $futureQuizzes  */
 ?>
+<a href="<?php echo $this->url('theme-rounds/form'); ?>">
+    <button class="btn btn-success">
+        <i class="fa fa-file-text-o"></i>
+        Nieuwe Thema ronde
+    </button>
+</a>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <table class="table">
             <thead>
             <tr>
-                <th>Thema rondes</th>
-                <th>
-                    <a href="<?php echo $this->url('theme-rounds/form'); ?>">
-                        <button class="btn btn-success">
-                            <i class="fa fa-file-text-o"></i>
-                            Nieuwe Thema ronde
-                        </button>
-                    </a>
-                </th>
+                <th>Naam</th>
+                <th>Audio/Foto</th>
+                <th></th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
             <?php foreach ($themeRounds as $themeRound): ?>
                 <tr>
-                    <td>
+                    <td class="col-md-6">
                         <a href="<?php echo $this->url('theme-rounds/detail', ["themeRoundId" => $themeRound->getId()]); ?>">
                             <?php echo $themeRound->getName(); ?>
                         </a>
                     </td>
-                    <td>
+                    <td class="col-md-2">
                         <?php if ($themeRound->isAudio()): ?>
                             <span class="label label-primary label-as-badge">
                                 <i class="fa fa-music"></i>
@@ -36,6 +38,71 @@
                                 <i class="fa fa-image"></i>
                             </span>
                         <?php endif ?>
+                    </td>
+                    <td class="col-md-2">
+                        <!-- Edit button -->
+                        <div class="btn-group">
+                            <button type="button" class="btn-xs btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <span class="fa fa-cogs"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right" role="menu">
+                                <li>
+                                    <a href="<?php echo $this->url('theme-rounds/form', [], ['query' => ['id' => $themeRound->getId()]]); ?>">
+                                        <span class="fa fa-pencil"></span>
+                                        Aanpassen
+                                    </a>
+                                </li>
+                                <?php if (count($futureQuizzes) > 0): ?>
+                                    <li class="divider" />
+                                    <?php foreach ($futureQuizzes as $quiz): ?>
+                                            <?php foreach ($quiz->getQuizRounds() as $quizRound): ?>
+                                                <?php if ($quizRound->isEmpty()): ?>
+                                                    <li>
+                                                        <a href="<?php echo $this->url('theme-rounds/add-to-quiz',
+                                                            [
+                                                                'themeRoundId' => $themeRound->getId(),
+                                                                'quizRoundId' => $quizRound->getId()
+                                                            ]); ?>">
+                                                            <span class="fa fa-plus"></span>
+                                                            <?php echo $quiz->getName().
+                                                                " - Ronde ".
+                                                                $quizRound->getNumber().
+                                                                " (".$quizRound->getPercentageFull()."%)"; ?>
+                                                        </a>
+                                                    </li>
+                                                <?php endif ?>
+                                            <?php endforeach ?>
+                                    <?php endforeach ?>
+                                <?php endif ?>
+                            </ul>
+                        </div>
+                    </td>
+                    <td class="col-md-4">
+                        <div class="progress" style="margin-bottom: 0px">
+                            <?php
+                            $maxQuestions = 10;
+                            $nrOfQuestions = $themeRound->getNumberOfQuestions();
+                            $percentage = round($nrOfQuestions/$maxQuestions * 100);
+                            $class = '';
+                            if ($percentage < 50) {
+                                $class = 'progress-bar-danger';
+                            } elseif ($percentage < 70) {
+                                $class = 'progress-bar-warning';
+                            } elseif ($percentage < 100) {
+                                $class = 'progress-bar-info';
+                            } else {
+                                $class = 'progress-bar-success';
+                            }
+                            ?>
+                            <div class="progress-bar <?php echo $class; ?>" role="progressbar"
+                                 aria-valuenow="<?php echo $percentage; ?>"
+                                 aria-valuemin="0" aria-valuemax="100"
+                                 style="width: <?php echo $percentage; ?>%;">
+                                <?php echo $percentage; ?>%
+                            </div>
+                        </div>
+    </div>
                     </td>
                 </tr>
             <?php endforeach ?>

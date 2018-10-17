@@ -7,6 +7,7 @@ use Quiz\Entity\Question as QuestionEntity;
 use Quiz\Entity\QuizRoundQuestion as QuizRoundQuestionEntity;
 use Quiz\Entity\Quiz as QuizEntity;
 use Quiz\Entity\QuizRound as QuizRoundEntity;
+use Quiz\Entity\ThemeRound as ThemeRoundEntity;
 use Quiz\Service\QuizRound as QuizRoundService;
 use Quiz\Service\QuizRoundQuestion as QuizRoundQuestionService;
 use Doctrine\ORM\EntityManager;
@@ -143,6 +144,16 @@ class Quiz extends AbstractService
         }
 
         return $newQuiz;
+    }
+
+    public function addThemeRound(ThemeRoundEntity $themeRound, QuizRoundEntity $quizRound)
+    {
+        foreach ($themeRound->getThemeRoundQuestions() as $themeRoundQuestion) {
+            $this->addQuestionToQuizRound(
+                $themeRoundQuestion->getQuestion(),
+                $quizRound
+            );
+        }
     }
 
     /**
