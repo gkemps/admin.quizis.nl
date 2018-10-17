@@ -130,8 +130,9 @@ $escape = new Zend\Escaper\Escaper('utf-8');
                                         <?php endforeach ?>
                                     <?php endif ?>
                                 <?php endforeach ?>
-                                <?php foreach ($incompleteThemeRounds as $themeRound): ?>
+                                <?php if (count($incompleteThemeRounds) > 0): ?>
                                     <li class="divider" />
+                                    <?php foreach ($incompleteThemeRounds as $themeRound): ?>
                                         <?php if (!$themeRound->containsQuestion($question)): ?>
                                             <li>
                                                 <a href="<?php echo $this->url('question/add-to-theme-round',
@@ -144,8 +145,8 @@ $escape = new Zend\Escaper\Escaper('utf-8');
                                                 </a>
                                             </li>
                                         <?php endif ?>
-                                    </li>
-                                <?php endforeach ?>
+                                    <?php endforeach ?>
+                                <?php endif ?>
                             </ul>
                         </div>
                     </td>
