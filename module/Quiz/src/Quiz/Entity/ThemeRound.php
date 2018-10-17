@@ -171,4 +171,9 @@ class ThemeRound
     {
         return count($this->getThemeRoundQuestions());
     }
+
+    public function isFull()
+    {
+        return $this->getNumberOfQuestions() == QuizRound::MAX_QUESTIONS;
+    }
 }

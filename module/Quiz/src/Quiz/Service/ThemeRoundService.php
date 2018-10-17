@@ -32,7 +32,17 @@ class ThemeRoundService extends AbstractService
 
     public function getIncompleteThemeRounds()
     {
-        return $this->getRepository()->findAll();
+        /** @var ThemeRound[] $results */
+        $results = $this->getRepository()->findAll();
+
+        $rounds = [];
+        foreach ($results as $result) {
+            if (!$result->isFull()) {
+                $rounds[] = $result;
+            }
+        }
+
+        return $rounds;
     }
 
     /**
