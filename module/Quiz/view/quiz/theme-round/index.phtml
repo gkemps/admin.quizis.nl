@@ -53,7 +53,7 @@
                                         Aanpassen
                                     </a>
                                 </li>
-                                <?php if (count($futureQuizzes) > 0): ?>
+                                <?php if (count($futureQuizzes) > 0 && $themeRound->getNumberOfQuestions() > 0): ?>
                                     <li class="divider" />
                                     <?php foreach ($futureQuizzes as $quiz): ?>
                                             <?php foreach ($quiz->getQuizRounds() as $quizRound): ?>
