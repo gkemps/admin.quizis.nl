@@ -155,7 +155,7 @@ class ThemeRoundController extends AbstractCrudController
         }
 
         if (empty($themeRound)) {
-            $themeRound = new ThemeRound();
+            $themeRound = new ThemeRoundEntity();
         }
 
         $this->themeRoundForm->bind($themeRound);
