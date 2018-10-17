@@ -219,6 +219,20 @@ return [
                             ],
                         ],
                     ],
+                    'add-to-theme-round' => [
+                        'type' => 'Segment',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/:questionId/toevoegen-aan-thema-ronde/:themeRoundId',
+                            'constraints' => [
+                                'themeRoundId' => '\d+'
+                            ],
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\Question',
+                                'action'     => 'addToThemeRound',
+                            ],
+                        ],
+                    ],
                     'cats' => [
                         'type' => 'Segment',
                         'may_terminate' => true,
@@ -391,6 +405,21 @@ return [
                     ],
                 ],
             ],
+            'reset-theme-round-question-number' => [
+                'type' => 'Segment',
+                'may_terminate' => true,
+                'options' => [
+                    'route'    => '/reset-theme-round-question-number/:themeRoundQuestionId/:newPosition',
+                    'constraints' => [
+                        'quizRoundQuestionId' => '\d+',
+                        'newPosition' => '\d+'
+                    ],
+                    'defaults' => [
+                        'controller' => 'Quiz\Controller\ThemeRound',
+                        'action'     => 'resetThemeRoundQuestionNumber',
+                    ],
+                ],
+            ],
 
             'comment' => [
                 'type' => 'Segment',
@@ -448,8 +477,61 @@ return [
                         'action'     => 'downloadMp3',
                     ],
                 ],
-            ]
+            ],
 
+            'theme-rounds' => [
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'may_terminate' => true,
+                'options' => [
+                    'route'    => '/thema-rondes',
+                    'defaults' => [
+                        'controller' => 'Quiz\Controller\ThemeRound',
+                        'action'     => 'index',
+                    ],
+                ],
+                'child_routes' => [
+                    'form' => [
+                        'type'      => 'Literal',
+                        'priority'  => 1000,
+                        'may_terminate' => true,
+                        'options'   => [
+                            'route' => '/form',
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\ThemeRound',
+                                'action'     => 'form',
+                            ],
+                        ],
+                    ],
+                    'detail' => [
+                        'type' => 'Segment',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/:themeRoundId',
+                            'constraints' => [
+                                'catId' => '\d+'
+                            ],
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\ThemeRound',
+                                'action'     => 'detail',
+                            ],
+                        ],
+                    ],
+                    'remove-question' => [
+                        'type' => 'Segment',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/remove/:themeRoundQuestionId',
+                            'constraints' => [
+                                'catId' => '\d+'
+                            ],
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\ThemeRound',
+                                'action'     => 'removeThemeRoundQuestion',
+                            ],
+                        ],
+                    ]
+                ]
+            ]
         ],
     ],
 ];

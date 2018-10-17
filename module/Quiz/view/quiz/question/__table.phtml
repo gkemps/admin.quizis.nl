@@ -2,6 +2,7 @@
 /** @var \Quiz\Entity\User $user */
 /** @var \Quiz\Entity\Question[] $questions */
 /** @var \Quiz\Entity\Quiz[] $futureQuizzes  */
+/** @var \Quiz\Entity\ThemeRound[] $incompleteThemeRounds */
 
 $escape = new Zend\Escaper\Escaper('utf-8');
 ?>
@@ -128,6 +129,22 @@ $escape = new Zend\Escaper\Escaper('utf-8');
                                             <?php endif ?>
                                         <?php endforeach ?>
                                     <?php endif ?>
+                                <?php endforeach ?>
+                                <?php foreach ($incompleteThemeRounds as $themeRound): ?>
+                                    <li class="divider" />
+                                        <?php if (!$themeRound->containsQuestion($question)): ?>
+                                            <li>
+                                                <a href="<?php echo $this->url('question/add-to-theme-round',
+                                                    [
+                                                        'questionId' => $question->getId(),
+                                                        'themeRoundId' => $themeRound->getId()
+                                                    ]); ?>">
+                                                    <span class="fa fa-plus"></span>
+                                                    <?php echo $themeRound->getName()." (".$themeRound->getPercentageFull()."%)"; ?>
+                                                </a>
+                                            </li>
+                                        <?php endif ?>
+                                    </li>
                                 <?php endforeach ?>
                             </ul>
                         </div>

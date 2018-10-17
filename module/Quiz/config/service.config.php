@@ -4,6 +4,8 @@ return [
         'factories' => [
             'Quiz\Service\Category' => 'Quiz\Service\CategoryFactory',
             'Quiz\Service\Tag' => 'Quiz\Service\TagFactory',
+            \Quiz\Service\ThemeRoundService::class => \Quiz\Service\ThemeRoundServiceFactory::class,
+            'Quiz\Service\ThemeRoundQuestionService' => 'Quiz\Service\ThemeRoundQuestionServiceFactory',
             'Quiz\Service\Question' => 'Quiz\Service\QuestionFactory',
             'Quiz\Service\Quiz' => 'Quiz\Service\QuizFactory',
             'Quiz\Service\QuizLog' => 'Quiz\Service\QuizLogFactory',

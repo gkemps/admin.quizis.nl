@@ -108,7 +108,8 @@ class Quiz extends AbstractService
     }
 
     /**
-     * @return QuizEntity
+     * @return QuizEntity|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findNextQuiz()
     {
@@ -123,7 +124,7 @@ class Quiz extends AbstractService
             ->setMaxResults(1)
             ->setParameter(1, $now->format('Y-m-d h:i:s'));
 
-        return $qb->getQuery()->getSingleResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -184,6 +185,7 @@ class Quiz extends AbstractService
 
     /**
      * @param QuizRoundEntity $quizRound
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     protected function storeQuizRound(QuizRoundEntity $quizRound)
     {
@@ -191,6 +193,11 @@ class Quiz extends AbstractService
         $this->em->flush();
     }
 
+    /**
+     * @param QuestionEntity $question
+     * @param QuizRoundEntity $quizRound
+     * @return QuizRoundQuestionEntity
+     */
     protected function createQuizRoundQuestion(QuestionEntity $question, QuizRoundEntity $quizRound)
     {
         $quizRoundQuestion = new QuizRoundQuestionEntity();

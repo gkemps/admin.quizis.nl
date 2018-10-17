@@ -90,6 +90,10 @@ class QuizController extends AbstractCrudController
     {
         $nextQuiz = $this->quizService->findNextQuiz();
 
+        if (is_null($nextQuiz)) {
+            return $this->redirect()->toRoute("quiz");
+        }
+
         return $this->redirect()->toRoute('quiz/detail', ['quizId' => $nextQuiz->getId()]);
     }
 

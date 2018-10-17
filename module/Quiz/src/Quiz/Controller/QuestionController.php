@@ -7,6 +7,7 @@ use Quiz\Service\Quiz as QuizService;
 use Quiz\Service\QuizLog as QuizLogService;
 use Quiz\Form\Question as QuestionForm;
 use Quiz\Entity\Question as QuestionEntity;
+use Quiz\Service\ThemeRoundService;
 use Zend\Form\FormInterface;
 use Zend\View\Model\ViewModel;
 use Zend\Authentication\AuthenticationService;
@@ -31,6 +32,9 @@ class QuestionController extends AbstractCrudController
     /** @var QuizLogService  */
     protected $quizLogService;
 
+    /** @var ThemeRoundService */
+    protected $themeRoundService;
+
     /**
      * @param QuestionService $questionService
      * @param CategoryService $categoryService
@@ -38,6 +42,7 @@ class QuestionController extends AbstractCrudController
      * @param AuthenticationService $userAuthenticationService
      * @param QuestionForm $questionForm
      * @param QuizLogService $quizLogService
+     * @param ThemeRoundService $themeRoundService
      */
     public function __construct(
         QuestionService $questionService,
@@ -45,7 +50,8 @@ class QuestionController extends AbstractCrudController
         QuizService $quizService,
         AuthenticationService $userAuthenticationService,
         QuestionForm $questionForm,
-        QuizLogService $quizLogService
+        QuizLogService $quizLogService,
+        ThemeRoundService $themeRoundService
     ) {
         parent::__construct();
 
@@ -55,6 +61,7 @@ class QuestionController extends AbstractCrudController
         $this->userAuthenticationService = $userAuthenticationService;
         $this->questionForm = $questionForm;
         $this->quizLogService = $quizLogService;
+        $this->themeRoundService = $themeRoundService;
     }
 
     public function indexAction()
@@ -236,6 +243,20 @@ class QuestionController extends AbstractCrudController
         return $this->redirect()->toUrl($url);
     }
 
+    public function addToThemeRoundAction()
+    {
+        $questionId = $this->params('questionId');
+        $themeRoundId = $this->params('themeRoundId');
+
+        $question = $this->questionService->getById($questionId);
+        $themeRound = $this->themeRoundService->getThemeRoundById($themeRoundId);
+
+        $this->themeRoundService->addQuestionToThemeRound($question, $themeRound);
+
+        $url = $this->getRequest()->getHeader('Referer')->getUri();
+        return $this->redirect()->toUrl($url);
+    }
+
     public function questionsByCategoryAction($orderByAsked = false)
     {
         $categoryId = $this->params('catId');
@@ -322,12 +343,14 @@ class QuestionController extends AbstractCrudController
         $user = $this->userAuthenticationService->getIdentity();
         $futureQuizzes = $this->quizService->findFutureQuizzes();
         $nrOfQuestions = $this->questionService->getNumberOfQuestions();
+        $incompleteThemeRounds = $this->themeRoundService->getIncompleteThemeRounds();
 
         return new ViewModel(
             [
                 'user' => $user,
                 'futureQuizzes' => $futureQuizzes,
-                'nrOfQuestions' => $nrOfQuestions
+                'nrOfQuestions' => $nrOfQuestions,
+                'incompleteThemeRounds' => $incompleteThemeRounds
             ]
         );
     }

@@ -2,6 +2,7 @@
 namespace Quiz\Controller;
 
 
+use Quiz\Service\ThemeRoundService;
 use Zend\Form\FormElementManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -40,13 +41,17 @@ class QuestionControllerFactory implements FactoryInterface
         /** @var \Quiz\Service\QuizLog $quizLogService */
         $quizLogService = $services->get('Quiz\Service\QuizLog');
 
+        /** @var ThemeRoundService $themeRoundService */
+        $themeRoundService = $services->get(ThemeRoundService::class);
+
         return new QuestionController(
             $questionService,
             $categoryService,
             $quizService,
             $authenticationService,
             $questionForm,
-            $quizLogService
+            $quizLogService,
+            $themeRoundService
         );
     }
 

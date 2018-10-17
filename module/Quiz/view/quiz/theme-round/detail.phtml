@@ -1,0 +1,47 @@
+<?php
+/** @var \Quiz\Entity\ThemeRound $themeRound */
+?>
+<div>
+    <h2 id="round<?php echo $themeRound->getId(); ?>">
+        <?php echo $themeRound->getName();?>
+    </h2>
+    <ol class="list-group sortable">
+        <?php foreach ($themeRound->getThemeRoundQuestions() as $themeRoundQuestion): ?>
+            <li class="list-group-item" data-themequestionid="<?php echo $themeRoundQuestion->getId(); ?>"
+                title="<?php echo $themeRoundQuestion->getQuestion()->getAnswer(); ?>">
+                <span class="<?php echo $themeRoundQuestion->getQuestion()->getCategory()->getIcon(); ?>"></span>
+                <?php echo $themeRoundQuestion->getQuestion()->getQuestion(); ?>
+                <?php if ($themeRoundQuestion->getQuestion()->hasImage()): ?>
+                    <span class="label label-primary label-as-badge">
+                                    <i class="fa fa-image"></i>
+                            </span>
+                <?php endif ?>
+                <?php if ($themeRoundQuestion->getQuestion()->isAudioQuestion()): ?>
+                    <audio controls>
+                        <source src="/data/audio/<?php echo $themeRoundQuestion->getQuestion()->getId(); ?>.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                <?php endif ?>
+                <span class="pull-right">
+                            <a href="<?php echo $this->url('theme-rounds/remove-question', ['themeRoundQuestionId' => $themeRoundQuestion->getId()]); ?>" style="color: #ff0000">
+                                <i class="fa fa-close"></i>
+                            </a>
+                        </span>
+            </li>
+        <?php endforeach ?>
+    </ol>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".sortable").sortable({
+            update:  function (event, ui) {
+                var id = $(ui.item).data('themequestionid');
+                var newPos = ui.item.index() + 1;
+                $.ajax({
+                    url:"/reset-theme-round-question-number/" + id + "/" + newPos
+                });
+            }
+        });
+    });
+</script>
