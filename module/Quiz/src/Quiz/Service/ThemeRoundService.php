@@ -18,7 +18,7 @@ class ThemeRoundService extends AbstractService
 
     public function getThemeRounds()
     {
-        return $this->getRepository()->findAll();
+        return $this->getRepository()->findBy([], ['name' => 'ASC']);
     }
 
     /**
