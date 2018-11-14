@@ -153,6 +153,17 @@ return [
                             ],
                         ],
                     ],
+                    'most-asked' => [
+                        'type' => 'Literal',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/most-asked',
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\Question',
+                                'action'     => 'mostAsked',
+                            ],
+                        ],
+                    ],
                     'search' => [
                         'type' => 'Segment',
                         'options' => [

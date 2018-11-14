@@ -201,6 +201,23 @@ class Question extends AbstractService
         return $this->returnPaginatedSetFromQueryBuilder($qb);
     }
 
+    public function mostAskedQuestions()
+    {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select('q, COUNT(qrq.id) AS HIDDEN nrAsked')
+            ->from('Quiz\Entity\Question', 'q')
+            ->leftJoin('q.quizRoundQuestions', 'qrq')
+            ->having($qb->expr()->gt(
+                'COUNT(qrq.id)',
+                0
+            ))
+            ->groupBy('q.id')
+            ->orderBy('nrAsked', 'DESC');
+
+        return $this->returnPaginatedSetFromQueryBuilder($qb);
+    }
+
     /**
      * @return \Zend\Paginator\Paginator
      */

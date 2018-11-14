@@ -189,6 +189,18 @@ class QuestionController extends AbstractCrudController
         return $view;
     }
 
+    public function mostAskedAction()
+    {
+        $questions = $this->questionService->mostAskedQuestions();
+        $questions->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
+        $questions->setDefaultItemCountPerPage(10);
+
+        $view = $this->getBasicView();
+        $view->setVariable('questions', $questions);
+        $view->setTemplate('quiz/question/index');
+
+        return $view;
+    }
 
     public function detailAction()
     {
