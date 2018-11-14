@@ -6,6 +6,8 @@ use Doctrine\ORM\EntityManager;
 
 class Category
 {
+    const MUSIC_CATEGORY_ID = 4;
+
     protected $em;
 
     protected $categoryRepository;

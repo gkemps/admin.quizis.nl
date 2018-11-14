@@ -1,6 +1,7 @@
 <?php
 namespace Quiz\Controller;
 
+use Quiz\Service\Category as CategoryService;
 use Quiz\Service\Quiz as QuizService;
 use Quiz\Service\QuizRoundQuestion as QuizRoundQuestionService;
 use Quiz\Service\QuizLog as QuizLogService;
@@ -20,6 +21,9 @@ class QuizController extends AbstractCrudController
     /** @var QuizLogService  */
     protected $quizLogService;
 
+    /** @var CategoryService */
+    protected $categoryService;
+
     /** @var QuizForm  */
     protected $quizForm;
 
@@ -27,12 +31,14 @@ class QuizController extends AbstractCrudController
      * @param QuizService $quizService
      * @param QuizRoundQuestionService $quizRoundQuestionService
      * @param QuizLogService $quizLogService
+     * @param CategoryService $categoryService
      * @param QuizForm $quizForm
      */
     public function __construct(
         QuizService $quizService,
         QuizRoundQuestionService $quizRoundQuestionService,
         QuizLogService $quizLogService,
+        CategoryService $categoryService,
         QuizForm $quizForm
     ) {
         parent::__construct();
@@ -40,6 +46,7 @@ class QuizController extends AbstractCrudController
         $this->quizService = $quizService;
         $this->quizRoundQuestionService = $quizRoundQuestionService;
         $this->quizLogService = $quizLogService;
+        $this->categoryService = $categoryService;
         $this->quizForm = $quizForm;
     }
 
@@ -63,16 +70,18 @@ class QuizController extends AbstractCrudController
         $labels = [];
         $data = [];
 
+        $cats = $this->categoryService->getAllCategories();
+        foreach ($cats as $cat) {
+            $data[$cat->getId()] = 0;
+            $labels[$cat->getId()] = $cat->getName();
+        }
+
         foreach ($quiz->getQuizRounds() as $round) {
             if (strtolower($round->getTheme()) == "muziek ronde" || strtolower($round->getTheme()) == "muziekronde") {
                 continue;
             }
             foreach ($round->getQuizRoundQuestions() as $question) {
                 $cat = $question->getQuestion()->getCategory();
-                if (!isset($data[$cat->getId()])) {
-                    $labels[$cat->getId()] = $cat->getName();
-                    $data[$cat->getId()] = 0;
-                }
                 $data[$cat->getId()] += $question->getQuestion()->getPoints();
             }
         }
