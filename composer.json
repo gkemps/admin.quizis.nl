@@ -8,21 +8,12 @@
     ],
     "homepage": "http://framework.zend.com/",
     "require": {
-        "php": ">=5.5.0",
+        "php": ">=7.2",
 
-        "zendframework/zendframework": "2.3.*",
-        "zf-commons/zfc-user": "1.2.*",
-        "zf-commons/zfc-user-doctrine-orm": "1.0.*",
-
-        "doctrine/orm": "=v2.4.4",
-        "doctrine/doctrine-orm-module": "0.8.*",
-
-        "andres-montanez/magallanes": "1.0.1",
-        "neilime/zf2-twb-bundle": "2.3.*",
-        "beberlei/DoctrineExtensions": "dev-master@dev",
-        "smirik/php-datetime-ago": "1.0.*",
-        "doctrine/annotations": "^1.4"
-
+        "zendframework/zendframework": "<3.0",
+        "doctrine/doctrine-orm-module": "<3.0",
+        "neilime/zf2-twb-bundle": "^3.3",
+        "zf-commons/zfc-user-doctrine-orm": "1.*"
     },
     "repositories": [
         {
