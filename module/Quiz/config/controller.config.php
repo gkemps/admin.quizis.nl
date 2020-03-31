@@ -3,6 +3,7 @@ return [
     'controllers' => [
         'factories' => [
             'Quiz\Controller\Category' => 'Quiz\Controller\CategoryControllerFactory',
+            'Quiz\Controller\Console' => 'Quiz\Controller\ConsoleControllerFactory',
             'Quiz\Controller\Index' => 'Quiz\Controller\IndexControllerFactory',
             'Quiz\Controller\Tag' => 'Quiz\Controller\TagControllerFactory',
             'Quiz\Controller\Temp' => 'Quiz\Controller\TempControllerFactory',

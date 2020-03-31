@@ -302,6 +302,14 @@ class Question
     }
 
     /**
+     * @return string
+     */
+    public function getRawImage()
+    {
+        return $this->image;
+    }
+
+    /**
      * @return boolean
      */
     public function isAudioQuestion()

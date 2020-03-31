@@ -585,4 +585,19 @@ return [
             ]
         ],
     ],
+    'console' => [
+        'router' => [
+            'routes' => [
+                'encrypt' => [
+                    'options' => [
+                        'route'    => 'image-convert',
+                        'defaults' => [
+                            'controller' => 'Quiz\Controller\Console',
+                            'action'     => 'convertImage',
+                        ],
+                    ],
+                ],
+            ]
+        ]
+    ]
 ];
