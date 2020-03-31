@@ -3,4 +3,7 @@
 vendor
 atlassian-ide-plugin.xml
 data/DoctrineORMModule
+data/images
+data/audio
+data/mysql
 config/app.cred
