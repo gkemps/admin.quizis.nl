@@ -27,7 +27,7 @@ class BackupController extends AbstractActionController
 
             $index = [];
             foreach ($pcloudFiles as $pcloudFile) {
-                $index[$pcloudFile->name] = $pcloudFile->id;
+                $index[$pcloudFile->name] = strtotime($pcloudFile->modified);
             }
 
             $localFiles = scandir($path);
@@ -36,13 +36,14 @@ class BackupController extends AbstractActionController
                 if (empty($fileName) || $fileName == "." || $fileName == ".." || substr($fileName, 0, 1) == ".") {
                     continue;
                 }
-                if (isset($index[$fileName])) {
+                $modified = filemtime($path."/".$fileName);
+                if (isset($index[$fileName]) && $modified <= $index[$fileName]) {
                     continue;
                 }
 
                 $pcloudFile = new pCloud\File();
                 try {
-                    print "Uploading ".$path."/".$fileName." to folderId: ".$folderId."\r\n";
+                    print "Backing up ".$path."/".$fileName." to folderId: ".$folderId."\r\n";
                     $fileMetadata = $pcloudFile->upload($path."/".$fileName, $folderId);
                     if (empty($fileMetadata->metadata->fileid)) {
                         throw new \Exception("missing metadata");
