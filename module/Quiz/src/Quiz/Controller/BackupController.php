@@ -54,4 +54,35 @@ class BackupController extends AbstractActionController
             }
         }
     }
+
+
+    public function restoreAction()
+    {
+        foreach ($this->backupConfig as $path => $folderId) {
+            $localFiles = scandir($path);
+
+            $index = [];
+            foreach ($localFiles as $localFile) {
+                $index[$localFile] = filemtime($path."/".$localFile);
+            }
+
+            $folder = new pCloud\Folder();
+            /** @var \stdClass[] $pcloudFiles */
+            $pcloudFiles = $folder->getContent($folderId);
+
+            foreach ($pcloudFiles as $pcloudFile) {
+                if (isset($index[$pcloudFile->name])) {
+                    continue;
+                }
+
+                $file = new pCloud\File();
+                try {
+                    print "Restoring ".$path."/".$pcloudFile->name."\r\n";
+                    $file->download($pcloudFile->fileid, $path);
+                } catch (\Exception $e) {
+                    print "Error downloading from pCloud: " . $e->getMessage() . "\r\n";
+                }
+            }
+        }
+    }
 }

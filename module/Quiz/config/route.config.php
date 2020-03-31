@@ -606,6 +606,15 @@ return [
                         ],
                     ],
                 ],
+                'restore' => [
+                    'options' => [
+                        'route'    => 'restore',
+                        'defaults' => [
+                            'controller' => 'Quiz\Controller\Backup',
+                            'action'     => 'restore',
+                        ],
+                    ],
+                ],
             ]
         ]
     ]
