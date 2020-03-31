@@ -303,6 +303,18 @@ class QuestionController extends AbstractCrudController
         return $this->response;
     }
 
+    public function mediaAction()
+    {
+        $questionId = $this->params('questionId');
+        $question = $this->questionService->getById($questionId);
+        if ($question->isImageQuestion()) {
+            $file = "data/images/{$question->getId()}.png";
+            $mime_type = mime_content_type($file);
+            header('Content-Type: '.$mime_type);
+            readfile($file);
+        }
+    }
+
     /**
      * @param FormInterface $form
      * @return mixed
@@ -315,6 +327,9 @@ class QuestionController extends AbstractCrudController
         if (isset($_FILES['audio']['tmp_name']) && $_FILES['audio']['size'] > 0) {
             $question->setAudioQuestion(true);
         }
+        if (isset($_FILES['image']['tmp_name']) && $_FILES['image']['size'] > 0) {
+            $question->setImageQuestion(true);
+        }
 
         if (!$question->getId()) {
             $this->questionService->createNewQuestion($question);
@@ -324,6 +339,9 @@ class QuestionController extends AbstractCrudController
 
         if (isset($_FILES['audio']['tmp_name']) && $_FILES['audio']['size'] > 0) {
             move_uploaded_file($_FILES['audio']['tmp_name'], "public/data/audio/".$question->getId().".mp3");
+        }
+        if (isset($_FILES['image']['tmp_name']) && $_FILES['image']['size'] > 0) {
+            move_uploaded_file($_FILES['image']['tmp_name'], "data/images/".$question->getId().".png");
         }
 
         return true;

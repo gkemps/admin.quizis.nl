@@ -37,7 +37,7 @@ $escape = new Zend\Escaper\Escaper('utf-8');
                         </span>
                     </td>
                     <td class="text-right">
-                        <?php if ($question->hasImage()): ?>
+                        <?php if ($question->isImageQuestion()): ?>
                             <span class="label label-primary label-as-badge">
                                 <i class="fa fa-image"></i>
                             </span>

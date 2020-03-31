@@ -208,7 +208,7 @@ class Question extends Form
         $submit = new Element\Submit(self::ELEM_SUBMIT);
         $submit->setValue('Vraag opslaan');
         $submit->setOptions([
-                                'label'            => ' ',
+                                'label'            => 'Vraag opslaan',
                                 'column-size'      => $inputSize,
                                 'label_attributes' => [
                                     'class' => $columnSize,

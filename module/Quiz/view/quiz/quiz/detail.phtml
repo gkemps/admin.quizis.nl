@@ -146,7 +146,7 @@
                         title="<?php echo $quizRoundQuestion->getQuestion()->getAnswer(); ?>">
                         <span class="<?php echo $quizRoundQuestion->getQuestion()->getCategory()->getIcon(); ?>"></span>
                         <?php echo $quizRoundQuestion->getQuestion()->getQuestion(); ?>
-                        <?php if ($quizRoundQuestion->getQuestion()->hasImage()): ?>
+                        <?php if ($quizRoundQuestion->getQuestion()->isImageQuestion()): ?>
                             <span class="label label-primary label-as-badge">
                                     <i class="fa fa-image"></i>
                             </span>

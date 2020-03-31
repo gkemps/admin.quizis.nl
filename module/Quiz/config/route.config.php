@@ -490,6 +490,21 @@ return [
                 ],
             ],
 
+            'media' => [
+                'type' => 'Segment',
+                'may_terminate' => true,
+                'options' => [
+                    'route'    => '/media/:questionId',
+                    'constraints' => [
+                        'questionId' => '\d+'
+                    ],
+                    'defaults' => [
+                        'controller' => 'Quiz\Controller\Question',
+                        'action'     => 'media',
+                    ],
+                ],
+            ],
+
             'import' => [
                 'type' => 'Segment',
                 'may_terminate' => true,

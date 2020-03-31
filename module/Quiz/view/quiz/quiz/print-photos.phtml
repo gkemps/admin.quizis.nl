@@ -15,7 +15,7 @@ $escape = new Zend\Escaper\Escaper();
                             if ($quizRoundQuestion):
                         ?>
                             <img style="height: 150px"
-                                src="data:image/png;base64,<?php echo $quizRoundQuestion->getQuestion()->getImage(); ?>" />
+                                src="/media/<?php echo $quizRoundQuestion->getQuestion()->getId(); ?>" alt="image question" />
                         <?php endif ?>
                         <div class="question-number">
                             <?php echo $quizRoundQuestion->getQuestionNumber() / 10; ?>

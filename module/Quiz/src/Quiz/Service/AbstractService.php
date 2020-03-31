@@ -31,7 +31,7 @@ abstract class AbstractService
 
     /**
      * @param $id
-     * @return object
+     * @return object|\Quiz\Entity\Question
      */
     public function getById($id)
     {

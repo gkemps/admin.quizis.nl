@@ -14,7 +14,8 @@
         "doctrine/doctrine-orm-module": "<3.0",
         "neilime/zf2-twb-bundle": "^3.3",
         "zf-commons/zfc-user-doctrine-orm": "1.*",
-        "pcloud/pcloud-php-sdk": "^1.0"
+        "pcloud/pcloud-php-sdk": "^1.0",
+        "smirik/php-datetime-ago": "^1.1"
     },
     "repositories": [
         {

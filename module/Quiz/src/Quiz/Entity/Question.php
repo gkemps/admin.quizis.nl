@@ -54,18 +54,18 @@ class Question
     protected $source;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="integer")
      *
-     * @var string
+     * @var bool
      */
-    protected $image;
+    protected $audioQuestion;
 
     /**
      * @ORM\Column(type="integer")
      *
      * @var bool
      */
-    protected $audioQuestion;
+    protected $imageQuestion;
 
     /**
      * @ORM\Column(type="datetime")
@@ -294,22 +294,6 @@ class Question
     }
 
     /**
-     * @return string
-     */
-    public function getImage()
-    {
-        return base64_encode($this->image);
-    }
-
-    /**
-     * @return string
-     */
-    public function getRawImage()
-    {
-        return $this->image;
-    }
-
-    /**
      * @return boolean
      */
     public function isAudioQuestion()
@@ -326,17 +310,19 @@ class Question
     }
 
     /**
-     * @param string $image
-     * @return Question
+     * @return bool
      */
-    public function setImage($image)
+    public function isImageQuestion()
     {
-        if (isset($image['tmp_name']) && $image['size'] > 0) {
-            $image = file_get_contents($image['tmp_name']);
-            $this->image = $image;
-        }
+        return $this->imageQuestion;
+    }
 
-        return $this;
+    /**
+     * @param bool $imageQuestion
+     */
+    public function setImageQuestion($imageQuestion)
+    {
+        $this->imageQuestion = $imageQuestion;
     }
 
     /**
@@ -354,8 +340,6 @@ class Question
     {
         return !empty($this->source);
     }
-
-
 
     /**
      * @param User $user
@@ -394,13 +378,5 @@ class Question
      */
     public function removeQuestionLike(QuestionLikeEntity $questionLike) {
         $this->questionLikes->removeElement($questionLike);
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasImage()
-    {
-        return !empty($this->image);
     }
 }

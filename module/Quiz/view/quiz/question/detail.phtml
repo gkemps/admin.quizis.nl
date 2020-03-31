@@ -1,12 +1,11 @@
 <?php
 /** @var $question \Quiz\Entity\Question */
-$image = $question->getImage();
 ?>
 <div class="jumbotron">
     <div class="row">
-        <?php if (!empty($image)): ?>
+        <?php if ($question->isImageQuestion()): ?>
             <div class="col-md-3 text-center">
-                <img src="data:image/png;base64,<?php echo $question->getImage(); ?>" height="150px" />
+                <img src="/media/<?php echo $question->getId(); ?>" height="150px" alt="image question" />
             </div>
         <?php endif ?>
         <?php if (!empty($question->isAudioQuestion())): ?>
@@ -17,7 +16,7 @@ $image = $question->getImage();
                 </audio>
             </div>
         <?php endif ?>
-        <div class="col-md-<?php echo (empty($image) && !$question->isAudioQuestion()) ? "9" : "6"; ?> text-center">
+        <div class="col-md-<?php echo (!$question->isImageQuestion() && !$question->isAudioQuestion()) ? "9" : "6"; ?> text-center">
             <h3>
                 "<?php echo $question->getQuestion(); ?>"
             </h3>

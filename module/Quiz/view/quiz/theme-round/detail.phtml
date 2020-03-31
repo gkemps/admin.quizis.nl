@@ -11,7 +11,7 @@
                 title="<?php echo $themeRoundQuestion->getQuestion()->getAnswer(); ?>">
                 <span class="<?php echo $themeRoundQuestion->getQuestion()->getCategory()->getIcon(); ?>"></span>
                 <?php echo $themeRoundQuestion->getQuestion()->getQuestion(); ?>
-                <?php if ($themeRoundQuestion->getQuestion()->hasImage()): ?>
+                <?php if ($themeRoundQuestion->getQuestion()->isImageQuestion()): ?>
                     <span class="label label-primary label-as-badge">
                                     <i class="fa fa-image"></i>
                             </span>
