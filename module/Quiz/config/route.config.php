@@ -588,12 +588,21 @@ return [
     'console' => [
         'router' => [
             'routes' => [
-                'encrypt' => [
+                'image-convert' => [
                     'options' => [
                         'route'    => 'image-convert',
                         'defaults' => [
                             'controller' => 'Quiz\Controller\Console',
                             'action'     => 'convertImage',
+                        ],
+                    ],
+                ],
+                'backup' => [
+                    'options' => [
+                        'route'    => 'backup',
+                        'defaults' => [
+                            'controller' => 'Quiz\Controller\Backup',
+                            'action'     => 'backup',
                         ],
                     ],
                 ],

@@ -2,6 +2,7 @@
 return [
     'controllers' => [
         'factories' => [
+            'Quiz\Controller\Backup' => 'Quiz\Controller\BackupControllerFactory',
             'Quiz\Controller\Category' => 'Quiz\Controller\CategoryControllerFactory',
             'Quiz\Controller\Console' => 'Quiz\Controller\ConsoleControllerFactory',
             'Quiz\Controller\Index' => 'Quiz\Controller\IndexControllerFactory',

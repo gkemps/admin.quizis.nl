@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4aaca3953c302f93b4d89d76fca9921f",
+    "content-hash": "35766647f83117ca24f69a928d6a0ce4",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -1287,6 +1287,40 @@
             ],
             "description": "Composer plugin that provides efficient querying for installed package versions (no runtime IO)",
             "time": "2019-11-15T16:17:10+00:00"
+        },
+        {
+            "name": "pcloud/pcloud-php-sdk",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ivankrastev26/pcloud-php-sdk.git",
+                "reference": "23af45ad8436b8b5718c75fc3cf77fd01008938f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ivankrastev26/pcloud-php-sdk/zipball/23af45ad8436b8b5718c75fc3cf77fd01008938f",
+                "reference": "23af45ad8436b8b5718c75fc3cf77fd01008938f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "5.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "pCloud\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "pCloud SDK for PHP",
+            "time": "2017-01-06T10:00:59+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
