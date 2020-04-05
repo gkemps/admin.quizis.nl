@@ -490,17 +490,32 @@ return [
                 ],
             ],
 
-            'media' => [
+            'media-image' => [
                 'type' => 'Segment',
                 'may_terminate' => true,
                 'options' => [
-                    'route'    => '/media/:questionId',
+                    'route'    => '/media-image/:questionId',
                     'constraints' => [
                         'questionId' => '\d+'
                     ],
                     'defaults' => [
                         'controller' => 'Quiz\Controller\Question',
-                        'action'     => 'media',
+                        'action'     => 'mediaImage',
+                    ],
+                ],
+            ],
+
+            'media-audio' => [
+                'type' => 'Segment',
+                'may_terminate' => true,
+                'options' => [
+                    'route'    => '/media-audio/:questionId',
+                    'constraints' => [
+                        'questionId' => '\d+'
+                    ],
+                    'defaults' => [
+                        'controller' => 'Quiz\Controller\Question',
+                        'action'     => 'mediaAudio',
                     ],
                 ],
             ],

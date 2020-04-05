@@ -153,7 +153,7 @@
                         <?php endif ?>
                         <?php if ($quizRoundQuestion->getQuestion()->isAudioQuestion()): ?>
                             <audio controls>
-                                <source src="/data/audio/<?php echo $quizRoundQuestion->getQuestion()->getId(); ?>.mp3" type="audio/mpeg">
+                                <source src="/media-audio/<?php echo $quizRoundQuestion->getQuestion()->getId(); ?>" type="audio/mpeg">
                                 Your browser does not support the audio element.
                             </audio>
                         <?php endif ?>

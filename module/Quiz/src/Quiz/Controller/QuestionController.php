@@ -289,7 +289,7 @@ class QuestionController extends AbstractCrudController
     public function downloadMp3Action()
     {
         $questionId = $this->params('questionId');
-        $content = file_get_contents("public/data/audio/".$questionId.".mp3");
+        $content = file_get_contents("data/audio/".$questionId.".mp3");
 
         $response = $this->getResponse();
         $response->setContent($content);
@@ -303,12 +303,24 @@ class QuestionController extends AbstractCrudController
         return $this->response;
     }
 
-    public function mediaAction()
+    public function mediaImageAction()
     {
         $questionId = $this->params('questionId');
         $question = $this->questionService->getById($questionId);
         if ($question->isImageQuestion()) {
             $file = "data/images/{$question->getId()}.png";
+            $mime_type = mime_content_type($file);
+            header('Content-Type: '.$mime_type);
+            readfile($file);
+        }
+    }
+
+    public function mediaAudioAction()
+    {
+        $questionId = $this->params('questionId');
+        $question = $this->questionService->getById($questionId);
+        if ($question->isAudioQuestion()) {
+            $file = "data/audio/{$question->getId()}.mp3";
             $mime_type = mime_content_type($file);
             header('Content-Type: '.$mime_type);
             readfile($file);
@@ -338,7 +350,7 @@ class QuestionController extends AbstractCrudController
         }
 
         if (isset($_FILES['audio']['tmp_name']) && $_FILES['audio']['size'] > 0) {
-            move_uploaded_file($_FILES['audio']['tmp_name'], "public/data/audio/".$question->getId().".mp3");
+            move_uploaded_file($_FILES['audio']['tmp_name'], "data/audio/".$question->getId().".mp3");
         }
         if (isset($_FILES['image']['tmp_name']) && $_FILES['image']['size'] > 0) {
             move_uploaded_file($_FILES['image']['tmp_name'], "data/images/".$question->getId().".png");
