@@ -17,16 +17,6 @@ return [
                 //'cache' => 'my_memcache',
             ],
         ],
-        'connection' => [
-            'orm_default' => [
-                'driverClass' => 'Doctrine\\DBAL\\Driver\\PDOMySql\\Driver',
-                'params' => [
-                    'host'     => 'vps48589.public.cloudvps.com',
-                    'port'     => '3306',
-                    'charset'  => 'UTF8',
-                ],
-            ],
-        ],
     ],
 
     'service_manager' => [
