@@ -9,7 +9,7 @@ class BackupControllerFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        require_once("vendor/pcloud/pcloud-php-sdk/lib/pcloud/autoload.php");
+        require_once("vendor/pcloud/pcloud-php-sdk/lib/pCloud/autoload.php");
         pCloud\Config::$credentialPath = "config/app.cred";
 
         return new BackupController(
