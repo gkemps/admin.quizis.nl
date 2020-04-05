@@ -15,8 +15,8 @@ class BackupControllerFactory implements FactoryInterface
         return new BackupController(
             [
                 "data/images" => 5670277258,
-                //"data/audio" => 5670277878,
-                //"data/mysql" => 5670278339
+                "data/audio" => 5670277878,
+                "data/mysql" => 5670278339
             ]
         );
     }
