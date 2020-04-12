@@ -47,7 +47,7 @@ $escape = new Zend\Escaper\Escaper('utf-8');
                                 <i class="fa fa-music"></i>
                             </span>
                         <?php endif ?>
-                        <?php if (!$question->hasSource()): ?>
+                        <?php if (!$question->hasSource() && !$question->isImageQuestion()): ?>
                             <span class="label label-danger label-as-badge" title="Bron ontbreekt">
                                 <i class="fa fa-unlink"></i>
                             </span>
