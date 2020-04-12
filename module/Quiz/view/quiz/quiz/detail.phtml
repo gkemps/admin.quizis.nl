@@ -162,14 +162,6 @@
                                 <i class="fa fa-close"></i>
                             </a>
                         </span>
-                        <a class="pull-right" style="margin-right: 10px;" href="<?php echo $this->url('comment', ['quizRoundQuestionId' => $quizRoundQuestion->getId()]); ?>">
-                            <i class="fa fa-comments-o"></i>
-                            <?php if ($quizRoundQuestion->getComments()->count() > 0): ?>
-                                <span class="badge badge-warning">
-                                    <?php echo $quizRoundQuestion->getComments()->count(); ?>
-                                </span>
-                            <?php endif ?>
-                        </a>
                         <?php if ($quizRoundQuestion->getQuestion()->isAudioQuestion()): ?>
                             <span class="pull-right" style="margin-right: 10px;">
                                 <a href="<?php echo $this->url('download-mp3', ['questionId' => $quizRoundQuestion->getQuestion()->getId()]); ?>"><i class="fa fa-download"></i></a>

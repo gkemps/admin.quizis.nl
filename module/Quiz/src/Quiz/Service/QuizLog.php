@@ -98,21 +98,6 @@ class QuizLog extends AbstractService
         return $this->createNewQuizLog($quizLog);
     }
 
-    public function createNewQuestionCommentLog(QuizRoundQuestionEntity $quizRoundQuestion)
-    {
-        /** @var \Quiz\Entity\User $user */
-        $user = $this->authenticationService->getIdentity();
-
-        $text = "Comment geplaatst bij vraag ".($quizRoundQuestion->getQuestionNumber() / 10)." uit ronde ".$quizRoundQuestion->getQuizRound()->getNumber()." door ".$user->getDisplayName()." (".$quizRoundQuestion->getQuestion()->getQuestion().")";
-
-        $quizLog = new QuizLogEntity();
-        $quizLog->setQuiz($quizRoundQuestion->getQuizRound()->getQuiz());
-        $quizLog->setText($text);
-        $quizLog->setIcon('fa fa-comment');
-
-        return $this->createNewQuizLog($quizLog);
-    }
-
     public function createThemeRoundAddedLog(ThemeRoundEntity $themeRound, QuizRoundEntity $quizRound)
     {
         /** @var \Quiz\Entity\User $user */

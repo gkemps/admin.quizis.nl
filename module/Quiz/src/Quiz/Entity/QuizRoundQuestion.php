@@ -2,11 +2,9 @@
 namespace Quiz\Entity;
 
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Quiz\Entity\Question as QuestionEntity;
 use Quiz\Entity\QuizRound as QuizRoundEntity;
-use Quiz\Entity\QuizRoundQuestionComment as QuizRoundQuestionCommentEntity;
 
 /**
  * @ORM\Entity
@@ -36,14 +34,6 @@ class QuizRoundQuestion
     protected $question;
 
     /**
-     * @ORM\OneToMany(targetEntity="QuizRoundQuestionComment", mappedBy="quizRoundQuestion", cascade="persist")
-     * @ORM\OrderBy({"dateCreated" = "DESC"})
-     *
-     * @var ArrayCollection
-     **/
-    protected $comments;
-
-    /**
      * @ORM\Column(type="integer")
      *
      * @var int
@@ -66,7 +56,6 @@ class QuizRoundQuestion
 
     public function __construct()
     {
-        $this->comments = new ArrayCollection();
     }
 
     /**
@@ -181,19 +170,5 @@ class QuizRoundQuestion
         $this->quizRound = $quizRound;
 
         return $this;
-    }
-
-    public function addComment(QuizRoundQuestionCommentEntity $quizRoundQuestionComment)
-    {
-        $quizRoundQuestionComment->setQuizRoundQuestion($this);
-        $this->comments->add($quizRoundQuestionComment);
-    }
-
-    /**
-     * @return QuizRoundQuestionCommentEntity[]
-     */
-    public function getComments()
-    {
-        return $this->comments;
     }
 }
