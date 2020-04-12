@@ -109,34 +109,6 @@ class QuestionController extends AbstractCrudController
         return $view;
     }
 
-    public function likedAction()
-    {
-        $user = $this->userAuthenticationService->getIdentity();
-
-        $questions = $this->questionService->likedQuestions($user);
-        $questions->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
-        $questions->setDefaultItemCountPerPage(10);
-
-        $view = $this->getBasicView();
-        $view->setVariable('questions', $questions);
-        $view->setTemplate('quiz/question/index');
-
-        return $view;
-    }
-
-    public function likesAction()
-    {
-        $questions = $this->questionService->likesQuestions();
-        $questions->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
-        $questions->setDefaultItemCountPerPage(10);
-
-        $view = $this->getBasicView();
-        $view->setVariable('questions', $questions);
-        $view->setTemplate('quiz/question/index');
-
-        return $view;
-    }
-
     public function noSourceAction()
     {
         $questions = $this->questionService->noSourceQuestions();
@@ -213,31 +185,6 @@ class QuestionController extends AbstractCrudController
                 'question' => $question
             ]
         );
-    }
-
-    public function likeAction()
-    {
-        $questionId = $this->params('questionId');
-
-        $question = $this->questionService->getById($questionId);
-
-        $this->questionService->likeQuestion($question);
-
-        $url = $this->getRequest()->getHeader('Referer')->getUri();
-        return $this->redirect()->toUrl($url);
-    }
-
-    public function unlikeAction()
-    {
-        $user = $this->userAuthenticationService->getIdentity();
-
-        $questionId = $this->params('questionId');
-        $question = $this->questionService->getById($questionId);
-
-        $this->questionService->unlikeQuestion($question, $user);
-
-        $url = $this->getRequest()->getHeader('Referer')->getUri();
-        return $this->redirect()->toUrl($url);
     }
 
     public function addToQuizRoundAction()

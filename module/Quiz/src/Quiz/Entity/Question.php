@@ -8,7 +8,6 @@ use Quiz\Entity\Category as CategoryEntity;
 use Quiz\Entity\User as UserEntity;
 use Quiz\Entity\QuestionTag as QuestionTagEntity;
 use Quiz\Entity\QuizRoundQuestion as QuizRoundQuestionEntity;
-use Quiz\Entity\QuestionLike as QuestionLikeEntity;
 
 /**
  * @ORM\Entity
@@ -102,13 +101,6 @@ class Question
      * @ORM\OneToMany(targetEntity="QuizRoundQuestion", mappedBy="question")
      **/
     protected $quizRoundQuestions;
-
-    /**
-     * @ORM\OneToMany(targetEntity="QuestionLike", mappedBy="question", cascade={"persist", "remove"})
-     *
-     * @var Collection|QuestionLikeEntity[]
-     **/
-    protected $questionLikes;
 
     /**
      * @return string
@@ -339,44 +331,5 @@ class Question
     public function hasSource()
     {
         return !empty($this->source);
-    }
-
-    /**
-     * @param User $user
-     * @return bool
-     */
-    public function userHasLiked(UserEntity $user)
-    {
-        foreach ($this->questionLikes as $like) {
-            if ($like->getUser()->getId() == $user->getId()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @return Collection|QuestionLikeEntity[]
-     */
-    public function getQuestionLikes()
-    {
-        return $this->questionLikes;
-    }
-
-    /**
-     * @param QuestionLike $questionLike
-     */
-    public function addQuestionLike(QuestionLikeEntity $questionLike)
-    {
-        $questionLike->setQuestion($this);
-        $this->questionLikes->add($questionLike);
-    }
-
-    /**
-     * @param QuestionLike $questionLike
-     */
-    public function removeQuestionLike(QuestionLikeEntity $questionLike) {
-        $this->questionLikes->removeElement($questionLike);
     }
 }

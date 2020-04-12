@@ -87,28 +87,6 @@ return [
                             ],
                         ],
                     ],
-                    'liked' => [
-                        'type' => 'Literal',
-                        'may_terminate' => true,
-                        'options' => [
-                            'route'    => '/geliket',
-                            'defaults' => [
-                                'controller' => 'Quiz\Controller\Question',
-                                'action'     => 'liked',
-                            ],
-                        ],
-                    ],
-                    'likes' => [
-                        'type' => 'Literal',
-                        'may_terminate' => true,
-                        'options' => [
-                            'route'    => '/met-likes',
-                            'defaults' => [
-                                'controller' => 'Quiz\Controller\Question',
-                                'action'     => 'likes',
-                            ],
-                        ],
-                    ],
                     'not-asked' => [
                         'type' => 'Literal',
                         'may_terminate' => true,
@@ -185,34 +163,6 @@ return [
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Question',
                                 'action'     => 'detail',
-                            ],
-                        ],
-                    ],
-                    'like' => [
-                        'type' => 'Segment',
-                        'may_terminate' => true,
-                        'options' => [
-                            'route'    => '/like/:questionId',
-                            'constraints' => [
-                                'questionId' => '\d+'
-                            ],
-                            'defaults' => [
-                                'controller' => 'Quiz\Controller\Question',
-                                'action'     => 'like',
-                            ],
-                        ],
-                    ],
-                    'unlike' => [
-                        'type' => 'Segment',
-                        'may_terminate' => true,
-                        'options' => [
-                            'route'    => '/unlike/:questionId',
-                            'constraints' => [
-                                'questionId' => '\d+'
-                            ],
-                            'defaults' => [
-                                'controller' => 'Quiz\Controller\Question',
-                                'action'     => 'unlike',
                             ],
                         ],
                     ],

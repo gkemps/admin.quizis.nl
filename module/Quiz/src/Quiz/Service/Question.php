@@ -4,7 +4,6 @@ namespace Quiz\Service;
 use DateTime;
 use Quiz\Entity\Question as QuestionEntity;
 use Quiz\Entity\Category as CategoryEntity;
-use Quiz\Entity\QuestionLike as QuestionLikeEntity;
 use Quiz\Entity\User as UserEntity;
 use Doctrine\ORM\EntityManager;
 use Zend\Authentication\AuthenticationService;
@@ -149,41 +148,6 @@ class Question extends AbstractService
     /**
      * @return \Zend\Paginator\Paginator
      */
-    public function likedQuestions(UserEntity $user)
-    {
-        $qb = $this->em->createQueryBuilder();
-
-        $qb->select('q')
-            ->from('Quiz\Entity\Question', 'q')
-            ->join('q.questionLikes', 'ql')
-            ->where($qb->expr()->eq(
-                    'ql.user', ':user'
-                ))
-            ->orderBy('q.dateCreated', 'DESC');
-
-        $qb->setParameter('user', $user);
-
-        return $this->returnPaginatedSetFromQueryBuilder($qb);
-    }
-
-    /**
-     * @return \Zend\Paginator\Paginator
-     */
-    public function likesQuestions()
-    {
-        $qb = $this->em->createQueryBuilder();
-
-        $qb->select('q')
-            ->from('Quiz\Entity\Question', 'q')
-            ->join('q.questionLikes', 'ql')
-            ->orderBy('q.dateCreated', 'DESC');
-
-        return $this->returnPaginatedSetFromQueryBuilder($qb);
-    }
-
-    /**
-     * @return \Zend\Paginator\Paginator
-     */
     public function notAskedQuestions()
     {
         $qb = $this->em->createQueryBuilder();
@@ -293,55 +257,5 @@ class Question extends AbstractService
         $this->persist($question);
 
         return $question;
-    }
-
-    /**
-     * @param QuestionEntity $question
-     */
-    public function likeQuestion(QuestionEntity $question)
-    {
-        $questionLike = $this->createQuestionLike($question);
-
-        $question->addQuestionLike($questionLike);
-        $this->persist($question);
-    }
-
-    /**
-     * @param QuestionEntity $question
-     * @param UserEntity $user
-     */
-    public function unlikeQuestion(QuestionEntity $question, UserEntity $user)
-    {
-        foreach ($question->getQuestionLikes() as $questionLike) {
-            if ($questionLike->getQuestion()->getId() == $question->getId() &&
-                $questionLike->getUser()->getId() == $user->getId()) {
-
-                $question->removeQuestionLike($questionLike);
-                $this->removeQuestionLike($questionLike);
-            }
-        }
-    }
-
-    protected function removeQuestionLike(QuestionLikeEntity $questionLike)
-    {
-        $this->em->remove($questionLike);
-        $this->em->flush();
-    }
-
-    /**
-     * @param QuestionEntity $question
-     * @return QuestionLikeEntity
-     */
-    protected function createQuestionLike(QuestionEntity $question)
-    {
-        /** @var UserEntity $user */
-        $user = $this->authenticationService->getIdentity();
-
-        $questionLike = new QuestionLikeEntity();
-        $questionLike->setQuestion($question);
-        $questionLike->setUser($user);
-        $questionLike->setDateCreated(new DateTime('now'));
-
-        return $questionLike;
     }
 }

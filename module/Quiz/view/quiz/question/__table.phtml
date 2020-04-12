@@ -52,12 +52,6 @@ $escape = new Zend\Escaper\Escaper('utf-8');
                                 <i class="fa fa-unlink"></i>
                             </span>
                         <?php endif ?>
-                        <?php if ($question->getQuestionLikes()->count() > 0): ?>
-                            <span class="label label-success label-as-badge" title="Aantal likes">
-                                <?php echo $question->getQuestionLikes()->count(); ?>
-                                <i class="fa fa-thumbs-up"></i>
-                            </span>
-                        <?php endif ?>
                         <?php if ($question->getQuizRoundQuestions()->count() > 0): ?>
                             <?php
                                 $locations = "";
@@ -93,21 +87,6 @@ $escape = new Zend\Escaper\Escaper('utf-8');
                                         Aanpassen
                                     </a>
                                 </li>
-                                <?php if (!$question->userHasLiked($user)): ?>
-                                    <li>
-                                        <a href="<?php echo $this->url('question/like', ['questionId' => $question->getId()]); ?>">
-                                            <span class="fa fa-thumbs-up"></span>
-                                            Liken
-                                        </a>
-                                    </li>
-                                <?php else: ?>
-                                    <li>
-                                        <a href="<?php echo $this->url('question/unlike', ['questionId' => $question->getId()]); ?>">
-                                            <span class="fa fa-thumbs-down"></span>
-                                            Unliken
-                                        </a>
-                                    </li>
-                                <?php endif ?>
                                 <?php foreach ($futureQuizzes as $quiz): ?>
                                     <?php if (!$quiz->containsQuestion($question)): ?>
                                         <li class="divider" />
