@@ -29,6 +29,20 @@ class Tag
     protected $name;
 
     /**
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
+    protected $icon;
+
+    /**
+     * @ORM\Column(type="integer")
+     *
+     * @var bool
+     */
+    protected $active;
+
+    /**
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="createdBy", referencedColumnName="id")
      **/
@@ -47,11 +61,6 @@ class Tag
      * @var DateTime
      */
     protected $dateUpdated;
-
-    /**
-     * @ORM\OneToMany(targetEntity="QuestionTag", mappedBy="tag")
-     **/
-    protected $questionTags;
 
     /**
      * @return mixed
@@ -149,10 +158,34 @@ class Tag
     }
 
     /**
-     * @return QuestionTagEntity[]
+     * @return string
      */
-    public function getQuestionTags()
+    public function getIcon()
     {
-        return $this->questionTags;
+        return $this->icon;
+    }
+
+    /**
+     * @param string $icon
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param bool $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
     }
 }

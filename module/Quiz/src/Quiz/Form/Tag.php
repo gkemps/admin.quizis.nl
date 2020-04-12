@@ -13,6 +13,8 @@ class Tag extends Form
     const FORM_NAME = 'tag';
 
     const ELEM_NAME = 'name';
+    const ELEM_ICON = 'icon';
+    const ELEM_ACTIVE = 'active';
     const ELEM_SUBMIT = 'submit';
 
     protected $tagService;
@@ -33,7 +35,7 @@ class Tag extends Form
 
     public function init()
     {
-        $columnSize = 'col-md-4';
+        $columnSize = 'col-md-1';
         $inputSize  = 'md-6';
 
         $this->add(
@@ -53,11 +55,39 @@ class Tag extends Form
                 ],
             ]
         );
+        $this->add(
+            [
+                'name'       => self::ELEM_ICON,
+                'options'    => [
+                    'label'            => 'icon',
+                    'column-size'      => $inputSize,
+                    'label_attributes' => [
+                        'class' => $columnSize,
+                    ],
+                ],
+                'attributes' => [
+                    'type'        => 'text',
+                    'placeholder' => 'fa-xxxx',
+                    'required'    => true,
+                ],
+            ]
+        );
+        $this->add(
+            [
+                'type' => 'Zend\Form\Element\Checkbox',
+                'name' => self::ELEM_ACTIVE,
+                'options' => array(
+                    'label' => 'Actief',
+                    'checked_value' => '1',
+                    'unchecked_value' => '0',
+                ),
+            ]
+        );
 
         $submit = new Element\Submit(self::ELEM_SUBMIT);
         $submit->setValue('Tag opslaan');
         $submit->setOptions([
-                                'label'            => ' ',
+                                'label'            => 'Tag opslaan',
                                 'column-size'      => $inputSize,
                                 'label_attributes' => [
                                     'class' => $columnSize,

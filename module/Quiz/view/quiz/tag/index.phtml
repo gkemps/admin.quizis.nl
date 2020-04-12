@@ -2,40 +2,57 @@
 /** @var \Quiz\Entity\Tag[] $tags */
 ?>
 
-<div class="col-md-6">
-    <div class="row">
-        <div class="pull-right">
-            <a href="<?php echo $this->url('tag/form'); ?>" style="z-index: 1000; position: relative">
-                <button type="button" class="btn btn-primary" >Tag toevoegen</button>
-            </a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <table class="table table-striped">
-                <thead>
+<a href="<?php echo $this->url('tag/form'); ?>" style="z-index: 1000; position: relative">
+    <button type="button" class="btn btn-success" >Tag toevoegen</button>
+</a>
+<div class="row">
+    <div class="col-md-6">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th></th>
+                <th class="col-md-8">Tag</th>
+                <th>icon</th>
+                <th>actief</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($tags as $tag): ?>
                 <tr>
-                    <th></th>
-                    <th class="col-md-10">Tag</th>
-                    <th>#vragen</th>
+                    <td></td>
+                    <td class="col-md-10">
+                        <?php echo $tag->getName(); ?>
+                    </td>
+                    <td>
+                    <span class="label label-info label-as-badge">
+                        <i class="fa <?php echo $tag->getIcon(); ?>"></i>
+                    </span>
+                    </td>
+                    <td>
+                        <?php if ($tag->isActive()): ?>
+                            <span class="fa fa-check"></span>
+                        <?php endif ?>
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <span class="fa fa-cogs"></span>
+                                <span class="caret"></span>
+                            </button>
+                                <ul class="dropdown-menu pull-right" role="menu">
+                                    <li>
+                                        <a href="<?php echo $this->url('tag/form', [], ['query' => ['id' => $tag->getId()]]); ?>">
+                                            <span class="fa fa-pencil"></span>
+                                            Aanpassen
+                                        </a>
+                                    </li>
+                            </ul>
+                        </div>
+                    </td>
                 </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($tags as $tag): ?>
-                    <tr>
-                        <td></td>
-                        <td class="col-md-10">
-                            <?php echo $tag->getName(); ?>
-                        </td>
-                        <td>
-                            <a href="<?php echo $this->url('tag/form', [], ['query' => ['id' => $tag->getId()]]); ?>">
-                                <span class="fa fa-edit"></span>
-                            </a>
-                        </td>
-                    </tr>
-                <?php endforeach ?>
-                </tbody>
-            </table>
-        </div>
+            <?php endforeach ?>
+            </tbody>
+        </table>
     </div>
 </div>

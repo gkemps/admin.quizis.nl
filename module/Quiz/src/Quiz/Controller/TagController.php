@@ -23,6 +23,8 @@ class TagController extends AbstractCrudController
         TagService $tagService,
         Tagform $tagFrom
     ) {
+        parent::__construct();
+
         $this->tagService = $tagService;
         $this->tagForm = $tagFrom;
     }
