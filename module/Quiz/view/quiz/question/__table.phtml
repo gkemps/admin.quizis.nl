@@ -37,6 +37,11 @@ $escape = new Zend\Escaper\Escaper('utf-8');
                         </span>
                     </td>
                     <td class="text-right">
+                        <?php if (!empty($question->getQuestionEnUs())): ?>
+                            <span class="label label-info label-as-badge" title="Engels vertaald">
+                                en
+                            </span>
+                        <?php endif ?>
                         <?php if ($question->isImageQuestion()): ?>
                             <span class="label label-primary label-as-badge">
                                 <i class="fa fa-image"></i>

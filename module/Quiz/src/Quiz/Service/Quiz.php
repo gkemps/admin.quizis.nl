@@ -14,6 +14,10 @@ use Doctrine\ORM\EntityManager;
 
 class Quiz extends AbstractService
 {
+    const PHOTO_ROUND = "F";
+    const QUESTION_ROUND = "V";
+    const AUDIO_ROUND = "M";
+
     /** @var EntityManager  */
     protected $em;
 
@@ -131,8 +135,9 @@ class Quiz extends AbstractService
     /**
      * @param QuizEntity $newQuiz
      * @return QuizEntity
+     * @throws \Exception
      */
-    public function createQuiz($newQuiz)
+    public function createQuiz(QuizEntity $newQuiz)
     {
         $newQuiz->setDateCreated(new DateTime());
         $this->persist($newQuiz);
@@ -140,7 +145,7 @@ class Quiz extends AbstractService
         if (null != $newQuiz->getCopyOfQuiz()) {
             $this->copyQuestionsFromQuiz($newQuiz);
         } else {
-            $this->createNewStandardQuiz($newQuiz);
+            $this->createQuizFromTemplate($newQuiz);
         }
 
         return $newQuiz;
@@ -195,7 +200,29 @@ class Quiz extends AbstractService
     }
 
     /**
+     * @param QuizEntity $quiz
+     */
+    protected function createQuizFromTemplate(QuizEntity $quiz)
+    {
+        for ($i = 0; $i < strlen($quiz->getTemplate()); $i++) {
+            switch($quiz->getTemplate()[$i]) {
+                case self::QUESTION_ROUND:
+                default:
+                    $this->quizRoundService->createNewQuizRound($quiz, $i + 1);
+                    break;
+                case self::PHOTO_ROUND:
+                    $this->quizRoundService->createNewQuizRound($quiz, $i + 1, "Foto ronde");
+                    break;
+                case self::AUDIO_ROUND:
+                    $this->quizRoundService->createNewQuizRound($quiz, $i + 1, "Muziek ronde");
+                    break;
+            }
+        }
+    }
+
+    /**
      * @param QuizRoundEntity $quizRound
+     * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     protected function storeQuizRound(QuizRoundEntity $quizRound)
@@ -208,6 +235,7 @@ class Quiz extends AbstractService
      * @param QuestionEntity $question
      * @param QuizRoundEntity $quizRound
      * @return QuizRoundQuestionEntity
+     * @throws \Exception
      */
     protected function createQuizRoundQuestion(QuestionEntity $question, QuizRoundEntity $quizRound)
     {

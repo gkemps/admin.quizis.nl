@@ -14,6 +14,7 @@ class Question extends Form
     const FORM_NAME = 'question';
 
     const ELEM_QUESTION = 'question';
+    const ELEM_QUESTION_EN_US = 'question_en_us';
     const ELEM_ANSWER = 'answer';
     const ELEM_POINTS = 'points';
     const ELEM_CATEGORY = 'category';
@@ -69,6 +70,24 @@ class Question extends Form
                     'type'        => 'textarea',
                     'placeholder' => 'vraag',
                     'required'    => true,
+                ],
+            ]
+        );
+
+        $this->add(
+            [
+                'name'       => self::ELEM_QUESTION_EN_US,
+                'options'    => [
+                    'label'            => 'vertaling Engels',
+                    'column-size'      => $inputSize,
+                    'label_attributes' => [
+                        'class' => $columnSize,
+                    ],
+                ],
+                'attributes' => [
+                    'type'        => 'textarea',
+                    'placeholder' => '(optioneel)',
+                    'required'    => false,
                 ],
             ]
         );

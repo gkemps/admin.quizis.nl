@@ -51,6 +51,20 @@ class Quiz
     protected $date;
 
     /**
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
+    protected $template;
+
+    /**
+     * @ORM\Column(type="integer")
+     *
+     * @var bool
+     */
+    protected $language_en_us;
+
+    /**
      * @ORM\Column(type="datetime")
      *
      * @var DateTime
@@ -307,5 +321,37 @@ class Quiz
     public function setCopyOfQuiz($copyOfQuiz)
     {
         $this->copyOfQuiz = $copyOfQuiz;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+    /**
+     * @param string $template
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLanguageEnUs()
+    {
+        return $this->language_en_us;
+    }
+
+    /**
+     * @param bool $language_en_us
+     */
+    public function setLanguageEnUs($language_en_us)
+    {
+        $this->language_en_us = $language_en_us;
     }
 }

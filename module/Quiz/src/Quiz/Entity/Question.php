@@ -36,6 +36,13 @@ class Question
      *
      * @var string
      */
+    protected $question_en_us;
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
     protected $answer;
 
     /**
@@ -331,5 +338,21 @@ class Question
     public function hasSource()
     {
         return !empty($this->source);
+    }
+
+    /**
+     * @return string
+     */
+    public function getQuestionEnUs()
+    {
+        return $this->question_en_us;
+    }
+
+    /**
+     * @param string $question_en_us
+     */
+    public function setQuestionEnUs($question_en_us)
+    {
+        $this->question_en_us = $question_en_us;
     }
 }
