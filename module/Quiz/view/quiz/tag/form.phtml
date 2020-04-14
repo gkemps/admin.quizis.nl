@@ -1,19 +1,44 @@
 <?php
 /** @var \Quiz\Form\Tag $form */
 
-$form->setAttribute(
-    'action',
-    $this->url(
-        'tag/form/process', [],
-        [
-            'query' => [
-                'id' => $form->getObject()->getId()
-            ]
+$action = $this->url(
+    'tag/form/process', [],
+    [
+        'query' => [
+            'id' => $form->getObject()->getId()
         ]
-    )
+    ]
 );
 
-$this->form->prepare();
-echo $this->form()->openTag($this->form);
-echo $this->form($form, \TwbBundle\Form\View\Helper\TwbBundleForm::LAYOUT_HORIZONTAL);
-echo $this->form()->closeTag();
+
+/** @var \Zend\Form\Element[] $elems */
+$elems = $form->getElements();
+
+?>
+<form method="post" name="tag" action="<?php echo $action; ?>" class="form-horizontal" id="tag">
+    <div class="form-group ">
+        <label class="col-md-1 control-label">Tag</label>
+        <div class="col-md-6">
+            <input name="name" type="text" placeholder="tag" required="required" class="form-control" value="<?php echo $elems["name"]->getValue(); ?>">
+        </div>
+    </div>
+    <div class="form-group ">
+        <label class="col-md-1 control-label">Icon</label>
+        <div class="col-md-6">
+            <input name="icon" type="text" placeholder="fa-xxxx" required="required"class="form-control" value="<?php echo $elems["icon"]->getValue(); ?>">
+        </div>
+    </div>
+    <div class="form-group ">
+        <label class="col-md-1 control-label">Actief</label>
+        <div class="col-md-6">
+            <input type="hidden" name="active" value="0">
+            <input type="checkbox" name="active" value="1" <?php echo ($elems["active"]->getValue() == "1") ? "checked=checked" : ""; ?>>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-1 control-label"></label>
+        <div class="col-md-6">
+            <button type="submit" name="submit" class="btn btn-default" value="Tag opslaan">Tag opslaan</button>
+        </div>
+    </div>
+</form>

@@ -42,7 +42,7 @@ class Tag extends Form
             [
                 'name'       => self::ELEM_NAME,
                 'options'    => [
-                    'label'            => 'tag',
+                    'label'            => 'name',
                     'column-size'      => $inputSize,
                     'label_attributes' => [
                         'class' => $columnSize,
