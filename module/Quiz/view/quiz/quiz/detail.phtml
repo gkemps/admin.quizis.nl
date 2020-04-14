@@ -60,6 +60,16 @@
                 <?php echo $quiz->getTotalPoints(); ?>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-6 col-xs-6">
+                <strong>
+                    Engelstalig:
+                </strong>
+            </div>
+            <div class="col-md-6 col-xs-6">
+                <?php echo $quiz->isLanguageEnUs() ? "Ja" : "Nee"; ?>
+            </div>
+        </div>
 
         <br />
         <?php foreach($quiz->getQuizRounds() as $quizRound): ?>
@@ -145,7 +155,11 @@
                     <li class="list-group-item" data-quizquestionid="<?php echo $quizRoundQuestion->getId(); ?>"
                         title="<?php echo $quizRoundQuestion->getQuestion()->getAnswer(); ?>">
                         <span class="<?php echo $quizRoundQuestion->getQuestion()->getCategory()->getIcon(); ?>"></span>
-                        <?php echo $quizRoundQuestion->getQuestion()->getQuestion(); ?>
+                        <?php if ($quiz->isLanguageEnUs() && !empty($quizRoundQuestion->getQuestion()->getQuestionEnUs())): ?>
+                            <?php echo $quizRoundQuestion->getQuestion()->getQuestionEnUs(); ?>
+                        <?php else: ?>
+                            <?php echo $quizRoundQuestion->getQuestion()->getQuestion(); ?>
+                        <?php endif ?>
                         <?php if ($quizRoundQuestion->getQuestion()->isImageQuestion()): ?>
                             <span class="label label-primary label-as-badge">
                                     <i class="fa fa-image"></i>
