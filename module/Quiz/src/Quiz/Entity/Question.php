@@ -346,7 +346,7 @@ class Question
     public function getQuestionEnUs()
     {
         $question = trim($this->question_en_us);
-        if (false == stripos($question, "?")) {
+        if (false == stripos($question, "?") && !empty($question)) {
             $question .= "?";
         }
         return $question;
