@@ -345,7 +345,11 @@ class Question
      */
     public function getQuestionEnUs()
     {
-        return $this->question_en_us;
+        $question = trim($this->question_en_us);
+        if (false == stripos($question, "?")) {
+            $question .= "?";
+        }
+        return $question;
     }
 
     /**

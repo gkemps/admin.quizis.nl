@@ -39,7 +39,11 @@ $escape = new Zend\Escaper\Escaper();
                     <ol>
                         <?php foreach($quizRound->getQuizRoundQuestions() as $quizQuestion): ?>
                             <li>
-                                <?php echo $quizQuestion->getQuestion()->getQuestion(); ?>
+                                <?php if ($quiz->isLanguageEnUs() && !empty($quizQuestion->getQuestion()->getQuestionEnUs())): ?>
+                                    <?php echo $quizQuestion->getQuestion()->getQuestionEnUs(); ?>
+                                <?php else: ?>
+                                    <?php echo $quizQuestion->getQuestion()->getQuestion(); ?>
+                                <?php endif ?>
                                 <?php if ($quizQuestion->getQuestion()->getPoints() > 1): ?>
                                     <strong>
                                         [<?php echo $quizQuestion->getQuestion()->getPoints();?>pt]

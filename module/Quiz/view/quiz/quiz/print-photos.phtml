@@ -44,7 +44,11 @@ $escape = new Zend\Escaper\Escaper();
                             <?php
                                 $quizRoundQuestion = $quizRound->getNextQuestion();
                                 if ($quizRoundQuestion) {
-                                    echo $quizRoundQuestion->getQuestion()->getQuestion();
+                                    if ($quizRound->getQuiz()->isLanguageEnUs() && !empty($quizRoundQuestion->getQuestion()->getQuestionEnUs())) {
+                                        print $quizRoundQuestion->getQuestion()->getQuestionEnUs();
+                                    } else {
+                                        print $quizRoundQuestion->getQuestion()->getQuestion();
+                                    }
                                 }
                             ?>
                         </li>
