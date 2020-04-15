@@ -18,6 +18,7 @@ class Question extends Form
     const ELEM_ANSWER = 'answer';
     const ELEM_POINTS = 'points';
     const ELEM_CATEGORY = 'category';
+    const ELEM_CATEGORY_ID = 'categoryId';
     const ELEM_TAGS = 'tags';
     const ELEM_SOURCE = 'source';
     const ELEM_IMAGE = 'image';
@@ -112,7 +113,7 @@ class Question extends Form
 
         //category select
         $select = new Element\Select();
-        $select->setName(self::ELEM_CATEGORY);
+        $select->setName(self::ELEM_CATEGORY_ID);
         $select->setOptions([
                                 'label'            => 'category',
                                 'column-size'      => $inputSize,
