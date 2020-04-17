@@ -40,6 +40,11 @@
                     <td>
                         <a href="<?php echo $this->url('quiz/detail', ['quizId' => $quiz->getId()]); ?>">
                             <?php echo $quiz->getName(); ?>
+                            <?php if ($quiz->isLanguageEnUs()): ?>
+                                <span class="label label-info label-as-badge" title="Engels vertaald">
+                                    en
+                                </span>
+                            <?php endif ?>
                         </a>
                     </td>
                     <td>
