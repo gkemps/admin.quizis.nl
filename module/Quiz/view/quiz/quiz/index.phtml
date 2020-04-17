@@ -2,37 +2,55 @@
 /** @var \Quiz\Entity\Quiz[] $quizzes */
 ?>
 
+<a href="<?php echo $this->url('quiz/form'); ?>">
+    <button class="btn btn-success">
+        <i class="fa fa-file-text-o"></i>
+        Nieuwe Quiz
+    </button>
+</a>
 <div class="row">
-    <div class="col-md-6">
-        <div class="col-md-2">
-            <a href="<?php echo $this->url('quiz/form'); ?>">
-                <button class="btn btn-success">
-                    <i class="fa fa-file-text-o"></i>
-                    Nieuwe Quiz
-                </button>
-            </a>
-        </div>
+    <div class="col-md-10">
         <table class="table table-striped">
             <thead>
             <tr>
+                <th>Datum</th>
+                <th style="width:10px"></th>
+                <th style="width:10px"></th>
                 <th>Naam</th>
                 <th>Locatie</th>
-                <th>Datum</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
             <?php foreach ($quizzes as $quiz): ?>
                 <tr>
                     <td>
+                        <?php echo $quiz->getDate()->format('d-m-Y H:i:s'); ?>
+                    </td>
+                    <td>
+                        <?php if ($quiz->isPresentation()): ?>
+                            <span class="fa fa-microphone" title="incl. presentatie"></span>
+                        <?php endif ?>
+                    </td>
+                    <td>
+                        <?php if ($quiz->isPrivate()): ?>
+                            <span class="fa fa-lock" title="prive quiz"></span>
+                        <?php endif ?>
+                    </td>
+                    <td>
                         <a href="<?php echo $this->url('quiz/detail', ['quizId' => $quiz->getId()]); ?>">
                             <?php echo $quiz->getName(); ?>
                         </a>
                     </td>
                     <td>
-                        <?php echo $quiz->getLocation(); ?>
+                        <?php if (!empty($quiz->getLocation()) && $quiz->getLocation()->getId() != \Quiz\Entity\Location::PRIVATE_LOCATION): ?>
+                            <?php echo $quiz->getLocation()->getName(); ?>
+                        <?php endif ?>
                     </td>
                     <td>
-                        <?php echo $quiz->getDate()->format('d-m-Y H:i:s'); ?>
+                        <?php if (!empty($quiz->getLocation()) && $quiz->getLocation()->getId() != \Quiz\Entity\Location::PRIVATE_LOCATION): ?>
+                            <?php echo $quiz->getLocation()->getCity(); ?>
+                        <?php endif ?>
                     </td>
                 </tr>
             <?php endforeach ?>

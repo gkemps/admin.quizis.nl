@@ -35,6 +35,12 @@ class Quiz
      *
      * @var string
      */
+    protected $address;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Location")
+     * @ORM\JoinColumn(name="quiz_Location_id", referencedColumnName="id")
+     **/
     protected $location;
 
     /**
@@ -42,6 +48,21 @@ class Quiz
      * @ORM\JoinColumn(name="quiz_quiz_id", referencedColumnName="id")
      */
     protected $copyOfQuiz;
+
+    /**
+     * @ORM\Column(type="integer")
+     *
+     * @var bool
+     */
+    protected $private;
+
+    /**
+     * @ORM\Column(type="integer")
+     *
+     * @var bool
+     */
+    protected $presentation;
+
 
     /**
      * @ORM\Column(type="datetime")
@@ -164,25 +185,6 @@ class Quiz
     public function setId($id)
     {
         $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLocation()
-    {
-        return $this->location;
-    }
-
-    /**
-     * @param string $location
-     * @return Quiz
-     */
-    public function setLocation($location)
-    {
-        $this->location = $location;
 
         return $this;
     }
@@ -353,5 +355,69 @@ class Quiz
     public function setLanguageEnUs($language_en_us)
     {
         $this->language_en_us = $language_en_us;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrivate()
+    {
+        return $this->private;
+    }
+
+    /**
+     * @param bool $private
+     */
+    public function setPrivate($private)
+    {
+        $this->private = $private;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPresentation()
+    {
+        return $this->presentation;
+    }
+
+    /**
+     * @param bool $presentation
+     */
+    public function setPresentation($presentation)
+    {
+        $this->presentation = $presentation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param string $address
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+    }
+
+    /**
+     * @return Location
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * @param mixed $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
     }
 }

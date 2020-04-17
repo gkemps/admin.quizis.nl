@@ -64,7 +64,7 @@ $escape = new Zend\Escaper\Escaper('utf-8');
                                     $locations .= "(".
                                         $quizRoudQuestion->getQuizRound()->getQuiz()->getDate()->format('M-y').
                                         " ".
-                                        $quizRoudQuestion->getQuizRound()->getQuiz()->getLocation().
+                                        $quizRoudQuestion->getQuizRound()->getQuiz()->getLocation()->getName().
                                         ")";
                                 }
                             ?>
