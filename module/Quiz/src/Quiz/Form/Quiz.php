@@ -19,6 +19,8 @@ class Quiz extends Form
     const ELEM_QUIZ = 'copyOfQuiz';
     const ELEM_TEMPLATE = 'template';
     const ELEM_LANGUAGE_EN_US = 'language_en_us';
+    const ELEM_PRIVATE = 'private';
+    const ELEM_PRESENTATION = 'presentation';
     const ELEM_SUBMIT = 'submit';
 
     protected $quizService;
@@ -144,6 +146,30 @@ class Quiz extends Form
         }
         $select->setValueOptions($options);
         $this->add($select);
+
+        $this->add(
+            [
+                'type' => 'Zend\Form\Element\Checkbox',
+                'name' => self::ELEM_PRESENTATION,
+                'options' => array(
+                    'label' => 'Incl. presentatie',
+                    'checked_value' => '1',
+                    'unchecked_value' => '0',
+                ),
+            ]
+        );
+
+        $this->add(
+            [
+                'type' => 'Zend\Form\Element\Checkbox',
+                'name' => self::ELEM_PRIVATE,
+                'options' => array(
+                    'label' => 'Besloten',
+                    'checked_value' => '1',
+                    'unchecked_value' => '0',
+                ),
+            ]
+        );
 
         $this->add(
             [
