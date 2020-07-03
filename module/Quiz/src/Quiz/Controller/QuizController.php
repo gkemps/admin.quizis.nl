@@ -12,6 +12,8 @@ use Zend\View\Model\ViewModel;
 
 class QuizController extends AbstractCrudController
 {
+    const imageHeight = 200;
+
     /** @var QuizService  */
     protected $quizService;
 
@@ -160,6 +162,103 @@ class QuizController extends AbstractCrudController
                 'quizRound' => $quizRound
             ]
         );
+    }
+
+    public function printPhotosV2Action()
+    {
+        $this->layout('print/layout-v2');
+
+        $files = scandir("data/images");
+
+        $images = [];
+        $questions = [];
+        for ($i=0; $i<10; $i++) {
+            $pick = $files[rand(3, count($files) - 1)];
+
+            list($width, $height) = getimagesize("data/images/".$pick);
+
+            $ratio = $height / self::imageHeight;
+
+            $newWidth = $width / $ratio;
+            $newHeight = self::imageHeight;
+
+            $images[] = [str_replace(".png", "", $pick), $newWidth, $newHeight];
+            $questions[] = $i." -> ".$pick." ({$width},{$height}) -> ({$newWidth},{$newHeight}})<br />";
+        }
+
+        $maxWidth = 650;
+        $maxHeight = 800;
+        for ($i = 3; $i < 10; $i++) {
+            $shelfHeight = $maxHeight / $i;
+            $images = $this->rescaleImages($images, $shelfHeight);
+            $shelves = $this->createShelves($images, $maxWidth);
+            //print "shelves before: {$i} shelves after: ".count($shelves)."<br />";
+
+            if (count($shelves) > $i) {
+                continue;
+            }
+            break;
+        }
+
+//        print "<pre>";
+//        print_r($shelves);
+//        die();
+
+        return new ViewModel(
+            [
+                'images' => $images,
+                'shelves' => $shelves,
+                'questions' => $questions
+            ]
+        );
+    }
+
+    /**
+     * @param array $images
+     * @param int $newHeight
+     * @return array
+     */
+    protected function rescaleImages(array $images, int $newHeight)
+    {
+        foreach ($images as $nr => $image) {
+            $currentHeight = $image[2];
+            $ratio = $newHeight / $currentHeight;
+            $newWidth = $image[1] * $ratio;
+            $images[$nr] = [$image[0], $newWidth, $newHeight];
+        }
+
+        return $images;
+    }
+
+    /**
+     * @param array $images
+     * @param int $maxWidth
+     * @return array
+     */
+    protected function createShelves(array $images, int $maxWidth)
+    {
+        $shelves = [];
+        foreach ($images as $image) {
+            $imagePlaced = false;
+            foreach($shelves as $nr => $shelf) {
+                if ($shelf->width + $image[1] > $maxWidth) {
+                    continue;
+                }
+
+                $shelf->width = $shelf->width + $image[1];
+                $shelf->images[] = $image;
+                $imagePlaced = true;
+                break;
+            }
+            if (!$imagePlaced) {
+                $newShelf = new \stdClass();
+                $newShelf->width = $image[1];
+                $newShelf->images = [$image];
+                $shelves[count($shelves)] = $newShelf;
+            }
+        }
+
+        return $shelves;
     }
 
     public function printAnswersAction()

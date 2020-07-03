@@ -292,6 +292,16 @@ return [
                                     ],
                                 ],
                             ],
+                            'print-photos-v2' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route'    => '/print-foto-ronde-v2',
+                                    'defaults' => [
+                                        'controller' => 'Quiz\Controller\Quiz',
+                                        'action'     => 'printPhotosV2',
+                                    ],
+                                ],
+                            ],
                         ]
                     ],
                     'next-quiz' => [

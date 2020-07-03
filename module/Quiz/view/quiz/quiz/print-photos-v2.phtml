@@ -1,0 +1,15 @@
+<!--<div class="row">-->
+<!--    --><?php //for ($i=0;$i<10;$i++): ?>
+<!--            <img height="--><?php //echo $images[$i][2]; ?><!--" width="--><?php //echo $images[$i][1]; ?><!--" alt="image" src="/media-image/--><?php //echo $images[$i][0]; ?><!--" />-->
+<!--    --><?php //endfor ?>
+<!--</div>-->
+
+<?php foreach ($shelves as $shelf): ?>
+    <div class="row">
+    <?php foreach ($shelf->images as $image): ?>
+        <div class="border-radius" style="position: relative">
+            <img height="<?php echo $image[2]; ?>" width="<?php echo $image[1]; ?>" alt="image" src="/media-image/<?php echo $image[0]; ?>" style="display: block" />
+        </div>
+        <?php endforeach ?>
+    </div>
+<?php endforeach; ?>

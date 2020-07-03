@@ -53,3 +53,14 @@ ol li.list-group-item {
     font-size: 18px;
     border-radius: 10px;
 }
+
+.border-radius {
+    border: 1px solid orangered;
+    -webkit-border-radius: 1px;
+    -moz-border-radius: 1px;
+    border-radius: 1px;
+    margin: 1px;
+    padding: 0px;
+    display: inline-block;
+    clear: both;
+}
