@@ -3,6 +3,8 @@ namespace Quiz\Form;
 
 use Doctrine\ORM\EntityManagerInterface;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use DoctrineModule\Form\Element\ObjectSelect;
+use Quiz\Entity\Category;
 use Zend\Form\Form;
 use Zend\Form\Element;
 use Quiz\Entity\Question as QuestionEntity;
@@ -18,12 +20,14 @@ class Question extends Form
     const ELEM_ANSWER = 'answer';
     const ELEM_POINTS = 'points';
     const ELEM_CATEGORY = 'category';
-    const ELEM_CATEGORY_ID = 'categoryId';
     const ELEM_TAGS = 'tags';
     const ELEM_SOURCE = 'source';
     const ELEM_IMAGE = 'image';
     const ELEM_AUDIO = 'audio';
     const ELEM_SUBMIT = 'submit';
+
+    /** @var EntityManagerInterface */
+    protected $em;
 
     /** @var CategoryService  */
     protected $categoryService;
@@ -48,6 +52,7 @@ class Question extends Form
             ->setObject(new QuestionEntity())
             ->setAttribute('method', 'post');
 
+        $this->em = $em;
         $this->categoryService = $categoryService;
         $this->tagService = $tagService;
     }
@@ -112,11 +117,13 @@ class Question extends Form
         );
 
         //category select
-        $select = new Element\Select();
-        $select->setName(self::ELEM_CATEGORY_ID);
+        $select = new ObjectSelect();
+        $select->setName(self::ELEM_CATEGORY);
         $select->setOptions([
                                 'label'            => 'category',
                                 'column-size'      => $inputSize,
+                                'object_manager'   => $this->em,
+                                'target_class'     => Category::class,
                                 'label_attributes' => [
                                     'class' => $columnSize,
                                 ]]);

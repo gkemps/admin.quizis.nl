@@ -235,6 +235,7 @@ class Question extends AbstractService
     /**
      * @param QuestionEntity $question
      * @return QuestionEntity
+     * @throws \Exception
      */
     public function createNewQuestion(QuestionEntity $question)
     {
@@ -250,6 +251,7 @@ class Question extends AbstractService
     /**
      * @param QuestionEntity $question
      * @return QuestionEntity
+     * @throws \Exception
      */
     public function updateQuestion(QuestionEntity $question)
     {

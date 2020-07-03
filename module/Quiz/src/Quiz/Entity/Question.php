@@ -100,13 +100,6 @@ class Question
     protected $category;
 
     /**
-     * @ORM\Column(type="integer", name="quiz_Category_id")
-     *
-     * @var bool
-     */
-    protected $categoryId;
-
-    /**
      * @ORM\OneToMany(targetEntity="QuestionTag", mappedBy="question")
      **/
     protected $questionTags;
@@ -365,21 +358,5 @@ class Question
     public function setQuestionEnUs($question_en_us)
     {
         $this->question_en_us = $question_en_us;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isCategoryId()
-    {
-        return $this->categoryId;
-    }
-
-    /**
-     * @param bool $categoryId
-     */
-    public function setCategoryId($categoryId)
-    {
-        $this->categoryId = $categoryId;
     }
 }
