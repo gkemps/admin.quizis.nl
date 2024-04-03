@@ -6,10 +6,10 @@ return [
             'home' => [
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => [
-                    'route'    => '/',
+                    'route' => '/',
                     'defaults' => [
                         'controller' => 'Quiz\Controller\Question',
-                        'action'     => 'index',
+                        'action' => 'index',
                     ],
                 ],
             ],
@@ -17,10 +17,10 @@ return [
             'category' => [
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => [
-                    'route'    => '/cats',
+                    'route' => '/cats',
                     'defaults' => [
                         'controller' => 'Quiz\Controller\Category',
-                        'action'     => 'index',
+                        'action' => 'index',
                     ],
                 ],
             ],
@@ -29,34 +29,34 @@ return [
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'may_terminate' => true,
                 'options' => [
-                    'route'    => '/tags',
+                    'route' => '/tags',
                     'defaults' => [
                         'controller' => 'Quiz\Controller\Tag',
-                        'action'     => 'index',
+                        'action' => 'index',
                     ],
                 ],
                 'child_routes' => [
                     'form' => [
-                        'type'      => 'Literal',
-                        'priority'  => 1000,
+                        'type' => 'Literal',
+                        'priority' => 1000,
                         'may_terminate' => true,
-                        'options'   => [
+                        'options' => [
                             'route' => '/form',
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Tag',
-                                'action'     => 'form',
+                                'action' => 'form',
                             ],
                         ],
                         'child_routes' => [
                             'process' => [
-                                'type'      => 'Literal',
-                                'priority'  => 1000,
+                                'type' => 'Literal',
+                                'priority' => 1000,
                                 'may_terminate' => true,
-                                'options'   => [
+                                'options' => [
                                     'route' => '/process',
                                     'defaults' => [
                                         'controller' => 'Quiz\Controller\Tag',
-                                        'action'     => 'process',
+                                        'action' => 'process',
                                     ],
                                 ],
                             ]
@@ -69,10 +69,10 @@ return [
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'may_terminate' => true,
                 'options' => [
-                    'route'    => '/vragen',
+                    'route' => '/vragen',
                     'defaults' => [
                         'controller' => 'Quiz\Controller\Question',
-                        'action'     => 'index',
+                        'action' => 'index',
                     ],
                 ],
                 'child_routes' => [
@@ -80,10 +80,10 @@ return [
                         'type' => 'Literal',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/jouw-vragen',
+                            'route' => '/jouw-vragen',
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Question',
-                                'action'     => 'yours',
+                                'action' => 'yours',
                             ],
                         ],
                     ],
@@ -91,10 +91,10 @@ return [
                         'type' => 'Literal',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/niet-gesteld',
+                            'route' => '/niet-gesteld',
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Question',
-                                'action'     => 'notAsked',
+                                'action' => 'notAsked',
                             ],
                         ],
                     ],
@@ -102,10 +102,10 @@ return [
                         'type' => 'Literal',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/niet-gesteld-vdo',
+                            'route' => '/niet-gesteld-vdo',
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Question',
-                                'action'     => 'notAskedVdo',
+                                'action' => 'notAskedVdo',
                             ],
                         ],
                     ],
@@ -113,10 +113,10 @@ return [
                         'type' => 'Literal',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/geen-bron',
+                            'route' => '/geen-bron',
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Question',
-                                'action'     => 'noSource',
+                                'action' => 'noSource',
                             ],
                         ],
                     ],
@@ -124,10 +124,10 @@ return [
                         'type' => 'Literal',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/afbeelding',
+                            'route' => '/afbeelding',
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Question',
-                                'action'     => 'image',
+                                'action' => 'image',
                             ],
                         ],
                     ],
@@ -135,10 +135,10 @@ return [
                         'type' => 'Literal',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/audio',
+                            'route' => '/audio',
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Question',
-                                'action'     => 'audio',
+                                'action' => 'audio',
                             ],
                         ],
                     ],
@@ -146,10 +146,10 @@ return [
                         'type' => 'Literal',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/muziek',
+                            'route' => '/muziek',
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Question',
-                                'action'     => 'music',
+                                'action' => 'music',
                             ],
                         ],
                     ],
@@ -157,10 +157,10 @@ return [
                         'type' => 'Literal',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/meest-gesteld',
+                            'route' => '/meest-gesteld',
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Question',
-                                'action'     => 'mostAsked',
+                                'action' => 'mostAsked',
                             ],
                         ],
                     ],
@@ -168,20 +168,20 @@ return [
                         'type' => 'Literal',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/meest-gesteld-jaar',
+                            'route' => '/meest-gesteld-jaar',
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Question',
-                                'action'     => 'mostAskedYear',
+                                'action' => 'mostAskedYear',
                             ],
                         ],
                     ],
                     'search' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route'    => '/zoeken/:term',
+                            'route' => '/zoeken/:term',
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Question',
-                                'action'     => 'search',
+                                'action' => 'search',
                             ],
                         ],
                     ],
@@ -189,13 +189,13 @@ return [
                         'type' => 'Segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/:questionId',
+                            'route' => '/:questionId',
                             'constraints' => [
                                 'questionId' => '\d+'
                             ],
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Question',
-                                'action'     => 'detail',
+                                'action' => 'detail',
                             ],
                         ],
                     ],
@@ -203,13 +203,13 @@ return [
                         'type' => 'Segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/:questionId/toevoegen-aan-quiz-ronde/:quizRoundId',
+                            'route' => '/:questionId/toevoegen-aan-quiz-ronde/:quizRoundId',
                             'constraints' => [
                                 'quizRoundId' => '\d+'
                             ],
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Question',
-                                'action'     => 'addToQuizRound',
+                                'action' => 'addToQuizRound',
                             ],
                         ],
                     ],
@@ -217,13 +217,13 @@ return [
                         'type' => 'Segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/:questionId/toevoegen-aan-thema-ronde/:themeRoundId',
+                            'route' => '/:questionId/toevoegen-aan-thema-ronde/:themeRoundId',
                             'constraints' => [
                                 'themeRoundId' => '\d+'
                             ],
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Question',
-                                'action'     => 'addToThemeRound',
+                                'action' => 'addToThemeRound',
                             ],
                         ],
                     ],
@@ -231,37 +231,37 @@ return [
                         'type' => 'Segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/cats/:catId',
+                            'route' => '/cats/:catId',
                             'constraints' => [
                                 'catId' => '\d+'
                             ],
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Question',
-                                'action'     => 'questionsByCategory',
+                                'action' => 'questionsByCategory',
                             ],
                         ],
                     ],
                     'form' => [
-                        'type'      => 'Literal',
-                        'priority'  => 1000,
+                        'type' => 'Literal',
+                        'priority' => 1000,
                         'may_terminate' => true,
-                        'options'   => [
+                        'options' => [
                             'route' => '/form',
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Question',
-                                'action'     => 'form',
+                                'action' => 'form',
                             ],
                         ],
                         'child_routes' => [
                             'process' => [
-                                'type'      => 'Literal',
-                                'priority'  => 1000,
+                                'type' => 'Literal',
+                                'priority' => 1000,
                                 'may_terminate' => true,
-                                'options'   => [
+                                'options' => [
                                     'route' => '/process',
                                     'defaults' => [
                                         'controller' => 'Quiz\Controller\Question',
-                                        'action'     => 'process',
+                                        'action' => 'process',
                                     ],
                                 ],
                             ]
@@ -274,10 +274,10 @@ return [
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'may_terminate' => true,
                 'options' => [
-                    'route'    => '/quiz',
+                    'route' => '/quiz',
                     'defaults' => [
                         'controller' => 'Quiz\Controller\Quiz',
-                        'action'     => 'index',
+                        'action' => 'index',
                     ],
                 ],
                 'child_routes' => [
@@ -285,43 +285,43 @@ return [
                         'type' => 'Segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/:quizId',
+                            'route' => '/:quizId',
                             'constraints' => [
                                 'catId' => '\d+'
                             ],
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Quiz',
-                                'action'     => 'detail',
+                                'action' => 'detail',
                             ],
                         ],
                         'child_routes' => [
                             'print-questions' => [
                                 'type' => 'Literal',
                                 'options' => [
-                                    'route'    => '/print-vragen',
+                                    'route' => '/print-vragen',
                                     'defaults' => [
                                         'controller' => 'Quiz\Controller\Quiz',
-                                        'action'     => 'printQuestions',
+                                        'action' => 'printQuestions',
                                     ],
                                 ],
                             ],
                             'print-answers' => [
                                 'type' => 'Literal',
                                 'options' => [
-                                    'route'    => '/print-antwoorden',
+                                    'route' => '/print-antwoorden',
                                     'defaults' => [
                                         'controller' => 'Quiz\Controller\Quiz',
-                                        'action'     => 'printAnswers',
+                                        'action' => 'printAnswers',
                                     ],
                                 ],
                             ],
                             'print-photos' => [
                                 'type' => 'Literal',
                                 'options' => [
-                                    'route'    => '/print-foto-ronde',
+                                    'route' => '/print-foto-ronde',
                                     'defaults' => [
                                         'controller' => 'Quiz\Controller\Quiz',
-                                        'action'     => 'printPhotos',
+                                        'action' => 'printPhotos',
                                     ],
                                 ],
                             ],
@@ -331,13 +331,13 @@ return [
                         'type' => 'Segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/volgende-quiz',
+                            'route' => '/volgende-quiz',
                             'constraints' => [
                                 'catId' => '\d+'
                             ],
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Quiz',
-                                'action'     => 'nextQuiz',
+                                'action' => 'nextQuiz',
                             ],
                         ],
                     ],
@@ -345,37 +345,37 @@ return [
                         'type' => 'Segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/vraag-verwijderen/:quizRoundQuestionId',
+                            'route' => '/vraag-verwijderen/:quizRoundQuestionId',
                             'constraints' => [
                                 'quizRoundQuestionId' => '\d+'
                             ],
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Quiz',
-                                'action'     => 'removeQuizRoundQuestion',
+                                'action' => 'removeQuizRoundQuestion',
                             ],
                         ],
                     ],
                     'form' => [
-                        'type'      => 'Literal',
-                        'priority'  => 1000,
+                        'type' => 'Literal',
+                        'priority' => 1000,
                         'may_terminate' => true,
-                        'options'   => [
+                        'options' => [
                             'route' => '/form',
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Quiz',
-                                'action'     => 'form',
+                                'action' => 'form',
                             ],
                         ],
                         'child_routes' => [
                             'process' => [
-                                'type'      => 'Literal',
-                                'priority'  => 1000,
+                                'type' => 'Literal',
+                                'priority' => 1000,
                                 'may_terminate' => true,
-                                'options'   => [
+                                'options' => [
                                     'route' => '/process',
                                     'defaults' => [
                                         'controller' => 'Quiz\Controller\Quiz',
-                                        'action'     => 'process',
+                                        'action' => 'process',
                                     ],
                                 ],
                             ]
@@ -388,14 +388,14 @@ return [
                 'type' => 'Segment',
                 'may_terminate' => true,
                 'options' => [
-                    'route'    => '/reset-quiz-round-question-number/:quizRoundQuestionId/:newPosition',
+                    'route' => '/reset-quiz-round-question-number/:quizRoundQuestionId/:newPosition',
                     'constraints' => [
                         'quizRoundQuestionId' => '\d+',
                         'newPosition' => '\d+'
                     ],
                     'defaults' => [
                         'controller' => 'Quiz\Controller\Quiz',
-                        'action'     => 'resetQuizRoundQuestionNumber',
+                        'action' => 'resetQuizRoundQuestionNumber',
                     ],
                 ],
             ],
@@ -403,14 +403,14 @@ return [
                 'type' => 'Segment',
                 'may_terminate' => true,
                 'options' => [
-                    'route'    => '/reset-theme-round-question-number/:themeRoundQuestionId/:newPosition',
+                    'route' => '/reset-theme-round-question-number/:themeRoundQuestionId/:newPosition',
                     'constraints' => [
                         'quizRoundQuestionId' => '\d+',
                         'newPosition' => '\d+'
                     ],
                     'defaults' => [
                         'controller' => 'Quiz\Controller\ThemeRound',
-                        'action'     => 'resetThemeRoundQuestionNumber',
+                        'action' => 'resetThemeRoundQuestionNumber',
                     ],
                 ],
             ],
@@ -419,13 +419,13 @@ return [
                 'type' => 'Segment',
                 'may_terminate' => true,
                 'options' => [
-                    'route'    => '/download-mp3/:questionId',
+                    'route' => '/download-mp3/:questionId',
                     'constraints' => [
                         'questionId' => '\d+'
                     ],
                     'defaults' => [
                         'controller' => 'Quiz\Controller\Question',
-                        'action'     => 'downloadMp3',
+                        'action' => 'downloadMp3',
                     ],
                 ],
             ],
@@ -434,13 +434,28 @@ return [
                 'type' => 'Segment',
                 'may_terminate' => true,
                 'options' => [
-                    'route'    => '/download-mp3-round/:quizRoundId',
+                    'route' => '/download-mp3-round/:quizRoundId',
                     'constraints' => [
                         'quizRoundId' => '\d+'
                     ],
                     'defaults' => [
                         'controller' => 'Quiz\Controller\QuizRound',
-                        'action'     => 'downloadMp3',
+                        'action' => 'downloadMp3',
+                    ],
+                ],
+            ],
+
+            'download-mp3-round-v2' => [
+                'type' => 'Segment',
+                'may_terminate' => true,
+                'options' => [
+                    'route' => '/download-mp3-round-v2/:quizRoundId',
+                    'constraints' => [
+                        'quizRoundId' => '\d+'
+                    ],
+                    'defaults' => [
+                        'controller' => 'Quiz\Controller\QuizRound',
+                        'action' => 'downloadMp3V2',
                     ],
                 ],
             ],
@@ -449,13 +464,13 @@ return [
                 'type' => 'Segment',
                 'may_terminate' => true,
                 'options' => [
-                    'route'    => '/media-image/:questionId',
+                    'route' => '/media-image/:questionId',
                     'constraints' => [
                         'questionId' => '\d+'
                     ],
                     'defaults' => [
                         'controller' => 'Quiz\Controller\Question',
-                        'action'     => 'mediaImage',
+                        'action' => 'mediaImage',
                     ],
                 ],
             ],
@@ -464,13 +479,13 @@ return [
                 'type' => 'Segment',
                 'may_terminate' => true,
                 'options' => [
-                    'route'    => '/media-audio/:questionId',
+                    'route' => '/media-audio/:questionId',
                     'constraints' => [
                         'questionId' => '\d+'
                     ],
                     'defaults' => [
                         'controller' => 'Quiz\Controller\Question',
-                        'action'     => 'mediaAudio',
+                        'action' => 'mediaAudio',
                     ],
                 ],
             ],
@@ -479,10 +494,10 @@ return [
                 'type' => 'Segment',
                 'may_terminate' => true,
                 'options' => [
-                    'route'    => '/import',
+                    'route' => '/import',
                     'defaults' => [
                         'controller' => 'Quiz\Controller\Temp',
-                        'action'     => 'import',
+                        'action' => 'import',
                     ],
                 ],
             ],
@@ -491,34 +506,34 @@ return [
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'may_terminate' => true,
                 'options' => [
-                    'route'    => '/thema-rondes',
+                    'route' => '/thema-rondes',
                     'defaults' => [
                         'controller' => 'Quiz\Controller\ThemeRound',
-                        'action'     => 'index',
+                        'action' => 'index',
                     ],
                 ],
                 'child_routes' => [
                     'form' => [
-                        'type'      => 'Literal',
-                        'priority'  => 1000,
+                        'type' => 'Literal',
+                        'priority' => 1000,
                         'may_terminate' => true,
-                        'options'   => [
+                        'options' => [
                             'route' => '/form',
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\ThemeRound',
-                                'action'     => 'form',
+                                'action' => 'form',
                             ],
                         ],
                         'child_routes' => [
                             'process' => [
-                                'type'      => 'Literal',
-                                'priority'  => 1000,
+                                'type' => 'Literal',
+                                'priority' => 1000,
                                 'may_terminate' => true,
-                                'options'   => [
+                                'options' => [
                                     'route' => '/process',
                                     'defaults' => [
                                         'controller' => 'Quiz\Controller\ThemeRound',
-                                        'action'     => 'process',
+                                        'action' => 'process',
                                     ],
                                 ],
                             ]
@@ -528,13 +543,13 @@ return [
                         'type' => 'Segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/:themeRoundId',
+                            'route' => '/:themeRoundId',
                             'constraints' => [
                                 'catId' => '\d+'
                             ],
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\ThemeRound',
-                                'action'     => 'detail',
+                                'action' => 'detail',
                             ],
                         ],
                     ],
@@ -542,13 +557,13 @@ return [
                         'type' => 'Segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/remove/:themeRoundQuestionId',
+                            'route' => '/remove/:themeRoundQuestionId',
                             'constraints' => [
                                 'catId' => '\d+'
                             ],
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\ThemeRound',
-                                'action'     => 'removeThemeRoundQuestion',
+                                'action' => 'removeThemeRoundQuestion',
                             ],
                         ],
                     ],
@@ -556,13 +571,13 @@ return [
                         'type' => 'Segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/add-to-quiz/:themeRoundId/:quizRoundId',
+                            'route' => '/add-to-quiz/:themeRoundId/:quizRoundId',
                             'constraints' => [
                                 'catId' => '\d+'
                             ],
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\ThemeRound',
-                                'action'     => 'addToQuiz',
+                                'action' => 'addToQuiz',
                             ],
                         ],
                     ]
@@ -575,28 +590,28 @@ return [
             'routes' => [
                 'image-convert' => [
                     'options' => [
-                        'route'    => 'image-convert',
+                        'route' => 'image-convert',
                         'defaults' => [
                             'controller' => 'Quiz\Controller\Console',
-                            'action'     => 'convertImage',
+                            'action' => 'convertImage',
                         ],
                     ],
                 ],
                 'backup' => [
                     'options' => [
-                        'route'    => 'backup',
+                        'route' => 'backup',
                         'defaults' => [
                             'controller' => 'Quiz\Controller\Backup',
-                            'action'     => 'backup',
+                            'action' => 'backup',
                         ],
                     ],
                 ],
                 'restore' => [
                     'options' => [
-                        'route'    => 'restore',
+                        'route' => 'restore',
                         'defaults' => [
                             'controller' => 'Quiz\Controller\Backup',
-                            'action'     => 'restore',
+                            'action' => 'restore',
                         ],
                     ],
                 ],

@@ -5,9 +5,13 @@
 <div class="row">
 
     <div class="col-md-4">
-        <h2><?php echo $quiz->getName(); ?></h2>
+        <h2>
+            <?php echo $quiz->getName(); ?>
+        </h2>
         <?php if (null != $quiz->getCopyOfQuiz()): ?>
-            <h3>(kopie: <?php echo $quiz->getCopyOfQuiz()->getName(); ?>)</h3>
+            <h3>(kopie:
+                <?php echo $quiz->getCopyOfQuiz()->getName(); ?>)
+            </h3>
         <?php endif ?>
         <div class="row">
             <div class="col-md-6 col-xs-6">
@@ -47,7 +51,8 @@
             </div>
             <div class="col-md-6 col-xs-6">
                 <?php echo $quiz->getMaxNumberOfQuestions(); ?>
-                (<?php echo $quiz->getNumberOfQuestions(); ?> gevuld)
+                (
+                <?php echo $quiz->getNumberOfQuestions(); ?> gevuld)
             </div>
         </div>
         <div class="row">
@@ -72,34 +77,34 @@
         </div>
 
         <br />
-        <?php foreach($quiz->getQuizRounds() as $quizRound): ?>
+        <?php foreach ($quiz->getQuizRounds() as $quizRound): ?>
             <div class="row">
                 <div class="col-md-6">
                     <a href="#round<?php echo $quizRound->getId(); ?>">
-                        Ronde <?php echo $quizRound->getNumber(); ?>
+                        Ronde
+                        <?php echo $quizRound->getNumber(); ?>
                     </a>
                 </div>
                 <div class="col-md-6 text-right">
                     <div class="progress">
                         <?php
-                            $maxQuestions = $quizRound->getMaxNumberOfQuestions();
-                            $nrOfQuestions = $quizRound->getNumberOfQuestions();
-                            $percentage = round($nrOfQuestions/$maxQuestions * 100);
-                            $class = '';
-                            if ($percentage < 50) {
-                                $class = 'progress-bar-danger';
-                            } elseif ($percentage < 70) {
-                                $class = 'progress-bar-warning';
-                            } elseif ($percentage < 100) {
-                                $class = 'progress-bar-info';
-                            } else {
-                                $class = 'progress-bar-success';
-                            }
+                        $maxQuestions = $quizRound->getMaxNumberOfQuestions();
+                        $nrOfQuestions = $quizRound->getNumberOfQuestions();
+                        $percentage = round($nrOfQuestions / $maxQuestions * 100);
+                        $class = '';
+                        if ($percentage < 50) {
+                            $class = 'progress-bar-danger';
+                        } elseif ($percentage < 70) {
+                            $class = 'progress-bar-warning';
+                        } elseif ($percentage < 100) {
+                            $class = 'progress-bar-info';
+                        } else {
+                            $class = 'progress-bar-success';
+                        }
                         ?>
                         <div class="progress-bar <?php echo $class; ?>" role="progressbar"
-                             aria-valuenow="<?php echo $percentage; ?>"
-                             aria-valuemin="0" aria-valuemax="100"
-                             style="width: <?php echo $percentage; ?>%;">
+                            aria-valuenow="<?php echo $percentage; ?>" aria-valuemin="0" aria-valuemax="100"
+                            style="width: <?php echo $percentage; ?>%;">
                             <?php echo $percentage; ?>%
                         </div>
                     </div>
@@ -114,10 +119,11 @@
 </div>
 <div class="row">
     <div class="col-md-2">
-        <a href="<?php echo $this->url('quiz/detail/print-questions', ['quizId' => $quiz->getId()]); ?>" target="_blank">
+        <a href="<?php echo $this->url('quiz/detail/print-questions', ['quizId' => $quiz->getId()]); ?>"
+            target="_blank">
             <button class="btn btn-info">
                 <i class="fa fa-file-text-o"></i>
-                 Vragen printen
+                Vragen printen
             </button>
         </a>
     </div>
@@ -142,55 +148,65 @@
 <div>
     <?php foreach ($quiz->getQuizRounds() as $quizRound): ?>
         <h2 id="round<?php echo $quizRound->getId(); ?>">
-            Ronde <?php echo $quizRound->getNumber(); ?>
+            Ronde
+            <?php echo $quizRound->getNumber(); ?>
             <?php if ($quizRound->getTheme() != ""): ?>
-             (<?php echo $quizRound->getTheme(); ?>)
+                (
+                <?php echo $quizRound->getTheme(); ?>)
             <?php endif ?>
             <?php if ($quizRound->hasAudio()): ?>
-                <a href="<?php echo $this->url('download-mp3-round', ['quizRoundId' => $quizRound->getId()]); ?>"><i class="fa fa-download" ></i></a>
+                <a href="<?php echo $this->url('download-mp3-round', ['quizRoundId' => $quizRound->getId()]); ?>"><i
+                        class="fa fa-download"></i></a>
+            <?php endif ?>
+            <?php if ($quizRound->hasAudio()): ?>
+                <a href="<?php echo $this->url('download-mp3-round-v2', ['quizRoundId' => $quizRound->getId()]); ?>"><i
+                        class="fa fa-download" style="color:#00ff00"></i></a>
             <?php endif ?>
         </h2>
         <ol class="list-group sortable">
             <?php foreach ($quizRound->getQuizRoundQuestions() as $quizRoundQuestion): ?>
-                    <li class="list-group-item" data-quizquestionid="<?php echo $quizRoundQuestion->getId(); ?>"
-                        title="<?php echo $quizRoundQuestion->getQuestion()->getAnswer(); ?>">
-                        <span class="<?php echo $quizRoundQuestion->getQuestion()->getCategory()->getIcon(); ?>"></span>
-                        <?php if ($quiz->isLanguageEnUs() && !empty($quizRoundQuestion->getQuestion()->getQuestionEnUs())): ?>
-                            <?php echo $quizRoundQuestion->getQuestion()->getQuestionEnUs(); ?>
-                        <?php else: ?>
-                            <?php echo $quizRoundQuestion->getQuestion()->getQuestion(); ?>
-                        <?php endif ?>
-                        <?php if ($quizRoundQuestion->getQuestion()->isImageQuestion()): ?>
-                            <span class="label label-primary label-as-badge">
-                                    <i class="fa fa-image"></i>
-                            </span>
-                        <?php endif ?>
-                        <?php if ($quizRoundQuestion->getQuestion()->isAudioQuestion()): ?>
-                            <audio controls>
-                                <source src="/media-audio/<?php echo $quizRoundQuestion->getQuestion()->getId(); ?>" type="audio/mpeg">
-                                Your browser does not support the audio element.
-                            </audio>
-                        <?php endif ?>
-                        <span class="pull-right">
-                            <a href="<?php echo $this->url('quiz/remove-question', ['quizRoundQuestionId' => $quizRoundQuestion->getId()]); ?>" style="color: #ff0000">
-                                <i class="fa fa-close"></i>
-                            </a>
+                <li class="list-group-item" data-quizquestionid="<?php echo $quizRoundQuestion->getId(); ?>"
+                    title="<?php echo $quizRoundQuestion->getQuestion()->getAnswer(); ?>">
+                    <span class="<?php echo $quizRoundQuestion->getQuestion()->getCategory()->getIcon(); ?>"></span>
+                    <?php if ($quiz->isLanguageEnUs() && !empty($quizRoundQuestion->getQuestion()->getQuestionEnUs())): ?>
+                        <?php echo $quizRoundQuestion->getQuestion()->getQuestionEnUs(); ?>
+                    <?php else: ?>
+                        <?php echo $quizRoundQuestion->getQuestion()->getQuestion(); ?>
+                    <?php endif ?>
+                    <?php if ($quizRoundQuestion->getQuestion()->isImageQuestion()): ?>
+                        <span class="label label-primary label-as-badge">
+                            <i class="fa fa-image"></i>
                         </span>
-                        <?php if ($quizRoundQuestion->getQuestion()->isAudioQuestion()): ?>
-                            <span class="pull-right" style="margin-right: 10px;">
-                                <a href="<?php echo $this->url('download-mp3', ['questionId' => $quizRoundQuestion->getQuestion()->getId()]); ?>"><i class="fa fa-download"></i></a>
-                            </span>
-                        <?php endif ?>
-                    </li>
+                    <?php endif ?>
+                    <?php if ($quizRoundQuestion->getQuestion()->isAudioQuestion()): ?>
+                        <audio controls>
+                            <source src="/media-audio/<?php echo $quizRoundQuestion->getQuestion()->getId(); ?>" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    <?php endif ?>
+                    <span class="pull-right">
+                        <a href="<?php echo $this->url('quiz/remove-question', ['quizRoundQuestionId' => $quizRoundQuestion->getId()]); ?>"
+                            style="color: #ff0000">
+                            <i class="fa fa-close"></i>
+                        </a>
+                    </span>
+                    <?php if ($quizRoundQuestion->getQuestion()->isAudioQuestion()): ?>
+                        <span class="pull-right" style="margin-right: 10px;">
+                            <a
+                                href="<?php echo $this->url('download-mp3', ['questionId' => $quizRoundQuestion->getQuestion()->getId()]); ?>"><i
+                                    class="fa fa-download"></i></a>
+                        </span>
+                    <?php endif ?>
+                </li>
             <?php endforeach ?>
         </ol>
     <?php endforeach ?>
     <h4>Quiz mutaties</h4>
-    <?php foreach($quiz->getQuizLogs() as $quizLog): ?>
+    <?php foreach ($quiz->getQuizLogs() as $quizLog): ?>
         <?php
-            $createdDate = new DateTime($quizLog->getDateCreated()->format('Y-m-d H:i:s'), new DateTimeZone('UTC'));
-            $dateAgo = new \Smirik\PHPDateTimeAgo\DateTimeAgo();
-            $dateAgo->setTextTranslator(new \Quiz\PHPDateTimeAgo\TextTranslator\DutchTranslator());
+        $createdDate = new DateTime($quizLog->getDateCreated()->format('Y-m-d H:i:s'), new DateTimeZone('UTC'));
+        $dateAgo = new \Smirik\PHPDateTimeAgo\DateTimeAgo();
+        $dateAgo->setTextTranslator(new \Quiz\PHPDateTimeAgo\TextTranslator\DutchTranslator());
         ?>
         <div class="row">
             <div class="pull-left">
@@ -226,13 +242,13 @@
 <!--</div>-->
 
 <script type="text/javascript">
-    $(document).ready(function(){
+    $(document).ready(function () {
         $(".sortable").sortable({
-            update:  function (event, ui) {
+            update: function (event, ui) {
                 var id = $(ui.item).data('quizquestionid');
                 var newPos = ui.item.index() + 1;
                 $.ajax({
-                    url:"/reset-quiz-round-question-number/" + id + "/" + newPos
+                    url: "/reset-quiz-round-question-number/" + id + "/" + newPos
                 });
             }
         });
@@ -260,7 +276,7 @@
 
     }
 
-    window.onload = function(){
+    window.onload = function () {
         var ctx = document.getElementById("pieChart").getContext("2d");
         //var myPieChart = new Chart(ctx[0]).Pie(data,options);
         window.myLine = new Chart(ctx).Radar(data, options);;
