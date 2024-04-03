@@ -78,7 +78,16 @@ class QuizRoundController extends AbstractActionController
             shell_exec($command);
         }
 
-        $this->response->setContent(file_get_contents($outputFile));
+        $mp3_output = file_get_contents($outputFile);
+
+        $this->response->setContent($mp3_output);
+
+        $headers = $this->response->getHeaders();
+        $headers->clearHeaders()
+            ->addHeaderLine('Content-Type', 'audio/mpeg')
+            ->addHeaderLine('Content-Disposition', 'attachment; filename="audio_ronde_' . $quizRound->getNumber() . '_v2.mp3"')
+            ->addHeaderLine('Content-Length', strlen($mp3_output));
+
         return $this->response;
     }
 }
