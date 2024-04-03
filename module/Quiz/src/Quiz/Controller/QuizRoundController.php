@@ -75,8 +75,7 @@ class QuizRoundController extends AbstractActionController
         $command = "/usr/bin/ffmpeg -i \"concat:" . implode("|", $mp3Files) . "\" -c copy $outputFile 2>&1";
 
         if (!file_exists($outputFile)) {
-            echo shell_exec($command);
-            die("stop!");
+            shell_exec($command);
         }
 
         $this->response->setContent(file_get_contents($outputFile));
