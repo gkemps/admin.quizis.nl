@@ -72,10 +72,11 @@ class QuizRoundController extends AbstractActionController
 
         $outputFile = "data/mp3/q" . $quizRound->getQuiz()->getId() . "r" . $quizRound->getNumber() . "_" . $hash . ".mp3";
 
-        $command = "ffmpeg -i \"concat:" . implode("|", $mp3Files) . "\" -c copy $outputFile";
+        $command = "/usr/bin/ffmpeg -i \"concat:" . implode("|", $mp3Files) . "\" -c copy $outputFile 2>&1";
 
         if (!file_exists($outputFile)) {
-            exec($command);
+            echo shell_exec($command);
+            die("stop!");
         }
 
         $this->response->setContent(file_get_contents($outputFile));
