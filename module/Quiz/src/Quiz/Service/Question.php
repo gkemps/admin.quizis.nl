@@ -150,6 +150,10 @@ class Question extends AbstractService
      */
     public function notAskedQuestions()
     {
+        $sql = "SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))";
+        $stmt = $this->em->getConnection()->prepare($sql);
+        $stmt->execute();
+
         $qb = $this->em->createQueryBuilder();
 
         $qb->select('q')
@@ -165,8 +169,46 @@ class Question extends AbstractService
         return $this->returnPaginatedSetFromQueryBuilder($qb);
     }
 
+    public function notAskedVdoQuestions()
+    {
+        $sql = "SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))";
+        $stmt = $this->em->getConnection()->prepare($sql);
+        $stmt->execute();
+
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select('q.id')
+            ->from('Quiz\Entity\Question', 'q')
+            ->leftJoin('q.quizRoundQuestions', 'qrq')
+            ->leftJoin('qrq.quizRound', 'qr')
+            ->leftJoin('qr.quiz', 'qz')	
+            ->where($qb->expr()->eq('qz.location', ':vdo'))
+            ->having($qb->expr()->gt(
+                    'COUNT(qrq.id)',
+                    0
+                ))
+            ->groupBy('q.id')
+            ->orderBy('q.dateCreated', 'DESC');
+
+        $qb2 = $this->em->createQueryBuilder();
+
+        $qb2->select('q2')
+            ->from('Quiz\Entity\Question', 'q2')
+            ->where($qb2->expr()->notIn('q2.id', $qb->getDQL()))
+            ->andWhere($qb2->expr()->notLike("q2.question", $qb2->expr()->literal("%band/artiest%")))
+            ->orderBy('q2.dateCreated', 'DESC');
+
+        $qb2->setParameter('vdo', 1);    
+
+        return $this->returnPaginatedSetFromQueryBuilder($qb2);
+    }
+
     public function mostAskedQuestions()
     {
+        $sql = "SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))";
+        $stmt = $this->em->getConnection()->prepare($sql);
+        $stmt->execute();
+
         $qb = $this->em->createQueryBuilder();
 
         $qb->select('q, COUNT(qrq.id) AS HIDDEN nrAsked')
@@ -174,10 +216,34 @@ class Question extends AbstractService
             ->leftJoin('q.quizRoundQuestions', 'qrq')
             ->having($qb->expr()->gt(
                 'COUNT(qrq.id)',
-                0
+                1
             ))
             ->groupBy('q.id')
             ->orderBy('nrAsked', 'DESC');
+
+        return $this->returnPaginatedSetFromQueryBuilder($qb);
+    }
+
+    public function mostAskedYearQuestions()
+    {
+        $sql = "SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))";
+        $stmt = $this->em->getConnection()->prepare($sql);
+        $stmt->execute();
+
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select('q, COUNT(qrq.id) AS HIDDEN nrAsked')
+            ->from('Quiz\Entity\Question', 'q')
+            ->leftJoin('q.quizRoundQuestions', 'qrq')
+            ->where($qb->expr()->gt('q.dateCreated', ':date'))
+            ->having($qb->expr()->gt(
+                'COUNT(qrq.id)',
+                1
+            ))
+            ->groupBy('q.id')
+            ->orderBy('nrAsked', 'DESC');
+
+        $qb->setParameter('date', new DateTime('now - 1 year'));
 
         return $this->returnPaginatedSetFromQueryBuilder($qb);
     }
@@ -207,7 +273,7 @@ class Question extends AbstractService
         $qb->select('q')
             ->from('Quiz\Entity\Question', 'q')
             ->where($qb->expr()->neq(
-                $qb->expr()->length('q.image'),
+                $qb->expr()->length('q.imageQuestion'),
                 0
             ))
             ->orderBy('q.dateCreated', 'DESC');
@@ -224,7 +290,24 @@ class Question extends AbstractService
             ->where(
                 $qb->expr()->andX(
                     $qb->expr()->neq('q.audioQuestion', 0),
-                    $qb->expr()->notLike("q.question", $qb->expr()->literal("%band%"))
+                    $qb->expr()->notLike("q.question", $qb->expr()->literal("%band/artiest%"))
+                )
+            )
+            ->orderBy('q.dateCreated', 'DESC');
+
+        return $this->returnPaginatedSetFromQueryBuilder($qb);
+    }
+
+    public function musicQuestions()
+    {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select('q')
+            ->from('Quiz\Entity\Question', 'q')
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->neq('q.audioQuestion', 0),
+                    $qb->expr()->like("q.question", $qb->expr()->literal("%band/artiest%"))
                 )
             )
             ->orderBy('q.dateCreated', 'DESC');

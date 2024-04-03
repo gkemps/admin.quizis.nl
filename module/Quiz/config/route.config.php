@@ -98,6 +98,17 @@ return [
                             ],
                         ],
                     ],
+                    'not-asked-vdo' => [
+                        'type' => 'Literal',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/niet-gesteld-vdo',
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\Question',
+                                'action'     => 'notAskedVdo',
+                            ],
+                        ],
+                    ],
                     'no-source' => [
                         'type' => 'Literal',
                         'may_terminate' => true,
@@ -131,14 +142,36 @@ return [
                             ],
                         ],
                     ],
+                    'music' => [
+                        'type' => 'Literal',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/muziek',
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\Question',
+                                'action'     => 'music',
+                            ],
+                        ],
+                    ],
                     'most-asked' => [
                         'type' => 'Literal',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/most-asked',
+                            'route'    => '/meest-gesteld',
                             'defaults' => [
                                 'controller' => 'Quiz\Controller\Question',
                                 'action'     => 'mostAsked',
+                            ],
+                        ],
+                    ],
+                    'most-asked-year' => [
+                        'type' => 'Literal',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/meest-gesteld-jaar',
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\Question',
+                                'action'     => 'mostAskedYear',
                             ],
                         ],
                     ],

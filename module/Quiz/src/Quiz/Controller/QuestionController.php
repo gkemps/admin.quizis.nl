@@ -135,6 +135,19 @@ class QuestionController extends AbstractCrudController
         return $view;
     }
 
+    public function notAskedVdoAction()
+    {
+        $questions = $this->questionService->notAskedVdoQuestions();
+        $questions->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
+        $questions->setDefaultItemCountPerPage(10);
+
+        $view = $this->getBasicView();
+        $view->setVariable('questions', $questions);
+        $view->setTemplate('quiz/question/index');
+
+        return $view;
+    }
+
     public function imageAction()
     {
         $questions = $this->questionService->imageQuestions();
@@ -161,9 +174,35 @@ class QuestionController extends AbstractCrudController
         return $view;
     }
 
+    public function musicAction()
+    {
+        $questions = $this->questionService->musicQuestions();
+        $questions->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
+        $questions->setDefaultItemCountPerPage(10);
+
+        $view = $this->getBasicView();
+        $view->setVariable('questions', $questions);
+        $view->setTemplate('quiz/question/index');
+
+        return $view;
+    }
+
     public function mostAskedAction()
     {
         $questions = $this->questionService->mostAskedQuestions();
+        $questions->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
+        $questions->setDefaultItemCountPerPage(10);
+
+        $view = $this->getBasicView();
+        $view->setVariable('questions', $questions);
+        $view->setTemplate('quiz/question/index');
+
+        return $view;
+    }
+
+    public function mostAskedYearAction()
+    {
+        $questions = $this->questionService->mostAskedYearQuestions();
         $questions->setCurrentPageNumber((int) $this->params()->fromQuery('page', 1));
         $questions->setDefaultItemCountPerPage(10);
 
