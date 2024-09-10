@@ -151,8 +151,7 @@
             Ronde
             <?php echo $quizRound->getNumber(); ?>
             <?php if ($quizRound->getTheme() != ""): ?>
-                (
-                <?php echo $quizRound->getTheme(); ?>)
+                (<?php echo $quizRound->getTheme(); ?>)
             <?php endif ?>
             <?php if ($quizRound->hasAudio()): ?>
                 <a href="<?php echo $this->url('download-mp3-round', ['quizRoundId' => $quizRound->getId()]); ?>"><i
