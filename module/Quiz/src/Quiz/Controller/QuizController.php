@@ -190,7 +190,7 @@ class QuizController extends AbstractCrudController
         if (!$quiz->getId()) {
             $this->quizService->createQuiz($quiz);
         } else {
-            //no update of quiz
+            $this->quizService->persist($quiz);
         }
 
         return true;

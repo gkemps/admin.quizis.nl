@@ -16,14 +16,21 @@ class Quiz extends Form
     const ELEM_NAME = 'name';
     const ELEM_LOCATION = 'location';
     const ELEM_DATE = 'date';
-    const ELEM_QUIZ = 'copyOfQuiz';
     const ELEM_TEMPLATE = 'template';
     const ELEM_LANGUAGE_EN_US = 'language_en_us';
     const ELEM_PRIVATE = 'private';
     const ELEM_PRESENTATION = 'presentation';
+    const ELEM_PREPAY = 'prepay';
+    const ELEM_CODE = 'code';
+    const ELEM_PRICE_PER_PERSON = 'pricePerPerson';
+    const ELEM_PRICE_PER_TEAM = 'pricePerTeam';
+    const ELEM_MAX_TEAM_MEMBERS = 'maxTeamMembers';
+    const ELEM_MAX_TEAMS = 'maxTeams';
+    const ELEM_WHITELIST_DEADLINE = 'whitelistDeadline';
     const ELEM_SUBMIT = 'submit';
 
     protected $quizService;
+    protected $entityManager;
 
     public function __construct(
         EntityManagerInterface $em,
@@ -32,6 +39,7 @@ class Quiz extends Form
         parent::__construct(self::FORM_NAME);
 
         $this->quizService = $quizService;
+        $this->entityManager = $em;
 
         $this
             ->setHydrator(new DoctrineHydrator($em))
@@ -110,28 +118,6 @@ class Quiz extends Form
         $select->setValueOptions($options);
         $this->add($select);
 
-        //quiz select
-        $select = new Element\Select();
-        $select->setName(self::ELEM_QUIZ);
-        $select->setOptions([
-            'label' => '- of kopie maken van',
-            'column-size' => $inputSize,
-            'label_attributes' => [
-                'class' => $columnSize,
-            ]
-        ]);
-
-        $quizis = $this->quizService->getAllQuizzes();
-
-        $options = [];
-        $options[0] = " --- Maak keuze --- ";
-        foreach ($quizis as $quiz) {
-            $options[$quiz->getId()] = $quiz->getName() . " (" . $quiz->getDate()->format('F Y') . ")";
-        }
-        $select->setValueOptions($options);
-        $this->add($select);
-
-
         $select = new Element\Select();
         $select->setName(self::ELEM_LOCATION);
         $select->setOptions([
@@ -142,13 +128,126 @@ class Quiz extends Form
             ]
         ]);
 
+        $locations = $this->entityManager->getRepository('Quiz\\Entity\\Location')->findAll();
+        
         $options = [];
         $options[0] = " --- Maak keuze --- ";
-        $options[4] = "Prive locatie";
+        foreach ($locations as $location) {
+            $options[$location->getId()] = $location->toString();
+        }
 
         $select->setValueOptions($options);
 
         $this->add($select);
+
+        $this->add(
+            [
+                'name' => self::ELEM_CODE,
+                'options' => [
+                    'label' => 'code',
+                    'column-size' => $inputSize,
+                    'label_attributes' => [
+                        'class' => $columnSize,
+                    ],
+                ],
+                'attributes' => [
+                    'type' => 'text',
+                    'placeholder' => 'code',
+                    'maxlength' => 50,
+                ],
+            ]
+        );
+
+        $this->add(
+            [
+                'name' => self::ELEM_PRICE_PER_PERSON,
+                'options' => [
+                    'label' => 'prijs per persoon',
+                    'column-size' => $inputSize,
+                    'label_attributes' => [
+                        'class' => $columnSize,
+                    ],
+                ],
+                'attributes' => [
+                    'type' => 'number',
+                    'step' => '0.01',
+                    'min' => '0',
+                    'placeholder' => '0.00',
+                ],
+            ]
+        );
+
+        $this->add(
+            [
+                'name' => self::ELEM_PRICE_PER_TEAM,
+                'options' => [
+                    'label' => 'prijs per team',
+                    'column-size' => $inputSize,
+                    'label_attributes' => [
+                        'class' => $columnSize,
+                    ],
+                ],
+                'attributes' => [
+                    'type' => 'number',
+                    'step' => '0.01',
+                    'min' => '0',
+                    'placeholder' => '0.00',
+                ],
+            ]
+        );
+
+        $this->add(
+            [
+                'name' => self::ELEM_MAX_TEAM_MEMBERS,
+                'options' => [
+                    'label' => 'max aantal teamleden',
+                    'column-size' => $inputSize,
+                    'label_attributes' => [
+                        'class' => $columnSize,
+                    ],
+                ],
+                'attributes' => [
+                    'type' => 'number',
+                    'min' => '1',
+                    'placeholder' => '5',
+                ],
+            ]
+        );
+
+        $this->add(
+            [
+                'name' => self::ELEM_MAX_TEAMS,
+                'options' => [
+                    'label' => 'max aantal teams',
+                    'column-size' => $inputSize,
+                    'label_attributes' => [
+                        'class' => $columnSize,
+                    ],
+                ],
+                'attributes' => [
+                    'type' => 'number',
+                    'min' => '1',
+                    'placeholder' => 'onbeperkt',
+                ],
+            ]
+        );
+
+        $this->add(
+            [
+                'name' => self::ELEM_WHITELIST_DEADLINE,
+                'options' => [
+                    'label' => 'aanmeld deadline',
+                    'column-size' => $inputSize,
+                    'label_attributes' => [
+                        'class' => $columnSize,
+                    ],
+                ],
+                'attributes' => [
+                    'type' => 'text',
+                    'placeholder' => $date->format('d-m-Y H:00:00'),
+                ],
+            ]
+        );
 
         $this->add(
             [
@@ -158,6 +257,10 @@ class Quiz extends Form
                     'label' => 'Incl. presentatie',
                     'checked_value' => '1',
                     'unchecked_value' => '0',
+                    'column-size' => $inputSize,
+                    'label_attributes' => [
+                        'class' => $columnSize,
+                    ],
                 ),
             ]
         );
@@ -170,6 +273,10 @@ class Quiz extends Form
                     'label' => 'Besloten',
                     'checked_value' => '1',
                     'unchecked_value' => '0',
+                    'column-size' => $inputSize,
+                    'label_attributes' => [
+                        'class' => $columnSize,
+                    ],
                 ),
             ]
         );
@@ -182,6 +289,26 @@ class Quiz extends Form
                     'label' => 'Engelstalig',
                     'checked_value' => '1',
                     'unchecked_value' => '0',
+                    'column-size' => $inputSize,
+                    'label_attributes' => [
+                        'class' => $columnSize,
+                    ],
+                ),
+            ]
+        );
+
+        $this->add(
+            [
+                'type' => 'Zend\Form\Element\Checkbox',
+                'name' => self::ELEM_PREPAY,
+                'options' => array(
+                    'label' => 'Vooruitbetalen verplicht',
+                    'checked_value' => '1',
+                    'unchecked_value' => '0',
+                    'column-size' => $inputSize,
+                    'label_attributes' => [
+                        'class' => $columnSize,
+                    ],
                 ),
             ]
         );

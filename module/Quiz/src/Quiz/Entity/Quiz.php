@@ -100,6 +100,62 @@ class Quiz
     protected $dateUpdated;
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     *
+     * @var int
+     */
+    protected $prepay;
+
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     *
+     * @var string
+     */
+    protected $code;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     *
+     * @var string
+     */
+    protected $crmGroupId;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     *
+     * @var float
+     */
+    protected $pricePerPerson;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     *
+     * @var float
+     */
+    protected $pricePerTeam;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     *
+     * @var int
+     */
+    protected $maxTeamMembers;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     *
+     * @var int
+     */
+    protected $maxTeams;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     *
+     * @var DateTime
+     */
+    protected $whitelistDeadline;
+
+    /**
      * @ORM\OneToMany(targetEntity="QuizRound", mappedBy="quiz")
      * @ORM\OrderBy({"number" = "ASC"})
      *
@@ -419,5 +475,149 @@ class Quiz
     public function setLocation($location)
     {
         $this->location = $location;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPrepay()
+    {
+        return $this->prepay;
+    }
+
+    /**
+     * @param int $prepay
+     * @return Quiz
+     */
+    public function setPrepay($prepay)
+    {
+        $this->prepay = $prepay;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string $code
+     * @return Quiz
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCrmGroupId()
+    {
+        return $this->crmGroupId;
+    }
+
+    /**
+     * @param string $crmGroupId
+     * @return Quiz
+     */
+    public function setCrmGroupId($crmGroupId)
+    {
+        $this->crmGroupId = $crmGroupId;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPricePerPerson()
+    {
+        return $this->pricePerPerson;
+    }
+
+    /**
+     * @param float $pricePerPerson
+     * @return Quiz
+     */
+    public function setPricePerPerson($pricePerPerson)
+    {
+        $this->pricePerPerson = $pricePerPerson;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPricePerTeam()
+    {
+        return $this->pricePerTeam;
+    }
+
+    /**
+     * @param float $pricePerTeam
+     * @return Quiz
+     */
+    public function setPricePerTeam($pricePerTeam)
+    {
+        $this->pricePerTeam = $pricePerTeam;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxTeamMembers()
+    {
+        return $this->maxTeamMembers;
+    }
+
+    /**
+     * @param int $maxTeamMembers
+     * @return Quiz
+     */
+    public function setMaxTeamMembers($maxTeamMembers)
+    {
+        $this->maxTeamMembers = $maxTeamMembers;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxTeams()
+    {
+        return $this->maxTeams;
+    }
+
+    /**
+     * @param int $maxTeams
+     * @return Quiz
+     */
+    public function setMaxTeams($maxTeams)
+    {
+        $this->maxTeams = $maxTeams;
+        return $this;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getWhitelistDeadline()
+    {
+        return $this->whitelistDeadline;
+    }
+
+    /**
+     * @param DateTime $whitelistDeadline
+     * @return Quiz
+     */
+    public function setWhitelistDeadline($whitelistDeadline)
+    {
+        $this->whitelistDeadline = $whitelistDeadline;
+        return $this;
     }
 }
