@@ -113,6 +113,45 @@ class Quiz extends AbstractService
     }
 
     /**
+     * Split quizzes into future and past based on today's date (00:00)
+     * 
+     * @return array Array with keys 'future' and 'past', each containing QuizEntity[]
+     */
+    public function getSplitQuizzesByDate()
+    {
+        $allQuizzes = $this->getAllQuizzes();
+        
+        // Set threshold to start of today (00:00)
+        $threshold = new DateTime('today');
+        
+        $futureQuizzes = [];
+        $pastQuizzes = [];
+        
+        foreach ($allQuizzes as $quiz) {
+            if ($quiz->getDate() >= $threshold) {
+                $futureQuizzes[] = $quiz;
+            } else {
+                $pastQuizzes[] = $quiz;
+            }
+        }
+        
+        // Sort future quizzes ascending (earliest first)
+        usort($futureQuizzes, function($a, $b) {
+            return $a->getDate() <=> $b->getDate();
+        });
+        
+        // Past quizzes remain descending (most recent first)
+        usort($pastQuizzes, function($a, $b) {
+            return $b->getDate() <=> $a->getDate();
+        });
+        
+        return [
+            'future' => $futureQuizzes,
+            'past' => $pastQuizzes
+        ];
+    }
+
+    /**
      * @return QuizEntity|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */

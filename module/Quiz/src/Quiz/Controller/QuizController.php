@@ -52,11 +52,12 @@ class QuizController extends AbstractCrudController
 
     public function indexAction()
     {
-        $quizzes = $this->quizService->getAllQuizzes();
+        $splitQuizzes = $this->quizService->getSplitQuizzesByDate();
 
         return new ViewModel(
             [
-                'quizzes' => $quizzes
+                'futureQuizzes' => $splitQuizzes['future'],
+                'pastQuizzes' => $splitQuizzes['past']
             ]
         );
     }

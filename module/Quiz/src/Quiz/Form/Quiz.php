@@ -42,40 +42,22 @@ class Quiz extends Form
     public function init()
     {
         $columnSize = 'col-md-4';
-        $inputSize  = 'md-6';
+        $inputSize = 'md-6';
 
         $this->add(
             [
-                'name'       => self::ELEM_NAME,
-                'options'    => [
-                    'label'            => 'naam',
-                    'column-size'      => $inputSize,
+                'name' => self::ELEM_NAME,
+                'options' => [
+                    'label' => 'naam',
+                    'column-size' => $inputSize,
                     'label_attributes' => [
                         'class' => $columnSize,
                     ],
                 ],
                 'attributes' => [
-                    'type'        => 'text',
+                    'type' => 'text',
                     'placeholder' => 'naam',
-                    'required'    => true,
-                ],
-            ]
-        );
-
-        $this->add(
-            [
-                'name'       => self::ELEM_LOCATION,
-                'options'    => [
-                    'label'            => 'locatie',
-                    'column-size'      => $inputSize,
-                    'label_attributes' => [
-                        'class' => $columnSize,
-                    ],
-                ],
-                'attributes' => [
-                    'type'        => 'text',
-                    'placeholder' => 'locatie',
-                    'required'    => true,
+                    'required' => true,
                 ],
             ]
         );
@@ -84,18 +66,18 @@ class Quiz extends Form
 
         $this->add(
             [
-                'name'       => self::ELEM_DATE,
-                'options'    => [
-                    'label'            => 'datum',
-                    'column-size'      => $inputSize,
+                'name' => self::ELEM_DATE,
+                'options' => [
+                    'label' => 'datum',
+                    'column-size' => $inputSize,
                     'label_attributes' => [
                         'class' => $columnSize,
                     ],
                 ],
                 'attributes' => [
-                    'type'        => 'text',
+                    'type' => 'text',
                     'placeholder' => $date->format('d-m-Y H:00:00'),
-                    'required'    => true,
+                    'required' => true,
                 ],
             ]
         );
@@ -104,11 +86,12 @@ class Quiz extends Form
         $select = new Element\Select();
         $select->setName(self::ELEM_TEMPLATE);
         $select->setOptions([
-            'label'            => 'quiz verloop',
-            'column-size'      => $inputSize,
+            'label' => 'quiz verloop',
+            'column-size' => $inputSize,
             'label_attributes' => [
                 'class' => $columnSize,
-            ]]);
+            ]
+        ]);
 
         $options = [];
         $options["FVVVVVMV"] = "Standaard Quiz (FVVVVVMV)";
@@ -131,20 +114,40 @@ class Quiz extends Form
         $select = new Element\Select();
         $select->setName(self::ELEM_QUIZ);
         $select->setOptions([
-            'label'            => '- of kopie maken van',
-            'column-size'      => $inputSize,
+            'label' => '- of kopie maken van',
+            'column-size' => $inputSize,
             'label_attributes' => [
                 'class' => $columnSize,
-            ]]);
+            ]
+        ]);
 
         $quizis = $this->quizService->getAllQuizzes();
 
         $options = [];
         $options[0] = " --- Maak keuze --- ";
         foreach ($quizis as $quiz) {
-            $options[$quiz->getId()] = $quiz->getName()." (".$quiz->getDate()->format('F Y').")";
+            $options[$quiz->getId()] = $quiz->getName() . " (" . $quiz->getDate()->format('F Y') . ")";
         }
         $select->setValueOptions($options);
+        $this->add($select);
+
+
+        $select = new Element\Select();
+        $select->setName(self::ELEM_LOCATION);
+        $select->setOptions([
+            'label' => 'locatie',
+            'column-size' => $inputSize,
+            'label_attributes' => [
+                'class' => $columnSize,
+            ]
+        ]);
+
+        $options = [];
+        $options[0] = " --- Maak keuze --- ";
+        $options[4] = "Prive locatie";
+
+        $select->setValueOptions($options);
+
         $this->add($select);
 
         $this->add(
@@ -186,12 +189,12 @@ class Quiz extends Form
         $submit = new Element\Submit(self::ELEM_SUBMIT);
         $submit->setValue('Quiz opslaan');
         $submit->setOptions([
-                                'label'            => 'Quiz opslaan',
-                                'column-size'      => $inputSize,
-                                'label_attributes' => [
-                                    'class' => $columnSize,
-                                ]
-                            ]);
+            'label' => 'Quiz opslaan',
+            'column-size' => $inputSize,
+            'label_attributes' => [
+                'class' => $columnSize,
+            ]
+        ]);
 
         $this->add($submit);
     }

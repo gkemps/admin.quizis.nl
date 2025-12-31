@@ -1,5 +1,6 @@
 <?php
-/** @var \Quiz\Entity\Quiz[] $quizzes */
+/** @var \Quiz\Entity\Quiz[] $futureQuizzes */
+/** @var \Quiz\Entity\Quiz[] $pastQuizzes */
 ?>
 
 <a href="<?php echo $this->url('quiz/form'); ?>">
@@ -8,58 +9,126 @@
         Nieuwe Quiz
     </button>
 </a>
+
 <div class="row">
     <div class="col-md-10">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Datum</th>
-                <th style="width:10px"></th>
-                <th style="width:10px"></th>
-                <th>Naam</th>
-                <th>Locatie</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($quizzes as $quiz): ?>
+        <!-- Toekomstige quizzen -->
+        <h3>Toekomstige quizzen</h3>
+        <?php if (count($futureQuizzes) > 0): ?>
+            <table class="table table-striped">
+                <thead>
                 <tr>
-                    <td>
-                        <?php echo $quiz->getDate()->format('d-m-Y H:i:s'); ?>
-                    </td>
-                    <td>
-                        <?php if ($quiz->isPresentation()): ?>
-                            <span class="fa fa-microphone" title="incl. presentatie"></span>
-                        <?php endif ?>
-                    </td>
-                    <td>
-                        <?php if ($quiz->isPrivate()): ?>
-                            <span class="fa fa-lock" title="prive quiz"></span>
-                        <?php endif ?>
-                    </td>
-                    <td>
-                        <a href="<?php echo $this->url('quiz/detail', ['quizId' => $quiz->getId()]); ?>">
-                            <?php echo $quiz->getName(); ?>
-                            <?php if ($quiz->isLanguageEnUs()): ?>
-                                <span class="label label-info label-as-badge" title="Engels vertaald">
-                                    en
-                                </span>
-                            <?php endif ?>
-                        </a>
-                    </td>
-                    <td>
-                        <?php if (!empty($quiz->getLocation()) && $quiz->getLocation()->getId() != \Quiz\Entity\Location::PRIVATE_LOCATION): ?>
-                            <?php echo $quiz->getLocation()->getName(); ?>
-                        <?php endif ?>
-                    </td>
-                    <td>
-                        <?php if (!empty($quiz->getLocation()) && $quiz->getLocation()->getId() != \Quiz\Entity\Location::PRIVATE_LOCATION): ?>
-                            <?php echo $quiz->getLocation()->getCity(); ?>
-                        <?php endif ?>
-                    </td>
+                    <th>Datum</th>
+                    <th style="width:10px"></th>
+                    <th style="width:10px"></th>
+                    <th>Naam</th>
+                    <th>Locatie</th>
+                    <th></th>
                 </tr>
-            <?php endforeach ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                <?php foreach ($futureQuizzes as $quiz): ?>
+                    <tr>
+                        <td>
+                            <?php echo $quiz->getDate()->format('d-m-Y H:i:s'); ?>
+                        </td>
+                        <td>
+                            <?php if ($quiz->isPresentation()): ?>
+                                <span class="fa fa-microphone" title="incl. presentatie"></span>
+                            <?php endif ?>
+                        </td>
+                        <td>
+                            <?php if ($quiz->isPrivate()): ?>
+                                <span class="fa fa-lock" title="prive quiz"></span>
+                            <?php endif ?>
+                        </td>
+                        <td>
+                            <a href="<?php echo $this->url('quiz/detail', ['quizId' => $quiz->getId()]); ?>">
+                                <?php echo $quiz->getName(); ?>
+                                <?php if ($quiz->isLanguageEnUs()): ?>
+                                    <span class="label label-info label-as-badge" title="Engels vertaald">
+                                        en
+                                    </span>
+                                <?php endif ?>
+                            </a>
+                        </td>
+                        <td>
+                            <?php if (!empty($quiz->getLocation()) && $quiz->getLocation()->getId() != \Quiz\Entity\Location::PRIVATE_LOCATION): ?>
+                                <?php echo $quiz->getLocation()->getName(); ?>
+                            <?php endif ?>
+                        </td>
+                        <td>
+                            <?php if (!empty($quiz->getLocation()) && $quiz->getLocation()->getId() != \Quiz\Entity\Location::PRIVATE_LOCATION): ?>
+                                <?php echo $quiz->getLocation()->getCity(); ?>
+                            <?php endif ?>
+                        </td>
+                    </tr>
+                <?php endforeach ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p class="text-muted">Geen toekomstige quizzen gepland.</p>
+        <?php endif; ?>
+
+        <!-- Separator -->
+        <div class="quiz-separator"></div>
+
+        <!-- Afgelopen quizzen -->
+        <h3>Afgelopen quizzen</h3>
+        <?php if (count($pastQuizzes) > 0): ?>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Datum</th>
+                    <th style="width:10px"></th>
+                    <th style="width:10px"></th>
+                    <th>Naam</th>
+                    <th>Locatie</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($pastQuizzes as $quiz): ?>
+                    <tr>
+                        <td>
+                            <?php echo $quiz->getDate()->format('d-m-Y H:i:s'); ?>
+                        </td>
+                        <td>
+                            <?php if ($quiz->isPresentation()): ?>
+                                <span class="fa fa-microphone" title="incl. presentatie"></span>
+                            <?php endif ?>
+                        </td>
+                        <td>
+                            <?php if ($quiz->isPrivate()): ?>
+                                <span class="fa fa-lock" title="prive quiz"></span>
+                            <?php endif ?>
+                        </td>
+                        <td>
+                            <a href="<?php echo $this->url('quiz/detail', ['quizId' => $quiz->getId()]); ?>">
+                                <?php echo $quiz->getName(); ?>
+                                <?php if ($quiz->isLanguageEnUs()): ?>
+                                    <span class="label label-info label-as-badge" title="Engels vertaald">
+                                        en
+                                    </span>
+                                <?php endif ?>
+                            </a>
+                        </td>
+                        <td>
+                            <?php if (!empty($quiz->getLocation()) && $quiz->getLocation()->getId() != \Quiz\Entity\Location::PRIVATE_LOCATION): ?>
+                                <?php echo $quiz->getLocation()->getName(); ?>
+                            <?php endif ?>
+                        </td>
+                        <td>
+                            <?php if (!empty($quiz->getLocation()) && $quiz->getLocation()->getId() != \Quiz\Entity\Location::PRIVATE_LOCATION): ?>
+                                <?php echo $quiz->getLocation()->getCity(); ?>
+                            <?php endif ?>
+                        </td>
+                    </tr>
+                <?php endforeach ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p class="text-muted">Geen afgelopen quizzen.</p>
+        <?php endif; ?>
     </div>
 </div>
