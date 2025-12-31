@@ -179,11 +179,18 @@ class Quiz extends AbstractService
     public function createQuiz(QuizEntity $newQuiz)
     {
         $newQuiz->setDateCreated(new DateTime());
+        
+        // Zorg dat copyOfQuiz null is als het niet expliciet is ingesteld
+        if (!$newQuiz->getCopyOfQuiz()) {
+            $newQuiz->setCopyOfQuiz(null);
+        }
+        
         $this->persist($newQuiz);
 
         if (null != $newQuiz->getCopyOfQuiz()) {
             $this->copyQuestionsFromQuiz($newQuiz);
         } else {
+            // Maak quiz rondes aan op basis van het template (bijv. FVVMV = 5 rondes)
             $this->createQuizFromTemplate($newQuiz);
         }
 
