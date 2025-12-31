@@ -545,7 +545,7 @@ class Quiz
      */
     public function setPricePerPerson($pricePerPerson)
     {
-        $this->pricePerPerson = $pricePerPerson;
+        $this->pricePerPerson = ($pricePerPerson === '' || $pricePerPerson === null) ? null : $pricePerPerson;
         return $this;
     }
 
@@ -563,7 +563,7 @@ class Quiz
      */
     public function setPricePerTeam($pricePerTeam)
     {
-        $this->pricePerTeam = $pricePerTeam;
+        $this->pricePerTeam = ($pricePerTeam === '' || $pricePerTeam === null) ? null : $pricePerTeam;
         return $this;
     }
 
@@ -581,7 +581,7 @@ class Quiz
      */
     public function setMaxTeamMembers($maxTeamMembers)
     {
-        $this->maxTeamMembers = $maxTeamMembers;
+        $this->maxTeamMembers = ($maxTeamMembers === '' || $maxTeamMembers === null) ? null : (int)$maxTeamMembers;
         return $this;
     }
 
@@ -599,7 +599,7 @@ class Quiz
      */
     public function setMaxTeams($maxTeams)
     {
-        $this->maxTeams = $maxTeams;
+        $this->maxTeams = ($maxTeams === '' || $maxTeams === null) ? null : (int)$maxTeams;
         return $this;
     }
 
