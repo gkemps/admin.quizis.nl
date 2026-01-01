@@ -23,6 +23,7 @@
                     <th style="width:10px"></th>
                     <th>Naam</th>
                     <th>Locatie</th>
+                    <th>Teams</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -55,6 +56,25 @@
                         <td>
                             <?php if (!empty($quiz->getLocation()) && $quiz->getLocation()->getId() != \Quiz\Entity\Location::PRIVATE_LOCATION): ?>
                                 <?php echo $quiz->getLocation()->getName(); ?>
+                            <?php endif ?>
+                        </td>
+                        <td>
+                            <?php 
+                                $teamsCount = $quiz->getRegisteredTeamsCount();
+                                $maxTeams = $quiz->getMaxTeams();
+                            ?>
+                            <?php if ($teamsCount > 0): ?>
+                                <span class="label label-info label-as-badge" title="Aangemelde teams">
+                                    <?php echo $teamsCount; ?>
+                                    <?php if ($maxTeams): ?>
+                                        / <?php echo $maxTeams; ?>
+                                    <?php endif ?>
+                                    <i class="fa fa-users"></i>
+                                </span>
+                            <?php elseif ($maxTeams): ?>
+                                <span class="text-muted" title="Nog geen teams aangemeld">
+                                    0 / <?php echo $maxTeams; ?>
+                                </span>
                             <?php endif ?>
                         </td>
                         <td>

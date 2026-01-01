@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Quiz\Entity\QuizRound as QuizRoundEntity;
 use Quiz\Entity\Question as QuestionEntity;
 use Quiz\Entity\QuizLog as QuizLogEntity;
+use Quiz\Entity\Team as TeamEntity;
 
 /**
  * @ORM\Entity
@@ -168,6 +169,13 @@ class Quiz
      * @ORM\OrderBy({"dateCreated" = "DESC"})
      **/
     protected $quizLogs;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Team", mappedBy="quiz")
+     *
+     * @var ArrayCollection|TeamEntity[]
+     **/
+    protected $teams;
 
     /**
      * @return DateTime
@@ -619,5 +627,33 @@ class Quiz
     {
         $this->whitelistDeadline = $whitelistDeadline;
         return $this;
+    }
+
+    /**
+     * @return TeamEntity[]
+     */
+    public function getTeams()
+    {
+        return $this->teams;
+    }
+
+    /**
+     * Get count of registered teams (excluding canceled)
+     * @return int
+     */
+    public function getRegisteredTeamsCount()
+    {
+        if (!$this->teams) {
+            return 0;
+        }
+        
+        $count = 0;
+        foreach ($this->teams as $team) {
+            if (!$team->isCanceled()) {
+                $count++;
+            }
+        }
+        
+        return $count;
     }
 }
