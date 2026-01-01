@@ -22,6 +22,7 @@
                     <th style="width:10px"></th>
                     <th style="width:10px"></th>
                     <th>Naam</th>
+                    <th style="width:200px">Voortgang</th>
                     <th>Locatie</th>
                     <th>Teams</th>
                     <th></th>
@@ -52,6 +53,39 @@
                                     </span>
                                 <?php endif ?>
                             </a>
+                        </td>
+                        <td>
+                            <?php 
+                                $currentQuestions = $quiz->getNumberOfQuestions();
+                                $maxQuestions = $quiz->getMaxNumberOfQuestions();
+                                $percentage = $maxQuestions > 0 ? round(($currentQuestions / $maxQuestions) * 100) : 0;
+                                
+                                // Bepaal kleur op basis van voortgang
+                                if ($percentage >= 100) {
+                                    $progressClass = 'progress-bar-success';
+                                } elseif ($percentage >= 75) {
+                                    $progressClass = 'progress-bar-info';
+                                } elseif ($percentage >= 50) {
+                                    $progressClass = 'progress-bar-warning';
+                                } else {
+                                    $progressClass = 'progress-bar-danger';
+                                }
+                            ?>
+                            <?php if ($maxQuestions > 0): ?>
+                                <div class="progress" style="margin-bottom: 0;">
+                                    <div class="progress-bar <?php echo $progressClass; ?>" 
+                                         role="progressbar" 
+                                         aria-valuenow="<?php echo $percentage; ?>" 
+                                         aria-valuemin="0" 
+                                         aria-valuemax="100" 
+                                         style="width: <?php echo $percentage; ?>%; min-width: 35px;">
+                                        <?php echo $percentage; ?>%
+                                    </div>
+                                </div>
+                                <small class="text-muted">
+                                    <?php echo $currentQuestions; ?> / <?php echo $maxQuestions; ?> vragen
+                                </small>
+                            <?php endif ?>
                         </td>
                         <td>
                             <?php if (!empty($quiz->getLocation()) && $quiz->getLocation()->getId() != \Quiz\Entity\Location::PRIVATE_LOCATION): ?>
