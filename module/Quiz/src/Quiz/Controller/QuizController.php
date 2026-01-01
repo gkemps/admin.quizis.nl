@@ -185,6 +185,18 @@ class QuizController extends AbstractCrudController
         );
     }
 
+    public function addRoundAction()
+    {
+        $quizId = $this->params('quizId');
+        $quiz = $this->quizService->getQuizById($quizId);
+
+        // Voeg een nieuwe ronde toe
+        $this->quizService->addNewRound($quiz);
+
+        // Redirect terug naar detail pagina
+        return $this->redirect()->toRoute('quiz/detail', ['quizId' => $quizId]);
+    }
+
     public function printAnswersAction()
     {
         $this->layout('print/layout');

@@ -335,6 +335,16 @@ return [
                                     ],
                                 ],
                             ],
+                            'add-round' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/add-round',
+                                    'defaults' => [
+                                        'controller' => 'Quiz\Controller\Quiz',
+                                        'action' => 'addRound',
+                                    ],
+                                ],
+                            ],
                         ]
                     ],
                     'next-quiz' => [
@@ -365,33 +375,31 @@ return [
                             ],
                         ],
                     ],
-                    'form' => [
-                        'type' => 'Literal',
-                        'priority' => 1000,
+                ]
+            ],
+
+            'quiz-round' => [
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'may_terminate' => false,
+                'options' => [
+                    'route' => '/quiz-round',
+                ],
+                'child_routes' => [
+                    'update-theme' => [
+                        'type' => 'Segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route' => '/form',
+                            'route' => '/:quizRoundId/update-theme',
+                            'constraints' => [
+                                'quizRoundId' => '\d+'
+                            ],
                             'defaults' => [
-                                'controller' => 'Quiz\Controller\Quiz',
-                                'action' => 'form',
+                                'controller' => 'Quiz\Controller\QuizRound',
+                                'action' => 'updateTheme',
                             ],
                         ],
-                        'child_routes' => [
-                            'process' => [
-                                'type' => 'Literal',
-                                'priority' => 1000,
-                                'may_terminate' => true,
-                                'options' => [
-                                    'route' => '/process',
-                                    'defaults' => [
-                                        'controller' => 'Quiz\Controller\Quiz',
-                                        'action' => 'process',
-                                    ],
-                                ],
-                            ]
-                        ]
-                    ]
-                ]
+                    ],
+                ],
             ],
 
             'reset-quiz-round-question-number' => [
@@ -511,7 +519,7 @@ return [
                     ],
                 ],
             ],
-
+            
             'theme-rounds' => [
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'may_terminate' => true,
@@ -590,10 +598,10 @@ return [
                                 'action' => 'addToQuiz',
                             ],
                         ],
-                    ]
-                ]
-            ]
-        ],
+                    ],
+                ],
+            ],
+        ]
     ],
     'console' => [
         'router' => [

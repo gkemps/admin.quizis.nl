@@ -19,6 +19,23 @@ class QuizRoundController extends AbstractActionController
         $this->quizRoundService = $quizRoundService;
     }
 
+    public function updateThemeAction()
+    {
+        $quizRoundId = $this->params('quizRoundId');
+        $theme = $this->params()->fromPost('theme', '');
+
+        $quizRound = $this->quizRoundService->getById($quizRoundId);
+        
+        if ($quizRound) {
+            $quizRound->setTheme($theme);
+            $this->quizRoundService->persist($quizRound);
+        }
+
+        // Redirect terug naar quiz detail
+        $quizId = $quizRound->getQuiz()->getId();
+        return $this->redirect()->toRoute('quiz/detail', ['quizId' => $quizId], ['fragment' => 'round' . $quizRoundId]);
+    }
+
     public function downloadMp3Action()
     {
         $silenceMp3 = file_get_contents("./data/mp3/silence.mp3");

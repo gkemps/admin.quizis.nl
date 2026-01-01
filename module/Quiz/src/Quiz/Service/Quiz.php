@@ -310,6 +310,18 @@ class Quiz extends AbstractService
         return min(array_diff($spots, $occupied)) * 10;
     }
 
+    /**
+     * Add a new round to the quiz
+     * @param QuizEntity $quiz
+     * @param string|null $theme
+     * @return QuizRoundEntity
+     */
+    public function addNewRound(QuizEntity $quiz, $theme = null)
+    {
+        $nextRoundNumber = $quiz->getNumberOfRounds() + 1;
+        return $this->quizRoundService->createNewQuizRound($quiz, $nextRoundNumber, $theme);
+    }
+
     protected function getRepository()
     {
         return $this->em->getRepository("Quiz\Entity\Quiz");
