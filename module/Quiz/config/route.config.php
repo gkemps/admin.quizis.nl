@@ -325,6 +325,16 @@ return [
                                     ],
                                 ],
                             ],
+                            'teams' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/teams',
+                                    'defaults' => [
+                                        'controller' => 'Quiz\Controller\Quiz',
+                                        'action' => 'teams',
+                                    ],
+                                ],
+                            ],
                         ]
                     ],
                     'next-quiz' => [

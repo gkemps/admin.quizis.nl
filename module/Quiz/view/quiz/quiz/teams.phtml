@@ -1,0 +1,155 @@
+<?php
+/** @var \Quiz\Entity\Quiz $quiz */
+/** @var \Quiz\Entity\Team[] $teams */
+
+$escape = new Zend\Escaper\Escaper('utf-8');
+?>
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Aangemelde teams: <?php echo $escape->escapeHtml($quiz->getName()); ?></h2>
+        <p>
+            <strong>Datum:</strong> <?php echo $quiz->getDate()->format('d-m-Y H:i'); ?><br>
+            <?php if ($quiz->getLocation()): ?>
+                <strong>Locatie:</strong> <?php echo $escape->escapeHtml($quiz->getLocation()->getName()); ?>
+                <?php if ($quiz->getLocation()->getCity()): ?>
+                    - <?php echo $escape->escapeHtml($quiz->getLocation()->getCity()); ?>
+                <?php endif ?>
+            <?php endif ?>
+        </p>
+        
+        <a href="<?php echo $this->url('quiz/detail', ['quizId' => $quiz->getId()]); ?>" class="btn btn-default">
+            <i class="fa fa-arrow-left"></i> Terug naar quiz
+        </a>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 20px;">
+    <div class="col-md-12">
+        <?php if (count($teams) > 0): ?>
+            <p>
+                <strong>Totaal aantal teams:</strong> <?php echo count($teams); ?>
+                <?php if ($quiz->getMaxTeams()): ?>
+                    / <?php echo $quiz->getMaxTeams(); ?>
+                <?php endif ?>
+            </p>
+            
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Teamnaam</th>
+                        <th>Aanvoerder</th>
+                        <th>Email</th>
+                        <th>Teamleden</th>
+                        <th>Bedrag</th>
+                        <th>Betaald</th>
+                        <th>Aanmelddatum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $counter = 1; ?>
+                    <?php foreach ($teams as $team): ?>
+                        <tr>
+                            <td><?php echo $counter++; ?></td>
+                            <td>
+                                <strong><?php echo $escape->escapeHtml($team->getName()); ?></strong>
+                            </td>
+                            <td>
+                                <?php echo $team->getCaptain() ? $escape->escapeHtml($team->getCaptain()) : '-'; ?>
+                            </td>
+                            <td>
+                                <?php if ($team->getEmail()): ?>
+                                    <a href="mailto:<?php echo $escape->escapeHtml($team->getEmail()); ?>">
+                                        <?php echo $escape->escapeHtml($team->getEmail()); ?>
+                                    </a>
+                                <?php else: ?>
+                                    -
+                                <?php endif ?>
+                            </td>
+                            <td class="text-center">
+                                <?php echo $team->getTeamMembers() ? $team->getTeamMembers() : '-'; ?>
+                            </td>
+                            <td class="text-right">
+                                <?php if ($team->getAmount()): ?>
+                                    &euro; <?php echo number_format($team->getAmount(), 2, ',', '.'); ?>
+                                <?php else: ?>
+                                    -
+                                <?php endif ?>
+                            </td>
+                            <td class="text-center">
+                                <?php if ($team->isPaid()): ?>
+                                    <span class="label label-success">
+                                        <i class="fa fa-check"></i> Betaald
+                                    </span>
+                                    <?php if ($team->getDatePaid()): ?>
+                                        <br><small><?php echo $team->getDatePaid()->format('d-m-Y'); ?></small>
+                                    <?php endif ?>
+                                <?php else: ?>
+                                    <span class="label label-warning">
+                                        <i class="fa fa-clock-o"></i> Openstaand
+                                    </span>
+                                <?php endif ?>
+                            </td>
+                            <td>
+                                <?php if ($team->getDateCreated()): ?>
+                                    <?php echo $team->getDateCreated()->format('d-m-Y H:i'); ?>
+                                <?php else: ?>
+                                    -
+                                <?php endif ?>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="4">Totaal</th>
+                        <th class="text-center">
+                            <?php 
+                                $totalMembers = 0;
+                                foreach ($teams as $team) {
+                                    if ($team->getTeamMembers()) {
+                                        $totalMembers += $team->getTeamMembers();
+                                    }
+                                }
+                                echo $totalMembers > 0 ? $totalMembers : '-';
+                            ?>
+                        </th>
+                        <th class="text-right">
+                            <?php 
+                                $totalAmount = 0;
+                                foreach ($teams as $team) {
+                                    if ($team->getAmount()) {
+                                        $totalAmount += $team->getAmount();
+                                    }
+                                }
+                                echo $totalAmount > 0 ? '&euro; ' . number_format($totalAmount, 2, ',', '.') : '-';
+                            ?>
+                        </th>
+                        <th colspan="2"></th>
+                    </tr>
+                </tfoot>
+            </table>
+            
+            <?php 
+                $paidTeams = 0;
+                foreach ($teams as $team) {
+                    if ($team->isPaid()) {
+                        $paidTeams++;
+                    }
+                }
+            ?>
+            
+            <div class="alert alert-info">
+                <strong>Status:</strong><br>
+                Betaald: <?php echo $paidTeams; ?> teams<br>
+                Openstaand: <?php echo (count($teams) - $paidTeams); ?> teams
+            </div>
+            
+        <?php else: ?>
+            <div class="alert alert-warning">
+                <i class="fa fa-info-circle"></i> Er zijn nog geen teams aangemeld voor deze quiz.
+            </div>
+        <?php endif ?>
+    </div>
+</div>

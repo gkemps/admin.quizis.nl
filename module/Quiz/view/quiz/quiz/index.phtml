@@ -64,13 +64,16 @@
                                 $maxTeams = $quiz->getMaxTeams();
                             ?>
                             <?php if ($teamsCount > 0): ?>
-                                <span class="label label-info label-as-badge" title="Aangemelde teams">
-                                    <?php echo $teamsCount; ?>
-                                    <?php if ($maxTeams): ?>
-                                        / <?php echo $maxTeams; ?>
-                                    <?php endif ?>
-                                    <i class="fa fa-users"></i>
-                                </span>
+                                <a href="<?php echo $this->url('quiz/detail/teams', ['quizId' => $quiz->getId()]); ?>" 
+                                   title="Bekijk aangemelde teams">
+                                    <span class="label label-info label-as-badge">
+                                        <?php echo $teamsCount; ?>
+                                        <?php if ($maxTeams): ?>
+                                            / <?php echo $maxTeams; ?>
+                                        <?php endif ?>
+                                        <i class="fa fa-users"></i>
+                                    </span>
+                                </a>
                             <?php elseif ($maxTeams): ?>
                                 <span class="text-muted" title="Nog geen teams aangemeld">
                                     0 / <?php echo $maxTeams; ?>

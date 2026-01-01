@@ -163,6 +163,28 @@ class QuizController extends AbstractCrudController
         );
     }
 
+    public function teamsAction()
+    {
+        $quizId = $this->params('quizId');
+        $quiz = $this->quizService->getQuizById($quizId);
+
+        $teams = [];
+        if ($quiz->getTeams()) {
+            foreach ($quiz->getTeams() as $team) {
+                if (!$team->isCanceled()) {
+                    $teams[] = $team;
+                }
+            }
+        }
+
+        return new ViewModel(
+            [
+                'quiz' => $quiz,
+                'teams' => $teams
+            ]
+        );
+    }
+
     public function printAnswersAction()
     {
         $this->layout('print/layout');
