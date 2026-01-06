@@ -1,0 +1,136 @@
+<?php
+$this->headTitle('Gegenereerde Vragen - Brainstorm - Quizis Admin');
+?>
+
+<style>
+.question-card {
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+.question-card .panel-heading {
+    padding: 8px 15px;
+}
+.question-card .panel-body {
+    padding: 10px 15px;
+}
+.question-card .panel-footer {
+    padding: 8px 15px;
+}
+.question-card h4 {
+    font-size: 14px;
+    margin: 8px 0 5px 0;
+    font-weight: bold;
+}
+.question-card .lead {
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+.question-card p {
+    margin: 0 0 8px 0;
+}
+.question-card .btn {
+    padding: 4px 10px;
+    font-size: 12px;
+}
+</style>
+
+<div class="container">
+    <div class="page-header" style="margin-top: 20px; margin-bottom: 20px;">
+        <h1 style="font-size: 28px;">Gegenereerde Quizvragen</h1>
+        <p class="lead" style="font-size: 14px;">Bron: <a href="<?php echo $this->escapeHtmlAttr($sourceUrl); ?>" target="_blank"><?php echo $this->escapeHtml($sourceUrl); ?></a></p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <a href="<?php echo $this->url('brainstorm'); ?>" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-arrow-left"></span> Terug
+            </a>
+        </div>
+    </div>
+
+    <?php if (isset($questions) && is_array($questions) && count($questions) > 0): ?>
+        <?php foreach ($questions as $index => $question): ?>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-primary question-card">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <strong>Vraag <?php echo $index + 1; ?></strong>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="question-content">
+                                <h4>Vraag:</h4>
+                                <p class="lead"><?php echo $this->escapeHtml($question['question']); ?></p>
+                                
+                                <h4>Antwoord:</h4>
+                                <p><strong><?php echo $this->escapeHtml($question['answer']); ?></strong></p>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <?php
+                            // Build URL with GET parameters to prefill the question form
+                            $queryParams = [
+                                'question' => $question['question'],
+                                'answer' => $question['answer'],
+                                'source' => isset($question['source']) ? $question['source'] : $sourceUrl,
+                            ];
+                            
+                            // Add category_id if available
+                            if (isset($question['category_id']) && !empty($question['category_id'])) {
+                                $queryParams['category_id'] = $question['category_id'];
+                            }
+                            
+                            $prefillUrl = $this->url('question/form', [], ['query' => $queryParams]);
+                            ?>
+                            <a href="<?php echo $prefillUrl; ?>" class="btn btn-primary" title="Gebruik deze vraag">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </a>
+                            <button type="button" class="btn btn-default" onclick="copyToClipboard(<?php echo $index; ?>)" title="Kopieer naar klembord">
+                                <span class="glyphicon glyphicon-copy"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hidden textarea for clipboard copy -->
+            <textarea id="question-text-<?php echo $index; ?>" style="position: absolute; left: -9999px;">
+Vraag: <?php echo $this->escapeHtml($question['question']); ?>
+
+Antwoord: <?php echo $this->escapeHtml($question['answer']); ?>
+
+Bron: <?php echo isset($question['source']) ? $this->escapeHtml($question['source']) : $this->escapeHtml($sourceUrl); ?>
+            </textarea>
+        <?php endforeach; ?>
+
+        <div class="row">
+            <div class="col-md-12">
+                <a href="<?php echo $this->url('brainstorm'); ?>" class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-arrow-left"></span> Nieuwe vragen genereren
+                </a>
+            </div>
+        </div>
+    <?php else: ?>
+        <div class="alert alert-warning">
+            <strong>Geen vragen gegenereerd.</strong> Er zijn geen vragen beschikbaar. Probeer het opnieuw.
+        </div>
+        <a href="<?php echo $this->url('brainstorm'); ?>" class="btn btn-primary btn-sm">Terug naar formulier</a>
+    <?php endif; ?>
+</div>
+
+<script>
+function copyToClipboard(index) {
+    var textarea = document.getElementById('question-text-' + index);
+    textarea.select();
+    textarea.setSelectionRange(0, 99999); // For mobile devices
+    
+    try {
+        document.execCommand('copy');
+        alert('Vraag gekopieerd naar klembord!');
+    } catch (err) {
+        alert('Kon niet kopiëren naar klembord');
+    }
+}
+</script>

@@ -359,6 +359,25 @@ class QuestionController extends AbstractCrudController
 
         if (empty($question)) {
             $question = new QuestionEntity();
+            
+            // Prefill from GET parameters (e.g., from Brainstorm)
+            if ($request->getQuery('question')) {
+                $question->setQuestion($request->getQuery('question'));
+            }
+            if ($request->getQuery('answer')) {
+                $question->setAnswer($request->getQuery('answer'));
+            }
+            if ($request->getQuery('source')) {
+                $question->setSource($request->getQuery('source'));
+            }
+            // Handle category prefill by ID
+            if ($request->getQuery('category_id')) {
+                $categoryId = $request->getQuery('category_id');
+                $category = $this->categoryService->getCategoryById($categoryId);
+                if ($category) {
+                    $question->setCategory($category);
+                }
+            }
         }
 
         $this->questionForm->bind($question);

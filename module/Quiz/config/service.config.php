@@ -2,6 +2,7 @@
 return [
     'service_manager' => [
         'factories' => [
+            'Quiz\Service\Brainstorm' => 'Quiz\Service\BrainstormServiceFactory',
             'Quiz\Service\Category' => 'Quiz\Service\CategoryFactory',
             'Quiz\Service\Tag' => 'Quiz\Service\TagFactory',
             \Quiz\Service\ThemeRoundService::class => \Quiz\Service\ThemeRoundServiceFactory::class,

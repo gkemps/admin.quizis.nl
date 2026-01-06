@@ -40,4 +40,29 @@ class Category
     {
         return $this->categoryRepository->find($id);
     }
+
+    /**
+     * Find a category by name (case-insensitive)
+     *
+     * @param string $name
+     * @return null|CategoryEntity
+     */
+    public function getCategoryByName($name)
+    {
+        if (empty($name)) {
+            return null;
+        }
+
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select("c")
+            ->from("Quiz\Entity\Category", "c")
+            ->where("LOWER(c.name) = LOWER(:name)")
+            ->setParameter('name', $name)
+            ->setMaxResults(1);
+
+        $result = $qb->getQuery()->getResult();
+
+        return !empty($result) ? $result[0] : null;
+    }
 }

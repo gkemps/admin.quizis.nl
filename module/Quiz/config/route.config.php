@@ -546,6 +546,32 @@ return [
                 ],
             ],
             
+            'brainstorm' => [
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'may_terminate' => true,
+                'options' => [
+                    'route' => '/brainstorm',
+                    'defaults' => [
+                        'controller' => 'Quiz\Controller\Brainstorm',
+                        'action' => 'index',
+                    ],
+                ],
+                'child_routes' => [
+                    'process' => [
+                        'type' => 'Literal',
+                        'priority' => 1000,
+                        'may_terminate' => true,
+                        'options' => [
+                            'route' => '/process',
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\Brainstorm',
+                                'action' => 'process',
+                            ],
+                        ],
+                    ]
+                ]
+            ],
+
             'theme-rounds' => [
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'may_terminate' => true,

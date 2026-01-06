@@ -1,0 +1,86 @@
+<?php
+$this->headTitle('Brainstorm - Quizis Admin');
+?>
+
+<div class="container">
+    <div class="page-header">
+        <h1>Brainstorm Quizvragen</h1>
+        <p class="lead">Genereer automatisch quizvragen uit een webpagina met behulp van AI</p>
+    </div>
+
+    <?php
+    $messages = $this->flashMessenger()->getErrorMessages();
+    if (!empty($messages)) {
+        foreach ($messages as $message) {
+            echo '<div class="alert alert-danger alert-dismissible" role="alert">';
+            echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+            echo $this->escapeHtml($message);
+            echo '</div>';
+        }
+    }
+    ?>
+
+    <div class="row">
+        <div class="col-md-10">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Webpagina URL Invoeren</h3>
+                </div>
+                <div class="panel-body">
+                    <p>Voer de URL in van een webpagina waaruit je quizvragen wilt genereren. De AI zal de inhoud analyseren en 3 quizvragen maken (makkelijk, gemiddeld, moeilijk).</p>
+                    
+                    <?php
+                    $form = $this->form;
+                    $form->setAttribute('action', $this->url('brainstorm/process'));
+                    $form->prepare();
+
+                    echo $this->form()->openTag($form);
+                    ?>
+
+                    <div class="form-group">
+                        <?php
+                        $url = $form->get('url');
+                        echo $this->formLabel($url);
+                        echo $this->formElement($url);
+                        echo $this->formElementErrors($url);
+                        ?>
+                    </div>
+
+                    <div class="form-group">
+                        <?php
+                        $numQuestions = $form->get('num_questions');
+                        echo $this->formLabel($numQuestions);
+                        echo $this->formElement($numQuestions);
+                        echo $this->formElementErrors($numQuestions);
+                        ?>
+                    </div>
+
+                    <div class="form-group">
+                        <?php
+                        $submit = $form->get('submit');
+                        echo $this->formElement($submit);
+                        ?>
+                    </div>
+
+                    <?php echo $this->form()->closeTag(); ?>
+                </div>
+            </div>
+
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Hoe werkt het?</h3>
+                </div>
+                <div class="panel-body">
+                    <ol>
+                        <li>Voer een URL in van een interessante webpagina (bijv. een nieuwsartikel, Wikipedia pagina, etc.)</li>
+                        <li>Kies hoeveel vragen je wilt genereren (1-10, standaard 5)</li>
+                        <li>Klik op "Genereer Vragen"</li>
+                        <li>De AI analyseert de inhoud en genereert de vragen</li>
+                        <li>Bekijk de gegenereerde vragen en gebruik ze direct of pas ze aan</li>
+                        <li>Klik op het <span class="glyphicon glyphicon-plus"></span> icoon om het vraagformulier in te vullen</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
