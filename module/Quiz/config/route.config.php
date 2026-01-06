@@ -347,6 +347,32 @@ return [
                             ],
                         ]
                     ],
+                    'form' => [
+                        'type' => 'Literal',
+                        'priority' => 1000,
+                        'may_terminate' => true,
+                        'options' => [
+                            'route' => '/form',
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\Quiz',
+                                'action' => 'form',
+                            ],
+                        ],
+                        'child_routes' => [
+                            'process' => [
+                                'type' => 'Literal',
+                                'priority' => 1000,
+                                'may_terminate' => true,
+                                'options' => [
+                                    'route' => '/process',
+                                    'defaults' => [
+                                        'controller' => 'Quiz\Controller\Quiz',
+                                        'action' => 'process',
+                                    ],
+                                ],
+                            ]
+                        ]
+                    ],
                     'next-quiz' => [
                         'type' => 'Segment',
                         'may_terminate' => true,
