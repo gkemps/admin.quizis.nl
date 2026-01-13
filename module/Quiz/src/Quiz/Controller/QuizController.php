@@ -184,6 +184,8 @@ class QuizController extends AbstractCrudController
                         $photos[] = [
                             'question' => $question,
                             'questionNumber' => $quizRoundQuestion->getQuestionNumber(),
+                            'quizRoundQuestion' => $quizRoundQuestion,
+                            'quizRoundQuestionId' => $quizRoundQuestion->getId(),
                             'width' => $imageSize[0],
                             'height' => $imageSize[1],
                         ];
@@ -192,12 +194,153 @@ class QuizController extends AbstractCrudController
             }
         }
 
+        // Distribute photos across two rows and assign display numbers
+        $rows = $this->distributePhotos($photos);
+
+        // Automatically save the optimized order to database
+        $allPhotos = [];
+        $updates = [];
+        
+        foreach ($rows as $row) {
+            foreach ($row as $photo) {
+                $quizRoundQuestion = $photo['quizRoundQuestion'];
+                $oldNumber = $quizRoundQuestion->getQuestionNumber();
+                $newNumber = $photo['displayNumber'];
+                
+                // Collect updates for batch processing
+                if ($oldNumber != ($newNumber * 10)) {
+                    $updates[] = [
+                        'quizRoundQuestion' => $quizRoundQuestion,
+                        'newPosition' => $newNumber
+                    ];
+                }
+                
+                // Collect all photos with displayNumber for the view
+                $allPhotos[] = $photo;
+            }
+        }
+        
+        // Perform batch update
+        if (!empty($updates)) {
+            $this->quizRoundQuestionService->batchUpdateQuestionNumbers($updates);
+            
+            // Log changes
+            foreach ($updates as $update) {
+                $this->quizLogService->createNewQuestionChangedLog($update['quizRoundQuestion']);
+            }
+        }
+
         return new ViewModel(
             [
                 'quizRound' => $quizRound,
-                'photos' => $photos
+                'photos' => $allPhotos,
+                'rows' => $rows
             ]
         );
+    }
+
+    /**
+     * Distribute photos across two rows optimally based on aspect ratios
+     * and assign display numbers from left to right, top to bottom
+     * 
+     * @param array $photos
+     * @return array [row1, row2] with displayNumber added to each photo
+     */
+    private function distributePhotos($photos)
+    {
+        $totalRatio = 0;
+        foreach ($photos as $photo) {
+            $totalRatio += $photo['width'] / $photo['height'];
+        }
+        $targetRatio = $totalRatio / 2;
+        
+        $row1 = [];
+        $row2 = [];
+        $row1Ratio = 0;
+        
+        // Sort by aspect ratio descending for better distribution
+        $sorted = $photos;
+        usort($sorted, function($a, $b) {
+            $ratioA = $a['width'] / $a['height'];
+            $ratioB = $b['width'] / $b['height'];
+            return $ratioB <=> $ratioA;
+        });
+        
+        foreach ($sorted as $photo) {
+            $aspectRatio = $photo['width'] / $photo['height'];
+            if ($row1Ratio < $targetRatio && count($row1) < ceil(count($photos) / 2)) {
+                $row1[] = $photo;
+                $row1Ratio += $aspectRatio;
+            } else {
+                $row2[] = $photo;
+            }
+        }
+        
+        // Sort rows back by question number for consistent display
+        usort($row1, function($a, $b) {
+            return $a['questionNumber'] <=> $b['questionNumber'];
+        });
+        usort($row2, function($a, $b) {
+            return $a['questionNumber'] <=> $b['questionNumber'];
+        });
+        
+        // Assign display numbers from left to right, top to bottom
+        $displayNumber = 1;
+        foreach ($row1 as &$photo) {
+            $photo['displayNumber'] = $displayNumber++;
+        }
+        foreach ($row2 as &$photo) {
+            $photo['displayNumber'] = $displayNumber++;
+        }
+        
+        return [$row1, $row2];
+    }
+
+    public function saveOptimizedPhotoOrderAction()
+    {
+        $quizId = $this->params('quizId');
+
+        $quiz = $this->quizService->getQuizById($quizId);
+        $quizRound = $quiz->getPhotoRound();
+
+        // Collect photo dimensions
+        $photos = [];
+        foreach ($quizRound->getQuizRoundQuestions() as $quizRoundQuestion) {
+            $question = $quizRoundQuestion->getQuestion();
+            if ($question->isImageQuestion()) {
+                $imagePath = 'data/images/' . $question->getId() . '.png';
+                if (file_exists($imagePath)) {
+                    $imageSize = getimagesize($imagePath);
+                    if ($imageSize) {
+                        $photos[] = [
+                            'question' => $question,
+                            'questionNumber' => $quizRoundQuestion->getQuestionNumber(),
+                            'quizRoundQuestion' => $quizRoundQuestion,
+                            'width' => $imageSize[0],
+                            'height' => $imageSize[1],
+                        ];
+                    }
+                }
+            }
+        }
+
+        // Get optimized distribution
+        $rows = $this->distributePhotos($photos);
+
+        // Update question numbers in database
+        foreach ($rows as $row) {
+            foreach ($row as $photo) {
+                $quizRoundQuestion = $photo['quizRoundQuestion'];
+                $this->quizRoundQuestionService->resetQuestionNumber(
+                    $quizRoundQuestion,
+                    $photo['displayNumber']
+                );
+                $this->quizLogService->createNewQuestionChangedLog($quizRoundQuestion);
+            }
+        }
+
+        // Redirect back to detail page
+        return $this->redirect()->toRoute('quiz/detail', ['quizId' => $quizId]);
     }
 
     public function teamsAction()

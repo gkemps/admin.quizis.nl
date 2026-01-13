@@ -34,6 +34,41 @@ class QuizRoundQuestion extends AbstractService
     }
 
     /**
+     * Update question number without resetting all other questions
+     * Used for batch updates where we want to set multiple questions at once
+     * 
+     * @param QuizRoundQuestionEntity $quizRoundQuestion
+     * @param integer $newPosition
+     */
+    public function setQuestionNumber(QuizRoundQuestionEntity $quizRoundQuestion, $newPosition)
+    {
+        $quizRoundQuestion->setQuestionNumber($newPosition * 10);
+        $quizRoundQuestion->setDateUpdated(new \DateTime('now'));
+        $this->persist($quizRoundQuestion);
+    }
+
+    /**
+     * Update multiple question numbers at once
+     * More efficient than calling setQuestionNumber multiple times
+     * 
+     * @param array $updates Array of ['quizRoundQuestion' => entity, 'newPosition' => position]
+     */
+    public function batchUpdateQuestionNumbers(array $updates)
+    {
+        foreach ($updates as $update) {
+            $quizRoundQuestion = $update['quizRoundQuestion'];
+            $newPosition = $update['newPosition'];
+            
+            $quizRoundQuestion->setQuestionNumber($newPosition * 10);
+            $quizRoundQuestion->setDateUpdated(new \DateTime('now'));
+            $this->persist($quizRoundQuestion);
+        }
+        
+        // Flush all changes at once
+        $this->em->flush();
+    }
+
+    /**
      * @param QuizRoundQuestionEntity $quizRoundQuestion
      */
     public function remove(QuizRoundQuestionEntity $quizRoundQuestion) {

@@ -2,50 +2,9 @@
 /**
  * Optimized photo printing view with modern layout
  * Uses flexbox-based layout similar to new_project/index.html
+ * 
+ * Photo distribution and display numbering is handled by the controller
  */
-
-// Distribute photos across two rows optimally
-function distributePhotos($photos) {
-    $totalRatio = 0;
-    foreach ($photos as $photo) {
-        $totalRatio += $photo['width'] / $photo['height'];
-    }
-    $targetRatio = $totalRatio / 2;
-    
-    $row1 = [];
-    $row2 = [];
-    $row1Ratio = 0;
-    
-    // Sort by aspect ratio descending for better distribution
-    $sorted = $photos;
-    usort($sorted, function($a, $b) {
-        $ratioA = $a['width'] / $a['height'];
-        $ratioB = $b['width'] / $b['height'];
-        return $ratioB <=> $ratioA;
-    });
-    
-    foreach ($sorted as $photo) {
-        $aspectRatio = $photo['width'] / $photo['height'];
-        if ($row1Ratio < $targetRatio && count($row1) < ceil(count($photos) / 2)) {
-            $row1[] = $photo;
-            $row1Ratio += $aspectRatio;
-        } else {
-            $row2[] = $photo;
-        }
-    }
-    
-    // Sort rows back by question number for consistent display
-    usort($row1, function($a, $b) {
-        return $a['questionNumber'] <=> $b['questionNumber'];
-    });
-    usort($row2, function($a, $b) {
-        return $a['questionNumber'] <=> $b['questionNumber'];
-    });
-    
-    return [$row1, $row2];
-}
-
-$rows = distributePhotos($photos);
 ?>
 <!DOCTYPE html>
 <html lang="nl">
@@ -301,8 +260,8 @@ $rows = distributePhotos($photos);
             ?>
             <div class="photo-item" style="flex: <?php echo $flexGrow; ?> 1 0;">
               <img src="<?php echo $this->url('media-image', ['questionId' => $photo['question']->getId()]); ?>" 
-                   alt="Foto <?php echo $photo['questionNumber']; ?>" loading="lazy">
-              <div class="photo-number"><?php echo $photo['questionNumber']; ?></div>
+                   alt="Foto <?php echo $photo['displayNumber']; ?>" loading="lazy">
+              <div class="photo-number"><?php echo $photo['displayNumber']; ?></div>
             </div>
           <?php endforeach; ?>
         </div>
@@ -312,9 +271,18 @@ $rows = distributePhotos($photos);
     <section class="questions-section">
       <h2 class="questions-title">Wie zijn deze personen?</h2>
       <div class="questions-grid">
-        <?php foreach ($photos as $photo): ?>
+        <?php 
+        // Create ordered list of photos by displayNumber
+        $orderedPhotos = [];
+        foreach ($rows as $row) {
+            foreach ($row as $photo) {
+                $orderedPhotos[] = $photo;
+            }
+        }
+        ?>
+        <?php foreach ($orderedPhotos as $photo): ?>
           <div class="question-item">
-            <span class="question-num"><?php echo $photo['questionNumber']; ?>.</span>
+            <span class="question-num"><?php echo $photo['displayNumber']; ?>.</span>
             <span class="question-text"><?php echo $this->escapeHtml($photo['question']->getQuestion()); ?></span>
           </div>
         <?php endforeach; ?>

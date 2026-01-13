@@ -335,6 +335,16 @@ return [
                                     ],
                                 ],
                             ],
+                            'save-optimized-photo-order' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/save-optimized-photo-order',
+                                    'defaults' => [
+                                        'controller' => 'Quiz\Controller\Quiz',
+                                        'action' => 'saveOptimizedPhotoOrder',
+                                    ],
+                                ],
+                            ],
                             'teams' => [
                                 'type' => 'Literal',
                                 'options' => [
