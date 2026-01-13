@@ -279,13 +279,27 @@
                 $orderedPhotos[] = $photo;
             }
         }
+        
+        // Split into two columns: 1-5 and 6-10
+        $leftColumn = array_slice($orderedPhotos, 0, 5);
+        $rightColumn = array_slice($orderedPhotos, 5, 5);
         ?>
-        <?php foreach ($orderedPhotos as $photo): ?>
-          <div class="question-item">
-            <span class="question-num"><?php echo $photo['displayNumber']; ?>.</span>
-            <span class="question-text"><?php echo $this->escapeHtml($photo['question']->getQuestion()); ?></span>
-          </div>
-        <?php endforeach; ?>
+        <div>
+          <?php foreach ($leftColumn as $photo): ?>
+            <div class="question-item">
+              <span class="question-num"><?php echo $photo['displayNumber']; ?>.</span>
+              <span class="question-text"><?php echo $this->escapeHtml($photo['question']->getQuestion()); ?></span>
+            </div>
+          <?php endforeach; ?>
+        </div>
+        <div>
+          <?php foreach ($rightColumn as $photo): ?>
+            <div class="question-item">
+              <span class="question-num"><?php echo $photo['displayNumber']; ?>.</span>
+              <span class="question-text"><?php echo $this->escapeHtml($photo['question']->getQuestion()); ?></span>
+            </div>
+          <?php endforeach; ?>
+        </div>
       </div>
     </section>
 
