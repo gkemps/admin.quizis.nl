@@ -38,6 +38,13 @@
       body {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
+        margin: 0;
+        padding: 0;
+      }
+      
+      html, body {
+        height: 210mm;
+        overflow: hidden;
       }
     }
 
@@ -45,18 +52,20 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: var(--bg-cream);
       color: var(--text-dark);
+      margin: 0;
+      padding: 0;
     }
 
     .page {
       width: 297mm;
       height: 210mm;
-      padding: 6mm;
-      margin: 0 auto;
+      padding: 4mm;
+      margin: 0;
       background: white;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       overflow: hidden;
+      box-sizing: border-box;
     }
 
     /* Header */
@@ -64,14 +73,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 3mm;
+      padding-bottom: 2mm;
       border-bottom: 2px solid var(--primary);
-      margin-bottom: 3mm;
+      margin-bottom: 2mm;
       flex-shrink: 0;
     }
 
     .logo {
-      height: 12mm;
+      height: 10mm;
     }
 
     .no-phone-warning {
@@ -127,7 +136,7 @@
       flex-direction: column;
       gap: 1.5mm;
       min-height: 0;
-      max-height: 120mm;
+      max-height: 145mm;
     }
 
     .photo-row {
@@ -173,8 +182,8 @@
     /* Questions Section */
     .questions-section {
       flex-shrink: 0;
-      margin-top: 2mm;
-      padding-top: 2mm;
+      margin-top: 1.5mm;
+      padding-top: 1.5mm;
       border-top: 2px solid var(--primary);
     }
 
@@ -221,8 +230,9 @@
     .footer {
       flex-shrink: 0;
       text-align: center;
-      padding-top: 2mm;
-      font-size: 8px;
+      padding-top: 1mm;
+      margin-top: 1mm;
+      font-size: 7px;
       color: #999;
     }
   </style>
