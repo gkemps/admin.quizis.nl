@@ -325,6 +325,16 @@ return [
                                     ],
                                 ],
                             ],
+                            'print-photos-optimized' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/print-foto-ronde-optimized',
+                                    'defaults' => [
+                                        'controller' => 'Quiz\Controller\Quiz',
+                                        'action' => 'printPhotosOptimized',
+                                    ],
+                                ],
+                            ],
                             'teams' => [
                                 'type' => 'Literal',
                                 'options' => [

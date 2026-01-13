@@ -29,21 +29,21 @@ body {
 }
 
 .subpage-landscape {
-    padding: 0cm 0cm 0cm 1cm;
+    padding: 0;
     #border: 5px red solid;
-    width: 276mm;
+    width: 297mm;
     #outline: 2cm #FFEAEA solid;
 }
 
 .page-landscape {
-    width: 29.7cm;
-    min-height: 21cm;
-    margin: 1cm auto;
+    width: 297mm;
+    min-height: 210mm;
+    margin: 0;
+    padding: 0;
     #border: 1px #D3D3D3 solid;
     #border-radius: 5px;
     background: white;
     #box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    margin: 0;
     page-break-after: always;
 }
 
@@ -77,4 +77,23 @@ body {
 
     font: 14px Arial;
     font-weight: bold;
+}
+
+.photo-container-optimized {
+    position: relative;
+    width: 276mm;
+    margin: 0;
+    padding: 0;
+}
+
+.photo-item-optimized {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+}
+
+.photo-item-optimized img {
+    display: block;
+    width: 100%;
+    height: 100%;
 }

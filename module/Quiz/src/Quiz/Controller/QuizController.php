@@ -163,6 +163,43 @@ class QuizController extends AbstractCrudController
         );
     }
 
+    public function printPhotosOptimizedAction()
+    {
+        $this->layout('print/layout');
+
+        $quizId = $this->params('quizId');
+
+        $quiz = $this->quizService->getQuizById($quizId);
+        $quizRound = $quiz->getPhotoRound();
+
+        // Collect photo dimensions
+        $photos = [];
+        foreach ($quizRound->getQuizRoundQuestions() as $quizRoundQuestion) {
+            $question = $quizRoundQuestion->getQuestion();
+            if ($question->isImageQuestion()) {
+                $imagePath = 'data/images/' . $question->getId() . '.png';
+                if (file_exists($imagePath)) {
+                    $imageSize = getimagesize($imagePath);
+                    if ($imageSize) {
+                        $photos[] = [
+                            'question' => $question,
+                            'questionNumber' => $quizRoundQuestion->getQuestionNumber(),
+                            'width' => $imageSize[0],
+                            'height' => $imageSize[1],
+                        ];
+                    }
+                }
+            }
+        }
+
+        return new ViewModel(
+            [
+                'quizRound' => $quizRound,
+                'photos' => $photos
+            ]
+        );
+    }
+
     public function teamsAction()
     {
         $quizId = $this->params('quizId');
