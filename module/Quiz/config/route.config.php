@@ -345,6 +345,16 @@ return [
                                     ],
                                 ],
                             ],
+                            'print-photos-optimized-a3' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/print-foto-ronde-optimized-a3',
+                                    'defaults' => [
+                                        'controller' => 'Quiz\Controller\Quiz',
+                                        'action' => 'printPhotosOptimizedA3',
+                                    ],
+                                ],
+                            ],
                             'teams' => [
                                 'type' => 'Literal',
                                 'options' => [

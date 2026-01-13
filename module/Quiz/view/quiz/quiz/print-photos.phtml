@@ -1,67 +1,287 @@
 <?php
-/** @var \Quiz\Entity\QuizRound $quizRound */
-
-$escape = new Zend\Escaper\Escaper();
+/**
+ * Photo printing view with modern professional layout
+ * Photos remain in database order (no resorting)
+ * Uses flexbox-based layout similar to print-photos-optimized.phtml
+ */
 ?>
-<div class="book">
-    <div class="page-landscape">
-        <div class="subpage-landscape">
-            <h1>Ronde 1</h1>
-            <div class="row">
-                <?php for ($j = 0; $j < 10; $j++): ?>
-                    <div class="border-radius" style="position: relative">
-                        <?php
-                            $quizRoundQuestion = $quizRound->getNextQuestion();
-                            if ($quizRoundQuestion):
-                        ?>
-                            <img style="height: 150px"
-                                src="/media-image/<?php echo $quizRoundQuestion->getQuestion()->getId(); ?>" alt="image question" />
-                        <?php endif ?>
-                        <div class="question-number">
-                            <?php echo $quizRoundQuestion->getQuestionNumber() / 10; ?>
-                        </div>
-                    </div>
-                <?php endfor ?>
-<!--                <div  class="border-radius" style="position: relative; border-color: #ff0000;">-->
-<!--                    <ul>-->
-<!--                        <li>Quiz bestaat uit 8 rondes</li>-->
-<!--                        <li>Ronde 1 is foto ronde, ronde 7 is muziek ronde</li>-->
-<!--                        <li>Pauzes na ronde 4 en ronde 6</li>-->
-<!--                        <li>Foto ronde 1 inleveren na ronde 4</li>-->
-<!--                        <li>Mobiele telefoons zijn <b><u>niet</u> toegestaan</b></li>-->
-<!--                        <li>Teams bestaan uit <b>maximaal 5 personen</b></li>-->
-<!--                    </ul>-->
-<!--                </div>-->
-            </div>
-            </div>
-            <?php $quizRound->getQuizRoundQuestions()->first(); ?>
-            <div class="row" style="margin-top: 20px; margin-right: 20px">
-            <?php for ($i = 0; $i < 2; $i++): ?>
-                <div class="col-sm-5" style="float: left">
-                    <ol start="<?php echo ($i * 5 + 1); ?>">
-                    <?php for ($j = 0; $j < 5; $j++): ?>
-                        <li>
-                            <?php
-                                $quizRoundQuestion = $quizRound->getNextQuestion();
-                                if ($quizRoundQuestion) {
-                                    if ($quizRound->getQuiz()->isLanguageEnUs() && !empty($quizRoundQuestion->getQuestion()->getQuestionEnUs())) {
-                                        print $quizRoundQuestion->getQuestion()->getQuestionEnUs();
-                                    } else {
-                                        print $quizRoundQuestion->getQuestion()->getQuestion();
-                                    }
-                                }
-                            ?>
-                        </li>
-                    <?php endfor ?>
-                    </ol>
-                </div>
-            <?php endfor ?>
-<!--                <div class="col-sm-2" style="margin-left: 30px; float: left">-->
-<!--                    <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRgs1gdCD13jgc6j1kx0PYyJNedeWuEB8Ts1p-gNx_SWxNI3kxV4wm8Vg" />-->
-<!--                </div>-->
-                <div class="col-sm-2" style="margin-left: 30px; float: left;">
-                    <img src="http://admin.quizis.nl/img/quizis.png" height="200"/>
-                </div>
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><?php echo $this->escapeHtml($quizRound->getQuiz()->getName()); ?> - Foto Ronde</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #c95a1f;
+      --primary-light: #e07a3f;
+      --primary-dark: #a04718;
+      --text-dark: #4a4a4a;
+      --text-light: #ffffff;
+      --bg-cream: #fdf8f4;
+      --border-light: #e8ddd5;
+    }
+
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+
+    @media print {
+      body {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        margin: 0;
+        padding: 0;
+      }
+      
+      html, body {
+        height: 210mm;
+        overflow: hidden;
+      }
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-cream);
+      color: var(--text-dark);
+      margin: 0;
+      padding: 0;
+    }
+
+    .page {
+      width: 297mm;
+      height: 210mm;
+      padding: 4mm;
+      margin: 0;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 2mm;
+      border-bottom: 2px solid var(--primary);
+      margin-bottom: 2mm;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      height: 10mm;
+    }
+
+    .no-phone-warning {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: var(--text-light);
+      padding: 6px 16px;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(201, 90, 31, 0.3);
+    }
+
+    .no-phone-icon {
+      width: 24px;
+      height: 24px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .phone-svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .phone-slash {
+      position: absolute;
+      width: 26px;
+      height: 2px;
+      background: var(--text-light);
+      transform: rotate(-45deg);
+      border-radius: 2px;
+    }
+
+    .round-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Photo Grid */
+    .photos-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5mm;
+      min-height: 0;
+      max-height: 145mm;
+    }
+
+    .photo-row {
+      flex: 1;
+      display: flex;
+      gap: 1.5mm;
+      align-items: stretch;
+    }
+
+    .photo-item {
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      border: 2px solid var(--border-light);
+      background: #f5f5f5;
+    }
+
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-number {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      color: var(--text-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    }
+
+    /* Questions Section */
+    .questions-section {
+      flex-shrink: 0;
+      margin-top: 1.5mm;
+      padding-top: 1.5mm;
+      border-top: 2px solid var(--primary);
+    }
+
+    .questions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2mm 4mm;
+    }
+
+    .question-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      background: var(--bg-cream);
+      border-radius: 4px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .question-num {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 15px;
+      min-width: 22px;
+    }
+
+    .question-text {
+      font-size: 14px;
+      color: var(--text-dark);
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <img src="<?php echo $this->basePath('new_project/logo_quizis.png'); ?>" alt="Quizis Logo" class="logo">
+      <h1 class="round-title">Foto Ronde</h1>
+      <div class="no-phone-warning">
+        <div class="no-phone-icon">
+          <svg class="phone-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+            <line x1="12" y1="18" x2="12" y2="18"></line>
+          </svg>
+          <div class="phone-slash"></div>
         </div>
+        <span>Geen telefoons!</span>
+      </div>
+    </header>
+
+    <div class="photos-container">
+      <?php foreach ($rows as $row): ?>
+        <div class="photo-row">
+          <?php 
+          $totalRatio = 0;
+          foreach ($row as $photo) {
+            $totalRatio += $photo['width'] / $photo['height'];
+          }
+          ?>
+          <?php foreach ($row as $photo): ?>
+            <?php
+            $aspectRatio = $photo['width'] / $photo['height'];
+            $flexGrow = ($aspectRatio / $totalRatio) * count($row);
+            ?>
+            <div class="photo-item" style="flex: <?php echo $flexGrow; ?> 1 0;">
+              <img src="<?php echo $this->url('media-image', ['questionId' => $photo['question']->getId()]); ?>" 
+                   alt="Foto <?php echo $photo['displayNumber']; ?>" loading="lazy">
+              <div class="photo-number"><?php echo $photo['displayNumber']; ?></div>
+            </div>
+          <?php endforeach; ?>
+        </div>
+      <?php endforeach; ?>
     </div>
-</div>
+
+    <section class="questions-section">
+      <div class="questions-grid">
+        <?php 
+        // Split into two columns: 1-5 and 6-10
+        $leftColumn = array_slice($photos, 0, 5);
+        $rightColumn = array_slice($photos, 5, 5);
+        ?>
+        <div>
+          <?php foreach ($leftColumn as $photo): ?>
+            <div class="question-item">
+              <span class="question-num"><?php echo $photo['displayNumber']; ?>.</span>
+              <span class="question-text"><?php echo $this->escapeHtml($photo['question']->getQuestion()); ?></span>
+            </div>
+          <?php endforeach; ?>
+        </div>
+        <div>
+          <?php foreach ($rightColumn as $photo): ?>
+            <div class="question-item">
+              <span class="question-num"><?php echo $photo['displayNumber']; ?>.</span>
+              <span class="question-text"><?php echo $this->escapeHtml($photo['question']->getQuestion()); ?></span>
+            </div>
+          <?php endforeach; ?>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

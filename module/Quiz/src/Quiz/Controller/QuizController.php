@@ -156,9 +156,50 @@ class QuizController extends AbstractCrudController
         $quiz = $this->quizService->getQuizById($quizId);
         $quizRound = $quiz->getPhotoRound();
 
+        // Collect photo dimensions in database order (no resorting)
+        $photos = [];
+        foreach ($quizRound->getQuizRoundQuestions() as $quizRoundQuestion) {
+            $question = $quizRoundQuestion->getQuestion();
+            if ($question->isImageQuestion()) {
+                $imagePath = 'data/images/' . $question->getId() . '.png';
+                if (file_exists($imagePath)) {
+                    $imageSize = getimagesize($imagePath);
+                    if ($imageSize) {
+                        $photos[] = [
+                            'question' => $question,
+                            'questionNumber' => $quizRoundQuestion->getQuestionNumber(),
+                            'quizRoundQuestion' => $quizRoundQuestion,
+                            'quizRoundQuestionId' => $quizRoundQuestion->getId(),
+                            'width' => $imageSize[0],
+                            'height' => $imageSize[1],
+                        ];
+                    }
+                }
+            }
+        }
+
+        // Distribute photos across two rows without changing order
+        // Just split them in half for display
+        $halfCount = ceil(count($photos) / 2);
+        $row1 = array_slice($photos, 0, $halfCount);
+        $row2 = array_slice($photos, $halfCount);
+        
+        // Assign display numbers sequentially
+        $displayNumber = 1;
+        foreach ($row1 as &$photo) {
+            $photo['displayNumber'] = $displayNumber++;
+        }
+        foreach ($row2 as &$photo) {
+            $photo['displayNumber'] = $displayNumber++;
+        }
+        
+        $rows = [$row1, $row2];
+
         return new ViewModel(
             [
-                'quizRound' => $quizRound
+                'quizRound' => $quizRound,
+                'photos' => array_merge($row1, $row2),
+                'rows' => $rows
             ]
         );
     }
@@ -294,6 +335,22 @@ class QuizController extends AbstractCrudController
         }
         
         return [$row1, $row2];
+    }
+
+    public function printPhotosOptimizedA3Action()
+    {
+        $this->layout('print/layout');
+
+        $quizId = $this->params('quizId');
+
+        $quiz = $this->quizService->getQuizById($quizId);
+        $quizRound = $quiz->getPhotoRound();
+
+        return new ViewModel(
+            [
+                'quizRound' => $quizRound
+            ]
+        );
     }
 
     public function saveOptimizedPhotoOrderAction()
