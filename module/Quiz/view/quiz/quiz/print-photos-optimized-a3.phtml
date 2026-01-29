@@ -309,12 +309,28 @@
 
       <section class="questions-section">
         <div class="questions-grid">
-          <?php foreach ($photos as $photo): ?>
+          <?php 
+          // Alternating order: 1,6,2,7,3,8,4,9,5,10
+          for ($i = 0; $i < 5 && $i < count($photos); $i++): 
+            $photo = $photos[$i];
+          ?>
             <div class="question-item">
               <span class="question-num"><?php echo $photo['displayNumber']; ?>.</span>
               <span class="question-text"><?php echo $this->escapeHtml($photo['question']->getQuestion()); ?></span>
             </div>
-          <?php endforeach; ?>
+          <?php 
+            // Show corresponding photo from second half (6-10)
+            if (($i + 5) < count($photos)):
+              $photo = $photos[$i + 5];
+          ?>
+            <div class="question-item">
+              <span class="question-num"><?php echo $photo['displayNumber']; ?>.</span>
+              <span class="question-text"><?php echo $this->escapeHtml($photo['question']->getQuestion()); ?></span>
+            </div>
+          <?php 
+            endif;
+          endfor; 
+          ?>
         </div>
       </section>
     </div>
@@ -362,15 +378,50 @@
 
       <section class="questions-section">
         <div class="questions-grid">
-          <?php foreach ($photos as $photo): ?>
+          <?php 
+          // Alternating order: 1,6,2,7,3,8,4,9,5,10
+          for ($i = 0; $i < 5 && $i < count($photos); $i++): 
+            $photo = $photos[$i];
+          ?>
             <div class="question-item">
               <span class="question-num"><?php echo $photo['displayNumber']; ?>.</span>
               <span class="question-text"><?php echo $this->escapeHtml($photo['question']->getQuestion()); ?></span>
             </div>
-          <?php endforeach; ?>
+          <?php 
+            // Show corresponding photo from second half (6-10)
+            if (($i + 5) < count($photos)):
+              $photo = $photos[$i + 5];
+          ?>
+            <div class="question-item">
+              <span class="question-num"><?php echo $photo['displayNumber']; ?>.</span>
+              <span class="question-text"><?php echo $this->escapeHtml($photo['question']->getQuestion()); ?></span>
+            </div>
+          <?php 
+            endif;
+          endfor; 
+          ?>
         </div>
       </section>
     </div>
   </div>
+
+  <script>
+    // Toggle object-fit between cover and contain on click
+    document.addEventListener('DOMContentLoaded', function() {
+      const images = document.querySelectorAll('.photo-item img');
+      
+      images.forEach(function(img) {
+        img.style.cursor = 'pointer';
+        
+        img.addEventListener('click', function() {
+          if (this.style.objectFit === 'contain') {
+            this.style.objectFit = 'cover';
+          } else {
+            this.style.objectFit = 'contain';
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>
