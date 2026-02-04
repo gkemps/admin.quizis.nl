@@ -7,6 +7,11 @@
     <div class="col-md-4">
         <h2>
             <?php echo $quiz->getName(); ?>
+            <a href="<?php echo $this->url('quiz/form', [], ['query' => ['id' => $quiz->getId()]]); ?>" 
+               title="Quiz aanpassen" 
+               style="font-size: 0.6em; margin-left: 10px;">
+                <i class="fa fa-pencil"></i>
+            </a>
         </h2>
         <?php if (null != $quiz->getCopyOfQuiz()): ?>
             <h3>(kopie:

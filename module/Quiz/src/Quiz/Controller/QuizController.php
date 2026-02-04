@@ -450,6 +450,30 @@ class QuizController extends AbstractCrudController
     }
 
     /**
+     * Override processAction to handle disabled template field
+     */
+    public function processAction()
+    {
+        /* @var $request \Zend\Http\PhpEnvironment\Request */
+        $request = $this->getRequest();
+        
+        // Check if this is an update (id in query string)
+        $quizId = $request->getQuery('id');
+        
+        // If updating existing quiz, restore template value (field is disabled so not submitted)
+        if ($quizId) {
+            $existingQuiz = $this->quizService->getById($quizId);
+            if ($existingQuiz) {
+                $postData = $request->getPost();
+                $postData->set(QuizForm::ELEM_TEMPLATE, $existingQuiz->getTemplate());
+            }
+        }
+        
+        // Call parent processAction
+        return parent::processAction();
+    }
+
+    /**
      * @param FormInterface $form
      * @return mixed
      */
@@ -495,6 +519,14 @@ class QuizController extends AbstractCrudController
 
     protected function getCrudFailureResponse()
     {
-        return $this->redirect()->toRoute('quiz');
+        /* @var $request \Zend\Http\PhpEnvironment\Request */
+        $request = $this->getRequest();
+        
+        $params = ['action' => 'form'];
+        if ($request->getQuery('id')) {
+            $params['id'] = $request->getQuery('id');
+        }
+        
+        return $this->redirect()->toRoute('quiz/form', [], ['query' => $params]);
     }
 }

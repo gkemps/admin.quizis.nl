@@ -76,6 +76,7 @@ class Quiz extends Form
         $this->add(
             [
                 'name' => self::ELEM_DATE,
+                'type' => 'Zend\Form\Element\Text',
                 'options' => [
                     'label' => 'datum',
                     'column-size' => $inputSize,
@@ -348,5 +349,48 @@ class Quiz extends Form
         ]);
 
         $this->add($submit);
+    }
+
+    public function bind($object, $flags = \Zend\Form\FormInterface::VALUES_NORMALIZED)
+    {
+        // Call parent bind first
+        $result = parent::bind($object, $flags);
+        
+        // Convert DateTime objects to strings and entities to IDs after binding
+        if ($object instanceof QuizEntity) {
+            // Convert date DateTime to string
+            $dateElement = $this->get(self::ELEM_DATE);
+            if ($dateElement->getValue() instanceof \DateTime) {
+                $dateElement->setValue($dateElement->getValue()->format('d-m-Y H:i:s'));
+            }
+            
+            // Convert whitelist deadline DateTime to string
+            $whitelistElement = $this->get(self::ELEM_WHITELIST_DEADLINE);
+            if ($whitelistElement->getValue() instanceof \DateTime) {
+                $whitelistElement->setValue($whitelistElement->getValue()->format('d-m-Y H:i:s'));
+            }
+            
+            // Convert Location entity to ID
+            $locationElement = $this->get(self::ELEM_LOCATION);
+            $locationValue = $locationElement->getValue();
+            if (is_object($locationValue) && method_exists($locationValue, 'getId')) {
+                $locationElement->setValue($locationValue->getId());
+            }
+            
+            // Convert Customer entity to ID
+            $customerElement = $this->get(self::ELEM_CUSTOMER);
+            $customerValue = $customerElement->getValue();
+            if (is_object($customerValue) && method_exists($customerValue, 'getId')) {
+                $customerElement->setValue($customerValue->getId());
+            }
+            
+            // Make template field disabled for existing quizzes (rondes are already created)
+            if ($object->getId() !== null) {
+                $templateElement = $this->get(self::ELEM_TEMPLATE);
+                $templateElement->setAttribute('disabled', 'disabled');
+            }
+        }
+        
+        return $result;
     }
 }

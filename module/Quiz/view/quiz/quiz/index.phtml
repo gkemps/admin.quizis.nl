@@ -26,6 +26,7 @@
                     <th>Locatie</th>
                     <th>Teams</th>
                     <th></th>
+                    <th style="width:50px"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -119,6 +120,13 @@
                                 <?php echo $quiz->getLocation()->getCity(); ?>
                             <?php endif ?>
                         </td>
+                        <td>
+                            <a href="<?php echo $this->url('quiz/form', [], ['query' => ['id' => $quiz->getId()]]); ?>" 
+                               title="Quiz aanpassen" 
+                               class="btn btn-xs btn-default">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                        </td>
                     </tr>
                 <?php endforeach ?>
                 </tbody>
@@ -142,6 +150,7 @@
                     <th>Naam</th>
                     <th>Locatie</th>
                     <th></th>
+                    <th style="width:50px"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -179,6 +188,13 @@
                             <?php if (!empty($quiz->getLocation()) && $quiz->getLocation()->getId() != \Quiz\Entity\Location::PRIVATE_LOCATION): ?>
                                 <?php echo $quiz->getLocation()->getCity(); ?>
                             <?php endif ?>
+                        </td>
+                        <td>
+                            <a href="<?php echo $this->url('quiz/form', [], ['query' => ['id' => $quiz->getId()]]); ?>" 
+                               title="Quiz aanpassen" 
+                               class="btn btn-xs btn-default">
+                                <i class="fa fa-pencil"></i>
+                            </a>
                         </td>
                     </tr>
                 <?php endforeach ?>
