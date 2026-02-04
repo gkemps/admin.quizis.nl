@@ -468,13 +468,18 @@ class QuizController extends AbstractCrudController
         // Calculate invoice data
         $invoiceData = $this->calculateInvoiceData($quiz);
 
-        return new ViewModel(
+        $viewModel = new ViewModel(
             [
                 'quiz' => $quiz,
                 'customer' => $quiz->getCustomer(),
                 'invoiceData' => $invoiceData
             ]
         );
+        
+        // Disable layout - render only the invoice template
+        $viewModel->setTerminal(true);
+        
+        return $viewModel;
     }
 
     /**

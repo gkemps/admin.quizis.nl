@@ -132,6 +132,7 @@
                             <?php if ($quiz->canBeInvoiced()): ?>
                                 <a href="<?php echo $this->url('quiz/detail/invoice', ['quizId' => $quiz->getId()]); ?>" 
                                    title="Factuur genereren" 
+                                   target="_blank"
                                    class="btn btn-xs btn-primary">
                                     <i class="fa fa-file-text-o"></i>
                                 </a>
@@ -211,6 +212,7 @@
                             <?php if ($quiz->canBeInvoiced()): ?>
                                 <a href="<?php echo $this->url('quiz/detail/invoice', ['quizId' => $quiz->getId()]); ?>" 
                                    title="Factuur genereren" 
+                                   target="_blank"
                                    class="btn btn-xs btn-primary">
                                     <i class="fa fa-file-text-o"></i>
                                 </a>

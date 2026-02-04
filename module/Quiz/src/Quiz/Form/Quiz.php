@@ -120,6 +120,9 @@ class Quiz extends Form
         $options["FVVV"] = "Halve Quiz zonder muziek - (FVVV)";
         $options["VVMV"] = "Halve Quiz zonder foto - (VVMV)";
         $options["VVVV"] = "Halve Quiz zonder foto/muziek (VVVV)";
+        $options["V"] = "Één ronde (V)";
+        $options["F"] = "Één ronde (F)";
+        $options["M"] = "Één ronde (M)";
 
         $select->setValueOptions($options);
         $this->add($select);
