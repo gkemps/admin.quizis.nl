@@ -8,6 +8,7 @@ use Quiz\Entity\QuizRound as QuizRoundEntity;
 use Quiz\Entity\Question as QuestionEntity;
 use Quiz\Entity\QuizLog as QuizLogEntity;
 use Quiz\Entity\Team as TeamEntity;
+use Quiz\Entity\Customer as CustomerEntity;
 
 /**
  * @ORM\Entity
@@ -43,6 +44,12 @@ class Quiz
      * @ORM\JoinColumn(name="quiz_Location_id", referencedColumnName="id")
      **/
     protected $location;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Customer")
+     * @ORM\JoinColumn(name="quiz_Customer_id", referencedColumnName="id")
+     **/
+    protected $customer;
 
     /**
      * @ORM\OneToOne(targetEntity="Quiz")
@@ -483,6 +490,24 @@ class Quiz
     public function setLocation($location)
     {
         $this->location = $location;
+    }
+
+    /**
+     * @return CustomerEntity
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param CustomerEntity $customer
+     * @return Quiz
+     */
+    public function setCustomer($customer)
+    {
+        $this->customer = $customer;
+        return $this;
     }
 
     /**

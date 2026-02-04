@@ -6,6 +6,7 @@ return [
             'Quiz\Controller\Brainstorm' => 'Quiz\Controller\BrainstormControllerFactory',
             'Quiz\Controller\Category' => 'Quiz\Controller\CategoryControllerFactory',
             'Quiz\Controller\Console' => 'Quiz\Controller\ConsoleControllerFactory',
+            'Quiz\Controller\Customer' => 'Quiz\Controller\CustomerControllerFactory',
             'Quiz\Controller\Index' => 'Quiz\Controller\IndexControllerFactory',
             'Quiz\Controller\Tag' => 'Quiz\Controller\TagControllerFactory',
             'Quiz\Controller\Temp' => 'Quiz\Controller\TempControllerFactory',

@@ -15,6 +15,7 @@ class Quiz extends Form
 
     const ELEM_NAME = 'name';
     const ELEM_LOCATION = 'location';
+    const ELEM_CUSTOMER = 'customer';
     const ELEM_DATE = 'date';
     const ELEM_TEMPLATE = 'template';
     const ELEM_LANGUAGE_EN_US = 'language_en_us';
@@ -134,6 +135,29 @@ class Quiz extends Form
         $options[0] = " --- Maak keuze --- ";
         foreach ($locations as $location) {
             $options[$location->getId()] = $location->toString();
+        }
+
+        $select->setValueOptions($options);
+
+        $this->add($select);
+
+        // Customer dropdown
+        $select = new Element\Select();
+        $select->setName(self::ELEM_CUSTOMER);
+        $select->setOptions([
+            'label' => 'klant',
+            'column-size' => $inputSize,
+            'label_attributes' => [
+                'class' => $columnSize,
+            ]
+        ]);
+
+        $customers = $this->entityManager->getRepository('Quiz\\Entity\\Customer')->findAll();
+        
+        $options = [];
+        $options[0] = " --- Geen klant geselecteerd --- ";
+        foreach ($customers as $customer) {
+            $options[$customer->getId()] = $customer->getName();
         }
 
         $select->setValueOptions($options);

@@ -24,7 +24,45 @@ return [
                     ],
                 ],
             ],
-
+            'customer' => [
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'may_terminate' => true,
+                'options' => [
+                    'route'    => '/klanten',
+                    'defaults' => [
+                        'controller' => 'Quiz\Controller\Customer',
+                        'action'     => 'index',
+                    ],
+                ],
+                'child_routes' => [
+                    'form' => [
+                        'type'      => 'Literal',
+                        'priority'  => 1000,
+                        'may_terminate' => true,
+                        'options'   => [
+                            'route' => '/form',
+                            'defaults' => [
+                                'controller' => 'Quiz\Controller\Customer',
+                                'action'     => 'form',
+                            ],
+                        ],
+                        'child_routes' => [
+                            'process' => [
+                                'type'      => 'Literal',
+                                'priority'  => 1000,
+                                'may_terminate' => true,
+                                'options'   => [
+                                    'route' => '/process',
+                                    'defaults' => [
+                                        'controller' => 'Quiz\Controller\Customer',
+                                        'action'     => 'process',
+                                    ],
+                                ],
+                            ]
+                        ]
+                    ]
+                ]
+            ],
             'tag' => [
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'may_terminate' => true,
