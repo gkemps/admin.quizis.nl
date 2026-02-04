@@ -413,6 +413,16 @@ return [
                                     ],
                                 ],
                             ],
+                            'invoice' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/factuur',
+                                    'defaults' => [
+                                        'controller' => 'Quiz\Controller\Quiz',
+                                        'action' => 'invoice',
+                                    ],
+                                ],
+                            ],
                         ]
                     ],
                     'form' => [

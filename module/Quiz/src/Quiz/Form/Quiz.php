@@ -28,6 +28,10 @@ class Quiz extends Form
     const ELEM_MAX_TEAM_MEMBERS = 'maxTeamMembers';
     const ELEM_MAX_TEAMS = 'maxTeams';
     const ELEM_WHITELIST_DEADLINE = 'whitelistDeadline';
+    const ELEM_PRICE_INVOICE = 'priceInvoice';
+    const ELEM_PRICE_PER_PERSON_INVOICE = 'pricePerPersonInvoice';
+    const ELEM_DISCOUNT_AMOUNT = 'discountAmount';
+    const ELEM_DISCOUNT_PERCENTAGE = 'discountPercentage';
     const ELEM_SUBMIT = 'submit';
 
     protected $quizService;
@@ -270,6 +274,83 @@ class Quiz extends Form
                 'attributes' => [
                     'type' => 'text',
                     'placeholder' => $date->format('d-m-Y H:00:00'),
+                ],
+            ]
+        );
+
+        $this->add(
+            [
+                'name' => self::ELEM_PRICE_INVOICE,
+                'options' => [
+                    'label' => 'factuur bedrag',
+                    'column-size' => $inputSize,
+                    'label_attributes' => [
+                        'class' => $columnSize,
+                    ],
+                ],
+                'attributes' => [
+                    'type' => 'number',
+                    'step' => '0.01',
+                    'min' => '0',
+                    'placeholder' => '0.00',
+                ],
+            ]
+        );
+
+        $this->add(
+            [
+                'name' => self::ELEM_PRICE_PER_PERSON_INVOICE,
+                'options' => [
+                    'label' => 'factuur bedrag per persoon',
+                    'column-size' => $inputSize,
+                    'label_attributes' => [
+                        'class' => $columnSize,
+                    ],
+                ],
+                'attributes' => [
+                    'type' => 'number',
+                    'step' => '0.01',
+                    'min' => '0',
+                    'placeholder' => '0.00',
+                ],
+            ]
+        );
+
+        $this->add(
+            [
+                'name' => self::ELEM_DISCOUNT_AMOUNT,
+                'options' => [
+                    'label' => 'kortings bedrag',
+                    'column-size' => $inputSize,
+                    'label_attributes' => [
+                        'class' => $columnSize,
+                    ],
+                ],
+                'attributes' => [
+                    'type' => 'number',
+                    'step' => '0.01',
+                    'min' => '0',
+                    'placeholder' => '0.00',
+                ],
+            ]
+        );
+
+        $this->add(
+            [
+                'name' => self::ELEM_DISCOUNT_PERCENTAGE,
+                'options' => [
+                    'label' => 'kortings percentage',
+                    'column-size' => $inputSize,
+                    'label_attributes' => [
+                        'class' => $columnSize,
+                    ],
+                ],
+                'attributes' => [
+                    'type' => 'number',
+                    'step' => '0.01',
+                    'min' => '0',
+                    'max' => '100',
+                    'placeholder' => '0',
                 ],
             ]
         );

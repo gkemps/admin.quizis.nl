@@ -335,4 +335,14 @@ class Team
         $this->teamMembers = $teamMembers;
         return $this;
     }
+
+    /**
+     * Get number of members in the team
+     * 
+     * @return int
+     */
+    public function getNumberOfMembers()
+    {
+        return (int) $this->teamMembers;
+    }
 }

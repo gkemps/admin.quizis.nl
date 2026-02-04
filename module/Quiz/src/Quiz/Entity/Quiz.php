@@ -164,6 +164,41 @@ class Quiz
     protected $whitelistDeadline;
 
     /**
+     * @ORM\Column(type="float", nullable=true)
+     *
+     * @var float
+     */
+    protected $priceInvoice;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     *
+     * @var float
+     */
+    protected $pricePerPersonInvoice;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     *
+     * @var float
+     */
+    protected $discountAmount;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     *
+     * @var float
+     */
+    protected $discountPercentage;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     *
+     * @var DateTime
+     */
+    protected $dateInvoiced;
+
+    /**
      * @ORM\OneToMany(targetEntity="QuizRound", mappedBy="quiz")
      * @ORM\OrderBy({"number" = "ASC"})
      *
@@ -680,5 +715,105 @@ class Quiz
         }
         
         return $count;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPriceInvoice()
+    {
+        return $this->priceInvoice;
+    }
+
+    /**
+     * @param float $priceInvoice
+     * @return Quiz
+     */
+    public function setPriceInvoice($priceInvoice)
+    {
+        $this->priceInvoice = ($priceInvoice === '' || $priceInvoice === null) ? null : $priceInvoice;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPricePerPersonInvoice()
+    {
+        return $this->pricePerPersonInvoice;
+    }
+
+    /**
+     * @param float $pricePerPersonInvoice
+     * @return Quiz
+     */
+    public function setPricePerPersonInvoice($pricePerPersonInvoice)
+    {
+        $this->pricePerPersonInvoice = ($pricePerPersonInvoice === '' || $pricePerPersonInvoice === null) ? null : $pricePerPersonInvoice;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscountAmount()
+    {
+        return $this->discountAmount;
+    }
+
+    /**
+     * @param float $discountAmount
+     * @return Quiz
+     */
+    public function setDiscountAmount($discountAmount)
+    {
+        $this->discountAmount = ($discountAmount === '' || $discountAmount === null) ? null : $discountAmount;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscountPercentage()
+    {
+        return $this->discountPercentage;
+    }
+
+    /**
+     * @param float $discountPercentage
+     * @return Quiz
+     */
+    public function setDiscountPercentage($discountPercentage)
+    {
+        $this->discountPercentage = ($discountPercentage === '' || $discountPercentage === null) ? null : $discountPercentage;
+        return $this;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getDateInvoiced()
+    {
+        return $this->dateInvoiced;
+    }
+
+    /**
+     * @param DateTime $dateInvoiced
+     * @return Quiz
+     */
+    public function setDateInvoiced($dateInvoiced)
+    {
+        $this->dateInvoiced = $dateInvoiced;
+        return $this;
+    }
+
+    /**
+     * Check if this quiz can be invoiced
+     * @return bool
+     */
+    public function canBeInvoiced()
+    {
+        return $this->customer !== null && 
+               ($this->priceInvoice !== null || $this->pricePerPersonInvoice !== null);
     }
 }

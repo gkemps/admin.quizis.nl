@@ -1,9 +1,17 @@
+<?php
+/** @var \Quiz\Entity\Quiz $quiz */
+/** @var \Quiz\Entity\Customer $customer */
+/** @var array $invoiceData */
+
+$this->headTitle('Factuur - ' . $quiz->getName());
+?>
+
 <!DOCTYPE html>
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quizis Factuur</title>
+  <title>Quizis Factuur - <?php echo $this->escapeHtml($quiz->getName()); ?></title>
   <style>
     * {
       margin: 0;
@@ -30,6 +38,17 @@
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
       margin: 0 auto;
       padding: 4rem;
+      position: relative;
+    }
+
+    .invoice-content {
+      min-height: calc(297mm - 8rem - 4rem);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .invoice-body {
+      flex: 1;
     }
 
     .header {
@@ -82,8 +101,8 @@
     }
 
     .invoice-meta {
-      font-size: 0.875rem;
-      line-height: 1.8;
+      font-size: 1.125rem;
+      line-height: 2;
     }
 
     .invoice-meta div {
@@ -92,10 +111,12 @@
 
     .invoice-meta .font-semibold {
       font-weight: 600;
+      font-size: 1.25rem;
     }
 
     .invoice-meta span + span {
       margin-left: 0.5rem;
+      font-size: 1.125rem;
     }
 
     .bill-to {
@@ -200,11 +221,11 @@
     }
 
     .payment-terms {
-      margin-top: 4rem;
       padding-top: 2rem;
       border-top: 1px solid #e5e7eb;
       font-size: 0.875rem;
       color: #6b7280;
+      margin-bottom: 1rem;
     }
 
     .payment-terms p {
@@ -212,10 +233,28 @@
     }
 
     .footer {
-      margin-top: 2rem;
       text-align: center;
       font-size: 0.75rem;
       color: #9ca3af;
+    }
+
+    .no-print {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .no-print button {
+      background-color: #c95b1f;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 0.25rem;
+    }
+
+    .no-print button:hover {
+      background-color: #a84a18;
     }
 
     /* Print Styles */
@@ -225,31 +264,84 @@
         margin: 0;
       }
 
-      body {
+      * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      body * {
+        visibility: hidden;
+      }
+
+      .invoice-page,
+      .invoice-page * {
+        visibility: visible;
+      }
+
+      html, body {
         margin: 0;
         padding: 0;
         background: white;
+        width: 210mm;
+        height: 297mm;
       }
 
       .page-container {
         padding: 0;
         background: white;
+        width: 210mm;
+        height: 297mm;
       }
 
       .invoice-page {
+        position: absolute;
+        left: 0;
+        top: 0;
         width: 210mm;
         height: 297mm;
+        min-height: 297mm;
         margin: 0;
         padding: 20mm;
         box-shadow: none !important;
         page-break-after: always;
+      }
+
+      .invoice-content {
+        min-height: calc(297mm - 40mm - 4rem);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .invoice-body {
+        flex: 1;
+      }
+
+      .payment-terms {
+        padding-top: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      .footer {
+        
+      }
+
+      .no-print {
+        display: none !important;
+        visibility: hidden !important;
       }
     }
   </style>
 </head>
 <body>
   <div class="page-container">
+    <div class="no-print">
+      <button onclick="window.print()">Print Factuur</button>
+      <button onclick="window.location.href='<?php echo $this->url('quiz'); ?>'">Terug naar overzicht</button>
+    </div>
+    
     <div class="invoice-page">
+      <div class="invoice-content">
+        <div class="invoice-body">
       <!-- Header with Logo and Company Info -->
       <div class="header">
         <div class="company-info">
@@ -273,15 +365,15 @@
           <div class="invoice-meta">
             <div>
               <span class="font-semibold">Factuurnummer:</span>
-              <span>{factuurnummer}</span>
+              <span><?php echo $this->escapeHtml($invoiceData['invoiceNumber']); ?></span>
             </div>
             <div>
               <span class="font-semibold">Datum:</span>
-              <span>{datum}</span>
+              <span><?php echo $invoiceData['invoiceDate']->format('d-m-Y'); ?></span>
             </div>
             <div>
               <span class="font-semibold">Vervaldatum:</span>
-              <span>{vervaldatum}</span>
+              <span><?php echo $invoiceData['dueDate']->format('d-m-Y'); ?></span>
             </div>
           </div>
         </div>
@@ -291,51 +383,58 @@
       <div class="bill-to">
         <h2>Factuuradres:</h2>
         <div class="bill-to-details">
-          <p class="font-semibold">{klant_naam}</p>
-          <p>{klant_adres}</p>
-          <p>{klant_postcode} {klant_plaats}</p>
-          <p>{klant_land}</p>
-          <p class="mt-2">BTW: {klant_btw}</p>
+          <p class="font-semibold"><?php echo $this->escapeHtml($customer->getName()); ?></p>
+          <?php if ($customer->getAddress()): ?>
+            <p><?php echo $this->escapeHtml($customer->getAddress()); ?></p>
+          <?php endif; ?>
+          <?php if ($customer->getPostalCode() || $customer->getCity()): ?>
+            <p>
+              <?php echo $this->escapeHtml($customer->getPostalCode()); ?> 
+              <?php echo $this->escapeHtml($customer->getCity()); ?>
+            </p>
+          <?php endif; ?>
+          <p>Nederland</p>
         </div>
       </div>
 
       <!-- Quiz Items Table -->
       <div>
         <table class="items-table">
-          <!---indien quiz op basis van priceInvoice -->  
-          <thead>
-            <tr>
-              <th>Omschrijving</th>
-              <th class="text-right">Prijs</th>
-              <th class="text-right">Totaal</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{naam quiz}</td>
-              <td class="text-right">{prijs quiz}</td>
-              <td class="text-right font-semibold">{totaal}</td>
-            </tr>
-          </tbody>
-          <!---quiz op basis van prijsPerPersonInvoice -->
-          <!---indien quiz op basis van prijsPerPersonInvoice -->  
-          <thead>
-            <tr>
-              <th>Omschrijving</th>
-              <th class="text-right">Deelnemers</th>
-              <th class="text-right">Prijs pp</th>
-              <th class="text-right">Totaal</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{naam quiz}</td>
-              <td class="text-right">{aantal deelnemers}</td>
-              <td class="text-right">{prijs per persoon}</td>
-              <td class="text-right font-semibold">{totaal}</td>
-            </tr>
-          </tbody>
-          <!---quiz op basis van prijsPerPersonInvoice -->
+          <?php if ($invoiceData['pricingModel'] === 'fixed'): ?>
+            <!-- Quiz on basis of priceInvoice -->
+            <thead>
+              <tr>
+                <th>Omschrijving</th>
+                <th class="text-right">Prijs</th>
+                <th class="text-right">Totaal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><?php echo $this->escapeHtml($quiz->getName()); ?></td>
+                <td class="text-right">€ <?php echo number_format($quiz->getPriceInvoice(), 2, ',', '.'); ?></td>
+                <td class="text-right font-semibold">€ <?php echo number_format($quiz->getPriceInvoice(), 2, ',', '.'); ?></td>
+              </tr>
+            </tbody>
+          <?php elseif ($invoiceData['pricingModel'] === 'perPerson'): ?>
+            <!-- Quiz on basis of pricePerPersonInvoice -->
+            <thead>
+              <tr>
+                <th>Omschrijving</th>
+                <th class="text-right">Deelnemers</th>
+                <th class="text-right">Prijs pp</th>
+                <th class="text-right">Totaal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><?php echo $this->escapeHtml($quiz->getName()); ?></td>
+                <td class="text-right"><?php echo $invoiceData['numberOfParticipants']; ?></td>
+                <td class="text-right">€ <?php echo number_format($invoiceData['pricePerPerson'], 2, ',', '.'); ?></td>
+                <td class="text-right font-semibold">€ <?php echo number_format($invoiceData['subtotal'], 2, ',', '.'); ?></td>
+              </tr>
+            </tbody>
+          <?php endif; ?>
         </table>
       </div>
 
@@ -344,18 +443,34 @@
         <div class="totals-box">
           <div class="totals-row">
             <span>Subtotaal:</span>
-            <span class="font-semibold">€ {subtotaal}</span>
+            <span class="font-semibold">€ <?php echo number_format($invoiceData['subtotal'], 2, ',', '.'); ?></span>
           </div>
+          <?php if ($invoiceData['discount'] > 0): ?>
+            <div class="totals-row">
+              <span>
+                Korting
+                <?php if ($quiz->getDiscountPercentage()): ?>
+                  (<?php echo number_format($quiz->getDiscountPercentage(), 2, ',', '.'); ?>%)
+                <?php endif; ?>:
+              </span>
+              <span class="font-semibold">- € <?php echo number_format($invoiceData['discount'], 2, ',', '.'); ?></span>
+            </div>
+            <div class="totals-row">
+              <span>Subtotaal na korting:</span>
+              <span class="font-semibold">€ <?php echo number_format($invoiceData['subtotalAfterDiscount'], 2, ',', '.'); ?></span>
+            </div>
+          <?php endif; ?>
           <div class="totals-row">
-            <span>BTW (21%):</span>
-            <span class="font-semibold">€ 23,63</span>
+            <span>BTW (<?php echo $invoiceData['vatPercentage']; ?>%):</span>
+            <span class="font-semibold">€ <?php echo number_format($invoiceData['vatAmount'], 2, ',', '.'); ?></span>
           </div>
           <div class="totals-total">
             <span>Totaal:</span>
-            <span>€ {totaal}</span>
+            <span>€ <?php echo number_format($invoiceData['total'], 2, ',', '.'); ?></span>
           </div>
         </div>
       </div>
+        </div>
 
       <!-- Payment Terms -->
       <div class="payment-terms">
@@ -365,6 +480,7 @@
       <!-- Footer -->
       <div class="footer">
         <p>Quizis B.V. | IBAN: NL41BUNQ2033722279 | info@quizis.nl | www.quizis.nl</p>
+      </div>
       </div>
     </div>
   </div>

@@ -449,6 +449,121 @@ class QuizController extends AbstractCrudController
         );
     }
 
+    public function invoiceAction()
+    {
+        $quizId = $this->params('quizId');
+        $quiz = $this->quizService->getQuizById($quizId);
+
+        // Check if quiz can be invoiced
+        if (!$quiz->canBeInvoiced()) {
+            return $this->redirect()->toRoute('quiz');
+        }
+
+        // Set dateInvoiced to current datetime if not already set
+        if ($quiz->getDateInvoiced() === null) {
+            $quiz->setDateInvoiced(new \DateTime());
+            $this->quizService->persist($quiz);
+        }
+
+        // Calculate invoice data
+        $invoiceData = $this->calculateInvoiceData($quiz);
+
+        return new ViewModel(
+            [
+                'quiz' => $quiz,
+                'customer' => $quiz->getCustomer(),
+                'invoiceData' => $invoiceData
+            ]
+        );
+    }
+
+    /**
+     * Calculate invoice data based on quiz pricing
+     * 
+     * @param QuizEntity $quiz
+     * @return array
+     */
+    private function calculateInvoiceData(QuizEntity $quiz)
+    {
+        $data = [];
+        
+        // Determine pricing model
+        if ($quiz->getPriceInvoice() !== null) {
+            $data['pricingModel'] = 'fixed';
+            $data['subtotal'] = $quiz->getPriceInvoice();
+        } elseif ($quiz->getPricePerPersonInvoice() !== null) {
+            $data['pricingModel'] = 'perPerson';
+            $data['pricePerPerson'] = $quiz->getPricePerPersonInvoice();
+            $data['numberOfParticipants'] = $this->calculateNumberOfParticipants($quiz);
+            $data['subtotal'] = $data['pricePerPerson'] * $data['numberOfParticipants'];
+        } else {
+            $data['pricingModel'] = 'none';
+            $data['subtotal'] = 0;
+        }
+
+        // Apply discount
+        $discount = 0;
+        if ($quiz->getDiscountAmount() !== null) {
+            $discount = $quiz->getDiscountAmount();
+        } elseif ($quiz->getDiscountPercentage() !== null) {
+            $discount = ($data['subtotal'] * $quiz->getDiscountPercentage()) / 100;
+        }
+        $data['discount'] = $discount;
+        $data['subtotalAfterDiscount'] = $data['subtotal'] - $discount;
+
+        // Calculate VAT (21%)
+        $data['vatPercentage'] = 21;
+        $data['vatAmount'] = ($data['subtotalAfterDiscount'] * $data['vatPercentage']) / 100;
+        
+        // Calculate total
+        $data['total'] = $data['subtotalAfterDiscount'] + $data['vatAmount'];
+
+        // Generate invoice number
+        $data['invoiceNumber'] = $this->generateInvoiceNumber($quiz);
+        
+        // Calculate due date (14 days from invoice date)
+        $invoiceDate = $quiz->getDateInvoiced() ?? new \DateTime();
+        $dueDate = clone $invoiceDate;
+        $dueDate->modify('+14 days');
+        $data['invoiceDate'] = $invoiceDate;
+        $data['dueDate'] = $dueDate;
+
+        return $data;
+    }
+
+    /**
+     * Calculate number of participants for per-person pricing
+     * 
+     * @param QuizEntity $quiz
+     * @return int
+     */
+    private function calculateNumberOfParticipants(QuizEntity $quiz)
+    {
+        $totalParticipants = 0;
+        
+        if ($quiz->getTeams()) {
+            foreach ($quiz->getTeams() as $team) {
+                if (!$team->isCanceled()) {
+                    $totalParticipants += $team->getNumberOfMembers();
+                }
+            }
+        }
+        
+        return $totalParticipants;
+    }
+
+    /**
+     * Generate invoice number based on quiz ID and date
+     * 
+     * @param QuizEntity $quiz
+     * @return string
+     */
+    private function generateInvoiceNumber(QuizEntity $quiz)
+    {
+        $invoiceDate = $quiz->getDateInvoiced() ?? new \DateTime();
+        return $invoiceDate->format('Y') . str_pad($quiz->getId(), 5, '0', STR_PAD_LEFT);
+    }
+
     /**
      * Override processAction to handle disabled template field
      */
