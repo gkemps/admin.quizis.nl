@@ -9,7 +9,7 @@ body {
     -moz-box-sizing: border-box;
 }
 .subpage {
-    padding: 1cm;
+    padding: 0.5cm;
     #border: 5px red solid;
     height: 25.7cm;
     #outline: 2cm #FFEAEA solid;

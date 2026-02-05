@@ -2,6 +2,90 @@
 /** @var \Quiz\Entity\Quiz $quiz */
 
 $escape = new Zend\Escaper\Escaper();
+
+// Dutch month and day names
+$dutchMonths = [
+    1 => 'januari', 2 => 'februari', 3 => 'maart', 4 => 'april',
+    5 => 'mei', 6 => 'juni', 7 => 'juli', 8 => 'augustus',
+    9 => 'september', 10 => 'oktober', 11 => 'november', 12 => 'december'
+];
+
+$dutchDays = [
+    'Monday' => 'maandag', 'Tuesday' => 'dinsdag', 'Wednesday' => 'woensdag',
+    'Thursday' => 'donderdag', 'Friday' => 'vrijdag', 'Saturday' => 'zaterdag', 'Sunday' => 'zondag'
+];
+
+// Format date in Dutch
+$date = $quiz->getDate();
+$dayName = $dutchDays[$date->format('l')];
+$day = $date->format('j');
+$month = $dutchMonths[(int)$date->format('n')];
+$year = $date->format('Y');
+$time = $date->format('H:i');
+
+// Find music round number and pause round
+$musicRoundNumber = null;
+$pauseRoundNumber = null;
+$numberOfRounds = $quiz->getNumberOfRounds();
+
+if ($numberOfRounds >= 6) {
+    $pauseRoundNumber = 4;
+} else {
+    $pauseRoundNumber = (int)ceil($numberOfRounds / 2);
+}
+
+foreach ($quiz->getQuizRounds() as $round) {
+    if (stripos($round->getTheme(), 'muziek') !== false) {
+        $musicRoundNumber = $round->getNumber();
+        break;
+    }
+}
+
+// Build practical tips HTML with placeholders replaced
+$practicalTipsPage1 = '<div>
+    <h1>Praktische tips presenteren pubquiz</h1>
+
+    <p>Een pubquiz (fenomeen overgenomen van de Angelsaktsische landen: <a href="https://nl.wikipedia.org/wiki/Pubquiz">https://nl.wikipedia.org/wiki/Pubquiz</a>) is een quiz die gespeeld wordt in kleine groepen en waarbij kennis, strijd en gezelligheid voorop staan. Lekker quizzen 1.0, met pen en papier en met de telefoons in de zak (of uit!). De quizmaster leest per ronde de vragen voor en de groepen schrijven hun antwoorden op het antwoordformulier. Rondes bestaan uit kennis rondes, fotorondes of muziekrondes. Hieronder wat praktische tips om de avond zo vlot mogelijk te laten verlopen. Maar voel je uiteraard vrij om de avond zo in te delen als jullie zelf willen!</p>
+
+    <h2>Voorafgaand</h2>
+
+    <ul>
+        <li>Verdeel je publiek in groepen van 4 tot 6 personen. Overleggen is belangrijk, maar werkt averechts als de groepen te groot worden. Maak de groepen dus niet te groot. Het leukste is als alle groepen divers en gelijk zijn. Dus mix je deelnemers zoveel in leeftijd, geslacht en achtergrond.</li>
+        <li>De quiz bestaat uit ' . $numberOfRounds . ' rondes. De eerste ronde is een fotoronde, ronde ' . ($musicRoundNumber ?: 'X') . ' is een muziekronde en de rest zijn kennis rondes. De quiz wordt gespeeld per ronde.</li>
+        <li>De quiz kent maar 1 spelregel: alle vragen worden beantwoord uit het blote hoofd (geen hulplijnen, geen overleg met andere groepen en belangrijkste: geen mobiele telefoon)</li>
+        <li>Het is gebruikelijk om na ronde ' . $pauseRoundNumber . ' een kleine pauze (+/- 10 min) te houden. Dit geeft de deelnemers de gelegenheid om de glazen bij te vullen, gebruik te maken van het toilet of op toch nog even de telefoon te checken</li>
+        <li>Geef iedere groep zijn eigen (sta)tafel en voorzie ze van antwoordvellen en 1 of meerdere pennen.</li>
+    </ul>
+
+    <h2>Tijdens de quiz</h2>
+
+    <ul>
+        <li>Heet de deelnemers welkom, vertel ze hoe de quiz gaat verlopen (hoeveel rondes, wanneer pauze en wat de regels zijn (geen telefoon!)</li>
+        <li>Na de introductie gaan we beginnen met ronde 1, de fotoronde. Verdeel de foto\'s zsm over de groepen, dan kan iedereen alvast beginnen met de quiz. Hoewel de quiz wordt gespeeld per ronde, is de fotoronde daar een uitzondering op. Vertel je deelnemers dat ze tot het einde van ronde ' . $pauseRoundNumber . ' (dus voor de 1e pauze) de tijd hebben de antwoorden van de foto\'s in te vullen. Op deze manier kan ieder groepje nog iets langer nadenken over die ene foto en hebben ze ook tussen het stellen van de vragen in de volgende rondes nog iets om over na te denken.</li>
+        <li>Geef de groepen rustig de gelegenheid om de eerste antwoorden van de fotoronde van ronde 1 op te schrijven, maar aangezien ze nog ruim de tijd hebben, kun je vrij snel beginnen aan ronde 2.</li>
+        <li>Iedere kennis ronde bestaat uit 10 vragen. Lees iedere vraag luid en duidelijk 2x voor. Neem ongeveer 30 tot 60 seconden voor het invullen van het antwoord. Je zult snel aan de zaal merken (geroezemoes zal toenemen) hoeveel pauze je moet inlassen voor het stellen van de volgende vraag. Na vraag 10 lees je nog 1x alle vragen snel voor, zodat de groepjes die nog een antwoord missen daar nog de kans voor krijgen.</li>
+        <li>Na het voorlezen van de laatste vraag geef je alle groepen nog 3 minuten de tijd om alle antwoorden op te schrijven. Daarna worden alle antwoordformulieren van deze ronde (dus alleen dit velletje) ingeleverd.</li>
+    </ul>
+</div>';
+
+$practicalTipsPage2 = '<div>
+    <h2>Tijdens de quiz (vervolg)</h2>
+
+    <ul>
+        <li>Mocht je hulp krijgen, dan kan iemand de vragen nakijken, terwijl jij de antwoorden geeft aan de zaal van de vorige ronde. Ben je alleen, dan kan je eerst de vragen nakijken en daarna de antwoorden geven. Eventueel kun je ook de vragen nakijken terwijl je de vragen stelt van de volgende ronde (voor meer ervaren quiz masters).</li>
+        <li>Na het nakijken van de ronde kan je de scores van de teams optellen bij de reeds behaalde punten. Bij >5 teams is het handig om hier bijvoorbeeld Excel of Google Sheets te gebruiken.</li>
+        <li>Het is gebruikelijk om na ronde ' . $pauseRoundNumber . ' een kleine pauze te houden. Geef, om de spanning extra te laten stijgen, aan het einde van de pauze een tussenstand. Het kan extra motivatie geven om daarbij de punten weg te laten (als verschillen tussen teams groot zijn) of om deze juist te benoemen (als teams elkaar weinig ontlopen)</li>
+        <li>Sommige rondes hebben een thema (staat tussen haakjes achter de ronde). Dit zou de deelnemers kunnen helpen om makkelijker de antwoorden te vinden. Aan de quizmaster de keuze om het thema, vooraf, tijdens of na de ronde prijs te geven. Vooraf maakt het voor de deelnemers iets makkelijker. Achteraf is leuker als de verschillen klein zijn, dan hebben de teams die het thema door hebben een voordeeltje.</li>
+        <li>Draai bij de muziekronde de bijbehorende mp3. Tien nummers worden afgespeeld met 2 seconde pauze ertussen. Het kan handig zijn om in deze pauzes het vraagnummer te benoemen, omdat sommige teams tijdens deze ronde de tel kwijt raken. Draai de mp3 twee keer achter elkaar, zodat alle teams 2x de kans krijgen om te luisteren. Laat de groepen het grote antwoordvel aan het einde gebruiken (extra groot met daarop kolommen titel & artiest).</li>
+    </ul>
+
+    <h2>Na de quiz</h2>
+
+    <ul>
+        <li>Reken de eindscore voor alle teams uit en presenteer deze tijdens de prijsuitreiking. Eeuwige roem voor de winnaars! Kan leuk zijn om prijzen te verdelen voor de top 3 en/of nummer laatst.</li>
+        <li>Wij horen het graag (als het kan inclusief leuke sfeer foto\'s naar info@quizis.nl) hoe de quiz is gegaan!</li>
+    </ul>
+</div>';
 ?>
 <div class="book">
     <div class="page">
@@ -9,17 +93,61 @@ $escape = new Zend\Escaper\Escaper();
             <div style="font-size: 60px; margin-top: 80px; text-align: center">
                 <?php echo $escape->escapeHtml($quiz->getName()); ?>
             </div>
-            <div style="text-align: center">
-                <?php echo $escape->escapeHtml($quiz->getDate()->format('l j F Y')); ?>
+            <div style="text-align: center; font-size: 18px; margin-top: 20px;">
+                <?php echo $escape->escapeHtml(ucfirst($dayName) . ' ' . $day . ' ' . $month . ' ' . $year); ?>
             </div>
-            <div style="text-align: center">
-                <?php echo $escape->escapeHtml($quiz->getDate()->format('H:i')); ?>
+            <div style="text-align: center; font-size: 18px; margin-top: 10px;">
+                <?php echo $escape->escapeHtml($time . ' uur'); ?>
             </div>
             <div style="font-size: 60px; margin-top: 150px; text-decoration: underline; text-align: center">
                 Vragen
             </div>
         </div>
     </div>
+    
+    <!-- Page 1 of Practical Tips -->
+    <div class="page">
+        <div class="subpage" style="font-size: 10pt; line-height: 1.4;">
+            <?php 
+            // Output page 1 with proper styling
+            echo str_replace(
+                ['<h1>', '<h2>', '<ul>', '<li>', '<p>', '<div>', '</div>'],
+                [
+                    '<h1 style="text-align: center; margin-bottom: 10px; font-size: 18pt; font-weight: bold;">',
+                    '<h2 style="margin-top: 12px; margin-bottom: 8px; font-size: 12pt; font-weight: bold;">',
+                    '<ul style="margin: 8px 0; padding-left: 20px;">',
+                    '<li style="margin-bottom: 6px;">',
+                    '<p style="margin: 8px 0;">',
+                    '',
+                    ''
+                ],
+                $practicalTipsPage1
+            );
+            ?>
+        </div>
+    </div>
+    
+    <!-- Page 2 of Practical Tips -->
+    <div class="page">
+        <div class="subpage" style="font-size: 10pt; line-height: 1.4;">
+            <?php 
+            // Output page 2 with proper styling
+            echo str_replace(
+                ['<h2>', '<ul>', '<li>', '<p>', '<div>', '</div>'],
+                [
+                    '<h2 style="margin-top: 12px; margin-bottom: 8px; font-size: 12pt; font-weight: bold;">',
+                    '<ul style="margin: 8px 0; padding-left: 20px;">',
+                    '<li style="margin-bottom: 6px;">',
+                    '<p style="margin: 8px 0;">',
+                    '',
+                    ''
+                ],
+                $practicalTipsPage2
+            );
+            ?>
+        </div>
+    </div>
+    
     <?php for($i=0; $i < $quiz->getNumberOfRounds(); $i++): ?>
         <div class="page">
             <div class="subpage">
