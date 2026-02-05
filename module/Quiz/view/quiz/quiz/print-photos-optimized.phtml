@@ -303,5 +303,24 @@
       </div>
     </section>
   </div>
+
+  <script>
+    // Toggle object-fit between cover and contain on click
+    document.addEventListener('DOMContentLoaded', function() {
+      const images = document.querySelectorAll('.photo-item img');
+      
+      images.forEach(function(img) {
+        img.style.cursor = 'pointer';
+        
+        img.addEventListener('click', function() {
+          if (this.style.objectFit === 'contain') {
+            this.style.objectFit = 'cover';
+          } else {
+            this.style.objectFit = 'contain';
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>
