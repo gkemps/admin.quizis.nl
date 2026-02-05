@@ -73,16 +73,25 @@ class QuizController extends AbstractCrudController
 
         $cats = $this->categoryService->getAllCategories();
         foreach ($cats as $cat) {
+            // Skip de categorie "Aangeleverd"
+            if ($cat->getName() === 'Aangeleverd') {
+                continue;
+            }
             $data[$cat->getId()] = 0;
             $labels[$cat->getId()] = $cat->getName();
         }
 
         foreach ($quiz->getQuizRounds() as $round) {
-            if (strtolower($round->getTheme()) == "muziek ronde" || strtolower($round->getTheme()) == "muziekronde") {
+            // Skip rondes die beginnen met "Muziekronde" (case-insensitive)
+            if (stripos($round->getTheme(), "Muziekronde") === 0 || stripos($round->getTheme(), "Muziek Ronde") === 0) {
                 continue;
             }
             foreach ($round->getQuizRoundQuestions() as $question) {
                 $cat = $question->getQuestion()->getCategory();
+                // Skip vragen uit de categorie "Aangeleverd"
+                if ($cat->getName() === 'Aangeleverd') {
+                    continue;
+                }
                 $data[$cat->getId()] += $question->getQuestion()->getPoints();
             }
         }
