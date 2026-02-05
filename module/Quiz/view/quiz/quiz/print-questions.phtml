@@ -36,9 +36,9 @@ $escape = new Zend\Escaper\Escaper();
                             (<?php echo $quizRound->getTheme(); ?>)
                         <?php endif ?>
                     </h1>
-                    <ol>
+                    <ol style="font-size: 13pt; line-height: 1.4;">
                         <?php foreach($quizRound->getQuizRoundQuestions() as $quizQuestion): ?>
-                            <li>
+                            <li style="margin-bottom: 0.6em;">
                                 <?php if ($quiz->isLanguageEnUs() && !empty($quizQuestion->getQuestion()->getQuestionEnUs())): ?>
                                     <?php echo $quizQuestion->getQuestion()->getQuestionEnUs(); ?>
                                 <?php else: ?>
@@ -50,7 +50,7 @@ $escape = new Zend\Escaper\Escaper();
                                     </strong>
                                 <?php endif ?>
                                 <br />
-                                <small style="font-size: 6pt">
+                                <small style="font-size: 9pt; color: #666;">
                                     <?php echo $quizQuestion->getQuestion()->getAnswer(); ?>
                                 </small>
                             </li>
