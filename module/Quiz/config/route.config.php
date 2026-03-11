@@ -415,11 +415,27 @@ return [
                             ],
                             'teams' => [
                                 'type' => 'Literal',
+                                'may_terminate' => true,
                                 'options' => [
                                     'route' => '/teams',
                                     'defaults' => [
                                         'controller' => 'Quiz\Controller\Quiz',
                                         'action' => 'teams',
+                                    ],
+                                ],
+                                'child_routes' => [
+                                    'team-paid' => [
+                                        'type' => 'Segment',
+                                        'options' => [
+                                            'route' => '/team/:teamId/betaald',
+                                            'constraints' => [
+                                                'teamId' => '\d+',
+                                            ],
+                                            'defaults' => [
+                                                'controller' => 'Quiz\Controller\Quiz',
+                                                'action' => 'teamPaid',
+                                            ],
+                                        ],
                                     ],
                                 ],
                             ],

@@ -89,6 +89,13 @@ class Team
     protected $datePaid;
 
     /**
+     * @ORM\Column(name="datePaidCash", type="datetime", nullable=true)
+     *
+     * @var DateTime
+     */
+    protected $datePaidCash;
+
+    /**
      * @ORM\Column(type="decimal", precision=15, scale=2, nullable=true)
      *
      * @var float
@@ -219,12 +226,38 @@ class Team
     }
 
     /**
+     * @return bool
+     */
+    public function isPaidCash()
+    {
+        return $this->datePaidCash !== null;
+    }
+
+    /**
      * @param int $paid
      * @return Team
      */
     public function setPaid($paid)
     {
         $this->paid = $paid;
+        return $this;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getDatePaidCash()
+    {
+        return $this->datePaidCash;
+    }
+
+    /**
+     * @param DateTime|null $datePaidCash
+     * @return Team
+     */
+    public function setDatePaidCash($datePaidCash)
+    {
+        $this->datePaidCash = $datePaidCash;
         return $this;
     }
 

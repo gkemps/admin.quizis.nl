@@ -487,6 +487,45 @@ class QuizController extends AbstractCrudController
         );
     }
 
+    public function teamPaidAction()
+    {
+        $quizId = $this->params('quizId');
+        $teamId = $this->params('teamId');
+
+        $request = $this->getRequest();
+        if (!$request->isPost()) {
+            return $this->redirect()->toRoute('quiz/detail/teams', ['quizId' => $quizId]);
+        }
+
+        $amount = $request->getPost('amount');
+        if ($amount === null || $amount === '') {
+            return $this->redirect()->toRoute('quiz/detail/teams', ['quizId' => $quizId]);
+        }
+
+        $amount = (float) str_replace(',', '.', $amount);
+        if ($amount < 0) {
+            return $this->redirect()->toRoute('quiz/detail/teams', ['quizId' => $quizId]);
+        }
+
+        $em = $this->quizService->getEntityManager();
+        /** @var \Quiz\Entity\Team $team */
+        $team = $em->getRepository('Quiz\Entity\Team')->find((int) $teamId);
+
+        if (!$team || $team->getQuiz()->getId() != $quizId) {
+            return $this->redirect()->toRoute('quiz/detail/teams', ['quizId' => $quizId]);
+        }
+
+        $team->setPaid(1);
+        $team->setAmount($amount);
+        $team->setDatePaid(new \DateTime());
+        $team->setDatePaidCash(new \DateTime());
+
+        $em->persist($team);
+        $em->flush();
+
+        return $this->redirect()->toRoute('quiz/detail/teams', ['quizId' => $quizId]);
+    }
+
     public function addRoundAction()
     {
         $quizId = $this->params('quizId');
