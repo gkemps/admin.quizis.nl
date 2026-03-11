@@ -145,7 +145,7 @@
     <div class="col-md-2">
         <a href="<?php echo $this->url('quiz/detail/print-questions', ['quizId' => $quiz->getId()]); ?>"
             target="_blank">
-            <button class="btn btn-default">
+            <button class="btn btn-info">
                 <i class="fa fa-file-text-o"></i>
                 Vragen printen++
             </button>
@@ -198,13 +198,13 @@
                title="Thema bewerken">
                 <i class="fa fa-pencil"></i>
             </a>
-            <?php if ($quizRound->hasAudio()): ?>
+            <!-- <?php if ($quizRound->hasAudio()): ?>
                 <a href="<?php echo $this->url('download-mp3-round', ['quizRoundId' => $quizRound->getId()]); ?>"><i
                         class="fa fa-download"></i></a>
-            <?php endif ?>
+            <?php endif ?> -->
             <?php if ($quizRound->hasAudio()): ?>
                 <a href="<?php echo $this->url('download-mp3-round-v2', ['quizRoundId' => $quizRound->getId()]); ?>"><i
-                        class="fa fa-download" style="color:#00ff00"></i></a>
+                        class="fa fa-download"></i></a>
             <?php endif ?>
         </h2>
         
