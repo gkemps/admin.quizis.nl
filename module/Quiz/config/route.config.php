@@ -343,6 +343,16 @@ return [
                                     ],
                                 ],
                             ],
+                            'print-questions-intern' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/print-vragen-intern',
+                                    'defaults' => [
+                                        'controller' => 'Quiz\Controller\Quiz',
+                                        'action' => 'printQuestionsInternal',
+                                    ],
+                                ],
+                            ],
                             'print-answers' => [
                                 'type' => 'Literal',
                                 'options' => [
@@ -370,6 +380,16 @@ return [
                                     'defaults' => [
                                         'controller' => 'Quiz\Controller\Quiz',
                                         'action' => 'printPhotosOptimized',
+                                    ],
+                                ],
+                            ],
+                            'optimize-photos' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/optimize-photos',
+                                    'defaults' => [
+                                        'controller' => 'Quiz\Controller\Quiz',
+                                        'action' => 'optimizePhotos',
                                     ],
                                 ],
                             ],

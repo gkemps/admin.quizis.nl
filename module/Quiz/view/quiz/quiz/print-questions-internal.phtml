@@ -1,0 +1,84 @@
+<?php
+/** @var \Quiz\Entity\Quiz $quiz */
+
+$escape = new Zend\Escaper\Escaper();
+
+// Dutch month and day names
+$dutchMonths = [
+    1 => 'januari', 2 => 'februari', 3 => 'maart', 4 => 'april',
+    5 => 'mei', 6 => 'juni', 7 => 'juli', 8 => 'augustus',
+    9 => 'september', 10 => 'oktober', 11 => 'november', 12 => 'december'
+];
+
+$dutchDays = [
+    'Monday' => 'maandag', 'Tuesday' => 'dinsdag', 'Wednesday' => 'woensdag',
+    'Thursday' => 'donderdag', 'Friday' => 'vrijdag', 'Saturday' => 'zaterdag', 'Sunday' => 'zondag'
+];
+
+// Format date in Dutch
+$date = $quiz->getDate();
+$dayName = $dutchDays[$date->format('l')];
+$day = $date->format('j');
+$month = $dutchMonths[(int)$date->format('n')];
+$year = $date->format('Y');
+$time = $date->format('H:i');
+?>
+<div class="book">
+    <div class="page">
+        <div class="subpage">
+            <div style="font-size: 60px; margin-top: 80px; text-align: center">
+                <?php echo $escape->escapeHtml($quiz->getName()); ?>
+            </div>
+            <div style="text-align: center; font-size: 18px; margin-top: 20px;">
+                <?php echo $escape->escapeHtml(ucfirst($dayName) . ' ' . $day . ' ' . $month . ' ' . $year); ?>
+            </div>
+            <div style="text-align: center; font-size: 18px; margin-top: 10px;">
+                <?php echo $escape->escapeHtml($time . ' uur'); ?>
+            </div>
+            <div style="font-size: 60px; margin-top: 150px; text-decoration: underline; text-align: center">
+                Vragen
+            </div>
+        </div>
+    </div>
+
+    <?php for($i=0; $i < $quiz->getNumberOfRounds(); $i++): ?>
+        <div class="page">
+            <div class="subpage">
+                <?php for ($j=0; $j < 1; $j++): ?>
+                    <?php
+                        $quizRound = $quiz->getNextRound();
+                        if (!$quizRound) {
+                            break;
+                        }
+                    ?>
+                    <h1>
+                        Ronde <?php echo $quizRound->getNumber(); ?>
+                        <?php if ($quizRound->getTheme() != ""): ?>
+                            (<?php echo $quizRound->getTheme(); ?>)
+                        <?php endif ?>
+                    </h1>
+                    <ol style="font-size: 13pt; line-height: 1.4;">
+                        <?php foreach($quizRound->getQuizRoundQuestions() as $quizQuestion): ?>
+                            <li style="margin-bottom: 0.6em;">
+                                <?php if ($quiz->isLanguageEnUs() && !empty($quizQuestion->getQuestion()->getQuestionEnUs())): ?>
+                                    <?php echo $quizQuestion->getQuestion()->getQuestionEnUs(); ?>
+                                <?php else: ?>
+                                    <?php echo $quizQuestion->getQuestion()->getQuestion(); ?>
+                                <?php endif ?>
+                                <?php if ($quizQuestion->getQuestion()->getPoints() > 1): ?>
+                                    <strong>
+                                        [<?php echo $quizQuestion->getQuestion()->getPoints();?>pt]
+                                    </strong>
+                                <?php endif ?>
+                                <br />
+                                <small style="font-size: 9pt; color: #666;">
+                                    <?php echo $quizQuestion->getQuestion()->getAnswer(); ?>
+                                </small>
+                            </li>
+                        <?php endforeach ?>
+                    </ol>
+                <?php endfor ?>
+            </div>
+        </div>
+    <?php endfor ?>
+</div>

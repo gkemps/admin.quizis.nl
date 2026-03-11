@@ -156,6 +156,21 @@ class QuizController extends AbstractCrudController
         );
     }
 
+    public function printQuestionsInternalAction()
+    {
+        $this->layout('print/layout');
+
+        $quizId = $this->params('quizId');
+
+        $quiz = $this->quizService->getQuizById($quizId);
+
+        return new ViewModel(
+            [
+                'quiz' => $quiz
+            ]
+        );
+    }
+
     public function printPhotosAction()
     {
         $this->layout('print/layout');
@@ -213,10 +228,8 @@ class QuizController extends AbstractCrudController
         );
     }
 
-    public function printPhotosOptimizedAction()
+    public function optimizePhotosAction()
     {
-        $this->layout('print/layout');
-
         $quizId = $this->params('quizId');
 
         $quiz = $this->quizService->getQuizById($quizId);
@@ -247,38 +260,81 @@ class QuizController extends AbstractCrudController
         // Distribute photos across two rows and assign display numbers
         $rows = $this->distributePhotos($photos);
 
-        // Automatically save the optimized order to database
-        $allPhotos = [];
+        // Save the optimized order to database
         $updates = [];
-        
         foreach ($rows as $row) {
             foreach ($row as $photo) {
                 $quizRoundQuestion = $photo['quizRoundQuestion'];
                 $oldNumber = $quizRoundQuestion->getQuestionNumber();
-                $newNumber = $photo['displayNumber'];
-                
-                // Collect updates for batch processing
-                if ($oldNumber != ($newNumber * 10)) {
+                if ($oldNumber != ($photo['displayNumber'] * 10)) {
                     $updates[] = [
                         'quizRoundQuestion' => $quizRoundQuestion,
-                        'newPosition' => $newNumber
+                        'newPosition' => $photo['displayNumber']
                     ];
                 }
-                
-                // Collect all photos with displayNumber for the view
-                $allPhotos[] = $photo;
             }
         }
-        
-        // Perform batch update
+
         if (!empty($updates)) {
             $this->quizRoundQuestionService->batchUpdateQuestionNumbers($updates);
-            
-            // Log changes
             foreach ($updates as $update) {
                 $this->quizLogService->createNewQuestionChangedLog($update['quizRoundQuestion']);
             }
         }
+
+        // Record the optimization timestamp
+        $quiz->setPhotosOptimized(new \DateTime());
+        $this->quizService->persist($quiz);
+
+        return $this->redirect()->toRoute('quiz/detail', ['quizId' => $quizId]);
+    }
+
+    public function printPhotosOptimizedAction()
+    {
+        $this->layout('print/layout');
+
+        $quizId = $this->params('quizId');
+
+        $quiz = $this->quizService->getQuizById($quizId);
+        $quizRound = $quiz->getPhotoRound();
+
+        // Collect photo dimensions (current DB order, no resorting)
+        $photos = [];
+        foreach ($quizRound->getQuizRoundQuestions() as $quizRoundQuestion) {
+            $question = $quizRoundQuestion->getQuestion();
+            if ($question->isImageQuestion()) {
+                $imagePath = 'data/images/' . $question->getId() . '.png';
+                if (file_exists($imagePath)) {
+                    $imageSize = getimagesize($imagePath);
+                    if ($imageSize) {
+                        $photos[] = [
+                            'question' => $question,
+                            'questionNumber' => $quizRoundQuestion->getQuestionNumber(),
+                            'quizRoundQuestion' => $quizRoundQuestion,
+                            'quizRoundQuestionId' => $quizRoundQuestion->getId(),
+                            'width' => $imageSize[0],
+                            'height' => $imageSize[1],
+                        ];
+                    }
+                }
+            }
+        }
+
+        // Split into two rows for display (current DB order, no optimization)
+        $halfCount = ceil(count($photos) / 2);
+        $row1 = array_slice($photos, 0, $halfCount);
+        $row2 = array_slice($photos, $halfCount);
+
+        $displayNumber = 1;
+        foreach ($row1 as &$photo) {
+            $photo['displayNumber'] = $displayNumber++;
+        }
+        foreach ($row2 as &$photo) {
+            $photo['displayNumber'] = $displayNumber++;
+        }
+
+        $rows = [$row1, $row2];
+        $allPhotos = array_merge($row1, $row2);
 
         return new ViewModel(
             [

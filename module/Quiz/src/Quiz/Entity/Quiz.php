@@ -199,6 +199,13 @@ class Quiz
     protected $dateInvoiced;
 
     /**
+     * @ORM\Column(type="datetime", nullable=true)
+     *
+     * @var DateTime|null
+     */
+    protected $photosOptimized;
+
+    /**
      * @ORM\OneToMany(targetEntity="QuizRound", mappedBy="quiz")
      * @ORM\OrderBy({"number" = "ASC"})
      *
@@ -804,6 +811,24 @@ class Quiz
     public function setDateInvoiced($dateInvoiced)
     {
         $this->dateInvoiced = $dateInvoiced;
+        return $this;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getPhotosOptimized()
+    {
+        return $this->photosOptimized;
+    }
+
+    /**
+     * @param DateTime|null $photosOptimized
+     * @return Quiz
+     */
+    public function setPhotosOptimized($photosOptimized)
+    {
+        $this->photosOptimized = $photosOptimized;
         return $this;
     }
 
