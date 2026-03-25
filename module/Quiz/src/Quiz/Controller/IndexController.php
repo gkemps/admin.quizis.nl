@@ -29,4 +29,11 @@ class IndexController extends AbstractActionController
             ]
         );
     }
+
+    public function offerteAction()
+    {
+        $viewModel = new ViewModel();
+        $viewModel->setTerminal(true);
+        return $viewModel;
+    }
 }

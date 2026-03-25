@@ -686,6 +686,17 @@ return [
                 ]
             ],
 
+            'offerte' => [
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => [
+                    'route' => '/offerte',
+                    'defaults' => [
+                        'controller' => 'Quiz\Controller\Index',
+                        'action' => 'offerte',
+                    ],
+                ],
+            ],
+
             'theme-rounds' => [
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'may_terminate' => true,

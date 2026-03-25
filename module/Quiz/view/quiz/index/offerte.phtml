@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quizis Offerte</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.5;
+      color: #1f2937;
+    }
+
+    .toolbar {
+      background: #f3f4f6;
+      border-bottom: 1px solid #d1d5db;
+      padding: 0.75rem 2rem;
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .toolbar span {
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin-right: 0.5rem;
+    }
+
+    .btn {
+      padding: 0.4rem 1rem;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .btn-print {
+      background: #c95b1f;
+      color: white;
+    }
+
+    .btn-print:hover {
+      background: #a84818;
+    }
+
+    .btn-add-row {
+      background: #16a34a;
+      color: white;
+    }
+
+    .btn-add-row:hover {
+      background: #15803d;
+    }
+
+    .btn-remove-row {
+      background: #dc2626;
+      color: white;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.75rem;
+    }
+
+    .btn-remove-row:hover {
+      background: #b91c1c;
+    }
+
+    .page-container {
+      min-height: 100vh;
+      background: #f9fafb;
+      padding: 2rem;
+    }
+
+    .offerte-page {
+      width: 210mm;
+      min-height: 297mm;
+      background: white;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      margin: 0 auto;
+      padding: 4rem;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 3rem;
+    }
+
+    .company-info {
+      flex: 1;
+    }
+
+    .company-info h2 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #c95b1f;
+      margin-bottom: 0.75rem;
+    }
+
+    .logo {
+      width: 12rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .company-details {
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    .company-details p {
+      margin-bottom: 0.25rem;
+    }
+
+    .company-details .font-semibold {
+      font-weight: 600;
+    }
+
+    .company-details .mt-3 {
+      margin-top: 0.75rem;
+    }
+
+    .company-details .mt-2 {
+      margin-top: 0.5rem;
+    }
+
+    .offerte-title-section {
+      flex: 1;
+      text-align: right;
+    }
+
+    .offerte-title {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #c95b1f;
+      margin-bottom: 1.5rem;
+    }
+
+    .offerte-meta-row {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      font-size: 0.875rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #e89264;
+    }
+
+    .offerte-meta-row > div {
+      display: flex;
+      gap: 0.5rem;
+      align-items: baseline;
+    }
+
+    .offerte-meta-row .font-semibold {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .bill-to {
+      margin-bottom: 3rem;
+    }
+
+    .bill-to h2 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #c95b1f;
+      margin-bottom: 0.75rem;
+    }
+
+    .bill-to-details {
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    .bill-to-details p {
+      margin-bottom: 0.25rem;
+    }
+
+    .bill-to-details .font-semibold {
+      font-weight: 600;
+    }
+
+    .items-table {
+      margin-bottom: 3rem;
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .items-table thead tr {
+      border-bottom: 2px solid #c95b1f;
+    }
+
+    .items-table th {
+      padding: 0.75rem 0.5rem;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .items-table th.text-right {
+      text-align: right;
+    }
+
+    .items-table tbody tr {
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .items-table td {
+      padding: 0.75rem 0.5rem;
+      vertical-align: middle;
+    }
+
+    .items-table td.text-right {
+      text-align: right;
+    }
+
+    .items-table td.font-semibold {
+      font-weight: 600;
+    }
+
+    .items-table td.td-actions {
+      text-align: right;
+      width: 2.5rem;
+    }
+
+    .totals-section {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 3rem;
+    }
+
+    .totals-box {
+      width: 20rem;
+      font-size: 0.875rem;
+    }
+
+    .totals-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-top: 1px solid #d1d5db;
+    }
+
+    .totals-row .font-semibold {
+      font-weight: 600;
+    }
+
+    .totals-total {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-top: 2px solid #c95b1f;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #c95b1f;
+      margin-top: 0.25rem;
+    }
+
+    .payment-terms {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid #e5e7eb;
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .payment-terms p {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: #374151;
+    }
+
+    /* Editable field styles */
+    [contenteditable="true"] {
+      outline: none;
+      border-bottom: 1px dashed #9ca3af;
+      min-width: 1em;
+      display: inline-block;
+    }
+
+    [contenteditable="true"]:focus {
+      border-bottom-color: #c95b1f;
+      background: #fff7f5;
+    }
+
+    [contenteditable="true"]:empty::before {
+      content: attr(data-placeholder);
+      color: #9ca3af;
+    }
+
+    /* Print Styles */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background: white;
+      }
+
+      .toolbar {
+        display: none !important;
+      }
+
+      .page-container {
+        padding: 0;
+        background: white;
+      }
+
+      .offerte-page {
+        width: 210mm;
+        height: 297mm;
+        margin: 0;
+        padding: 20mm;
+        box-shadow: none !important;
+        page-break-after: always;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+
+      .header,
+      .offerte-meta-row,
+      .bill-to,
+      .items-table,
+      .totals-section,
+      .payment-terms,
+      .footer {
+        page-break-inside: avoid;
+      }
+
+      .items-table tr {
+        page-break-inside: avoid;
+      }
+
+      .logo {
+        width: 12rem;
+        height: auto;
+      }
+
+      .offerte-title,
+      .company-info h2,
+      .bill-to h2,
+      .totals-total {
+        color: #c95b1f !important;
+      }
+
+      .offerte-meta-row {
+        border-bottom-color: #e89264 !important;
+      }
+
+      .items-table thead tr {
+        border-bottom-color: #c95b1f !important;
+      }
+
+      .totals-total {
+        border-top-color: #c95b1f !important;
+      }
+
+      [contenteditable="true"] {
+        border-bottom: none !important;
+        background: transparent !important;
+      }
+
+      .td-actions {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <span>Klik op tekst om te bewerken &mdash;</span>
+    <button class="btn btn-add-row" onclick="addRow()">+ Regel toevoegen</button>
+    <button class="btn btn-print" onclick="window.print()">&#128438; Afdrukken / PDF</button>
+  </div>
+
+  <div class="page-container">
+    <div class="offerte-page">
+
+      <!-- Header -->
+      <div class="header">
+        <div class="company-info">
+          <img
+            src="https://quizis.nl/images/custom/logo_quizis_large.png"
+            alt="Quizis Logo"
+            class="logo"
+          />
+          <h2>Offerte voor:</h2>
+          <div class="bill-to-details">
+            <p class="font-semibold"><span contenteditable="true" data-placeholder="Klantnaam">Klantnaam</span></p>
+            <p><span contenteditable="true" data-placeholder="Adres">Adresstraat 1</span></p>
+            <p>
+              <span contenteditable="true" data-placeholder="Postcode">1234 AB</span>&nbsp;
+              <span contenteditable="true" data-placeholder="Stad">Plaatsnaam</span>
+            </p>
+            <p>Nederland</p>
+          </div>
+        </div>
+
+        <div class="offerte-title-section">
+          <h1 class="offerte-title">OFFERTE</h1>
+          <div class="company-details">
+            <p class="font-semibold">Quizis B.V.</p>
+            <p>Meester Bakxstraat 17</p>
+            <p>5688SZ Oirschot</p>
+            <p>Nederland</p>
+            <p class="mt-3">BTW: NL857614423B01</p>
+            <p class="mt-3">KVK: 68841396</p>
+            <p class="mt-2">IBAN: NL41BUNQ2033722279</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Meta row -->
+      <div class="offerte-meta-row">
+        <div>
+          <span class="font-semibold">Offertenummer:</span>
+          <span contenteditable="true" data-placeholder="OFF-001"><?php echo date('Y') . '-' . str_pad(rand(1, 99), 3, '0', STR_PAD_LEFT); ?></span>
+        </div>
+        <div>
+          <span class="font-semibold">Datum:</span>
+          <span contenteditable="true" data-placeholder="dd-mm-jjjj"><?php echo date('d-m-Y'); ?></span>
+        </div>
+        <div>
+          <span class="font-semibold">Geldig tot:</span>
+          <span contenteditable="true" data-placeholder="dd-mm-jjjj"><?php echo date('d-m-Y', strtotime('+30 days')); ?></span>
+        </div>
+      </div>
+
+      <!-- Items table -->
+      <table class="items-table" id="items-table">
+        <thead>
+          <tr>
+            <th>Omschrijving</th>
+            <th class="text-right">Aantal</th>
+            <th class="text-right">Prijs</th>
+            <th class="text-right">Totaal</th>
+            <th class="td-actions"></th>
+          </tr>
+        </thead>
+        <tbody id="items-body">
+          <tr>
+            <td><span contenteditable="true" data-placeholder="Omschrijving">Pubquiz</span></td>
+            <td class="text-right"><span contenteditable="true" data-placeholder="1" data-role="qty" oninput="recalculate()">1</span></td>
+            <td class="text-right">€&nbsp;<span contenteditable="true" data-placeholder="0,00" data-role="price" oninput="recalculate()">0,00</span></td>
+            <td class="text-right font-semibold">€&nbsp;<span data-role="line-total">0,00</span></td>
+            <td class="td-actions"><button class="btn btn-remove-row" onclick="removeRow(this)">✕</button></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Totals -->
+      <div class="totals-section">
+        <div class="totals-box">
+          <div class="totals-row">
+            <span>Subtotaal:</span>
+            <span class="font-semibold">€&nbsp;<span id="subtotal">0,00</span></span>
+          </div>
+          <div class="totals-row">
+            <span>BTW (<span contenteditable="true" id="vat-pct" oninput="recalculate()">21</span>%):</span>
+            <span class="font-semibold">€&nbsp;<span id="vat-amount">0,00</span></span>
+          </div>
+          <div class="totals-total">
+            <span>Totaal:</span>
+            <span>€&nbsp;<span id="grand-total">0,00</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="payment-terms">
+        <p contenteditable="true">Deze offerte is vrijblijvend en geldig tot de aangegeven datum. Bij akkoord ontvangen wij graag een bevestiging per e-mail.</p>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <p>Quizis B.V. | IBAN: NL41BUNQ2033722279 | info@quizis.nl | www.quizis.nl</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function parseAmount(str) {
+      // Accept both comma and dot as decimal separator
+      return parseFloat(str.replace(/\./g, '').replace(',', '.')) || 0;
+    }
+
+    function formatAmount(num) {
+      return num.toFixed(2).replace('.', ',');
+    }
+
+    function recalculate() {
+      var rows = document.querySelectorAll('#items-body tr');
+      var subtotal = 0;
+
+      rows.forEach(function(row) {
+        var qtyEl = row.querySelector('[data-role="qty"]');
+        var priceEl = row.querySelector('[data-role="price"]');
+        var totalEl = row.querySelector('[data-role="line-total"]');
+
+        var qty = parseAmount(qtyEl ? qtyEl.innerText : '1');
+        var price = parseAmount(priceEl ? priceEl.innerText : '0');
+        var lineTotal = qty * price;
+
+        if (totalEl) {
+          totalEl.innerText = formatAmount(lineTotal);
+        }
+        subtotal += lineTotal;
+      });
+
+      var vatPctEl = document.getElementById('vat-pct');
+      var vatPct = parseAmount(vatPctEl ? vatPctEl.innerText : '21');
+      var vatAmount = subtotal * vatPct / 100;
+      var grandTotal = subtotal + vatAmount;
+
+      document.getElementById('subtotal').innerText = formatAmount(subtotal);
+      document.getElementById('vat-amount').innerText = formatAmount(vatAmount);
+      document.getElementById('grand-total').innerText = formatAmount(grandTotal);
+    }
+
+    function addRow() {
+      var tbody = document.getElementById('items-body');
+      var row = document.createElement('tr');
+      row.innerHTML =
+        '<td><span contenteditable="true" data-placeholder="Omschrijving">Omschrijving</span></td>' +
+        '<td class="text-right"><span contenteditable="true" data-placeholder="1" data-role="qty" oninput="recalculate()">1</span></td>' +
+        '<td class="text-right">&euro;&nbsp;<span contenteditable="true" data-placeholder="0,00" data-role="price" oninput="recalculate()">0,00</span></td>' +
+        '<td class="text-right font-semibold">&euro;&nbsp;<span data-role="line-total">0,00</span></td>' +
+        '<td class="td-actions"><button class="btn btn-remove-row" onclick="removeRow(this)">\u2715</button></td>';
+      tbody.appendChild(row);
+      recalculate();
+    }
+
+    function removeRow(btn) {
+      var row = btn.closest('tr');
+      row.parentNode.removeChild(row);
+      recalculate();
+    }
+
+    // Initial calculation
+    recalculate();
+  </script>
+</body>
+</html>
