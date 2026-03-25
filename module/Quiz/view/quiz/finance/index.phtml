@@ -1,0 +1,245 @@
+<?php
+/** @var int $year */
+/** @var int $quarter */
+/** @var int[] $years */
+/** @var array $factuurFinancials  [rows, totaalOmzetExclBtw, totaalBtw, totaalOmzetInclBtw, totaalKorting] */
+/** @var array $teamFinancials     [rows, totaalOmzetExclBtw, totaalBtw, totaalOmzetInclBtw] */
+/** @var float $totaalExclBtw */
+/** @var float $totaalBtw */
+/** @var float $totaalInclBtw */
+/** @var float $btwTarief */
+/** @var array $availableQuarters */
+
+$kwartaalNamen = ['Q1 (jan–mrt)', 'Q2 (apr–jun)', 'Q3 (jul–sep)', 'Q4 (okt–dec)'];
+
+$heeftFactuurQuizzen = !empty($factuurFinancials['rows']);
+$heeftTeamQuizzen    = !empty($teamFinancials['rows']);
+$heeftData           = $heeftFactuurQuizzen || $heeftTeamQuizzen;
+
+$this->headTitle('Finance – Kwartaaloverzicht');
+?>
+
+<h2>Finance <small>BTW- en omzetoverzicht per kwartaal</small></h2>
+
+<!-- Jaar- en kwartaalkiezer -->
+<form method="get" action="" class="form-inline" style="margin-bottom: 20px;">
+    <div class="form-group">
+        <label for="year" class="sr-only">Jaar</label>
+        <select name="year" id="year" class="form-control">
+            <?php foreach ($years as $y): ?>
+                <option value="<?php echo $y; ?>" <?php echo ($y === $year) ? 'selected' : ''; ?>>
+                    <?php echo $y; ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    &nbsp;
+    <div class="form-group">
+        <?php for ($q = 1; $q <= 4; $q++): ?>
+            <a href="?year=<?php echo $year; ?>&quarter=<?php echo $q; ?>"
+               class="btn <?php echo ($q === $quarter) ? 'btn-primary' : 'btn-default'; ?>">
+                <?php echo $kwartaalNamen[$q - 1]; ?>
+            </a>
+            &nbsp;
+        <?php endfor; ?>
+    </div>
+    &nbsp;
+    <button type="submit" class="btn btn-default">Toon jaar</button>
+</form>
+
+<h3>
+    Kwartaal <?php echo $quarter; ?> (<?php echo $kwartaalNamen[$quarter - 1]; ?>) &ndash; <?php echo $year; ?>
+</h3>
+
+<?php if (!$heeftData): ?>
+    <div class="alert alert-info">
+        Geen financiële gegevens gevonden voor dit kwartaal (geen gefactureerde quizzen en geen team-betalingen).
+    </div>
+<?php else: ?>
+
+<!-- ================================================================
+     TYPE 1: Factuur-quizzen (één totaalfactuur aan de klant)
+     ================================================================ -->
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong><i class="fa fa-file-text-o"></i> Type 1: Factuur-quizzen</strong>
+        <span class="text-muted" style="font-weight:normal; margin-left:8px;">Eén totaalfactuur per quiz aan de klant &mdash; gefilterd op factuurdatum</span>
+    </div>
+    <div class="panel-body">
+        <?php if (!$heeftFactuurQuizzen): ?>
+            <p class="text-muted">Geen factuur-quizzen in dit kwartaal.</p>
+        <?php else: ?>
+        <table class="table table-striped table-hover" style="margin-bottom:0;">
+            <thead>
+            <tr>
+                <th>Factuurdatum</th>
+                <th>Quiz</th>
+                <th>Klant</th>
+                <th class="text-right">Brutobedrag</th>
+                <th class="text-right">Korting</th>
+                <th class="text-right">Omzet excl. BTW</th>
+                <th class="text-right">BTW (<?php echo number_format($btwTarief * 100, 0); ?>%)</th>
+                <th class="text-right">Totaal incl. BTW</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($factuurFinancials['rows'] as $row): ?>
+                <?php /** @var \Quiz\Entity\Quiz $quiz */ $quiz = $row['quiz']; ?>
+                <tr>
+                    <td><?php echo $quiz->getDateInvoiced() ? $quiz->getDateInvoiced()->format('d-m-Y') : '–'; ?></td>
+                    <td>
+                        <a href="<?php echo $this->url('quiz/detail', ['quizId' => $quiz->getId()]); ?>">
+                            <?php echo $this->escapeHtml($quiz->getName()); ?>
+                        </a>
+                    </td>
+                    <td><?php echo $quiz->getCustomer() ? $this->escapeHtml($quiz->getCustomer()->getName()) : '–'; ?></td>
+                    <td class="text-right">
+                        <?php if ($row['brutoPrijs'] > 0): ?>
+                            &euro;&nbsp;<?php echo number_format($row['brutoPrijs'], 2, ',', '.'); ?>
+                        <?php else: ?>&ndash;<?php endif; ?>
+                    </td>
+                    <td class="text-right">
+                        <?php if ($row['korting'] > 0): ?>
+                            <span class="text-danger">&minus;&euro;&nbsp;<?php echo number_format($row['korting'], 2, ',', '.'); ?></span>
+                        <?php else: ?>&ndash;<?php endif; ?>
+                    </td>
+                    <td class="text-right">&euro;&nbsp;<?php echo number_format($row['nettoExclBtw'], 2, ',', '.'); ?></td>
+                    <td class="text-right">&euro;&nbsp;<?php echo number_format($row['btw'], 2, ',', '.'); ?></td>
+                    <td class="text-right"><strong>&euro;&nbsp;<?php echo number_format($row['inclBtw'], 2, ',', '.'); ?></strong></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+            <tfoot>
+            <tr class="active">
+                <td colspan="3"><strong>Subtotaal</strong></td>
+                <td class="text-right">
+                    <strong>&euro;&nbsp;<?php echo number_format(array_sum(array_column($factuurFinancials['rows'], 'brutoPrijs')), 2, ',', '.'); ?></strong>
+                </td>
+                <td class="text-right">
+                    <?php if ($factuurFinancials['totaalKorting'] > 0): ?>
+                        <span class="text-danger"><strong>&minus;&euro;&nbsp;<?php echo number_format($factuurFinancials['totaalKorting'], 2, ',', '.'); ?></strong></span>
+                    <?php else: ?>&ndash;<?php endif; ?>
+                </td>
+                <td class="text-right"><strong>&euro;&nbsp;<?php echo number_format($factuurFinancials['totaalOmzetExclBtw'], 2, ',', '.'); ?></strong></td>
+                <td class="text-right"><strong>&euro;&nbsp;<?php echo number_format($factuurFinancials['totaalBtw'], 2, ',', '.'); ?></strong></td>
+                <td class="text-right"><strong>&euro;&nbsp;<?php echo number_format($factuurFinancials['totaalOmzetInclBtw'], 2, ',', '.'); ?></strong></td>
+            </tr>
+            </tfoot>
+        </table>
+        <?php endif; ?>
+    </div>
+</div>
+
+<!-- ================================================================
+     TYPE 2: Team-quizzen (elk team betaalt individueel)
+     ================================================================ -->
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong><i class="fa fa-users"></i> Type 2: Team-quizzen</strong>
+        <span class="text-muted" style="font-weight:normal; margin-left:8px;">Teams betalen individueel &mdash; gefilterd op quizdatum &mdash; team.amount incl. BTW</span>
+    </div>
+    <div class="panel-body">
+        <?php if (!$heeftTeamQuizzen): ?>
+            <p class="text-muted">Geen team-quizzen met betaalde teams in dit kwartaal.</p>
+        <?php else: ?>
+        <table class="table table-striped table-hover" style="margin-bottom:0;">
+            <thead>
+            <tr>
+                <th>Quizdatum</th>
+                <th>Quiz</th>
+                <th>Betaalde teams</th>
+                <th>Geannuleerd</th>
+                <th class="text-right">Ontvangen (incl. BTW)</th>
+                <th class="text-right">Omzet excl. BTW</th>
+                <th class="text-right">BTW (<?php echo number_format($btwTarief * 100, 0); ?>%)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($teamFinancials['rows'] as $row): ?>
+                <?php /** @var \Quiz\Entity\Quiz $quiz */ $quiz = $row['quiz']; ?>
+                <tr>
+                    <td><?php echo $quiz->getDate()->format('d-m-Y'); ?></td>
+                    <td>
+                        <a href="<?php echo $this->url('quiz/detail', ['quizId' => $quiz->getId()]); ?>">
+                            <?php echo $this->escapeHtml($quiz->getName()); ?>
+                        </a>
+                    </td>
+                    <td><?php echo $row['aantalBetaald']; ?> team(s)</td>
+                    <td>
+                        <?php if ($row['aantalGeannuleerd'] > 0): ?>
+                            <span class="text-muted"><?php echo $row['aantalGeannuleerd']; ?></span>
+                        <?php else: ?>&ndash;<?php endif; ?>
+                    </td>
+                    <td class="text-right"><strong>&euro;&nbsp;<?php echo number_format($row['inclBtw'], 2, ',', '.'); ?></strong></td>
+                    <td class="text-right">&euro;&nbsp;<?php echo number_format($row['nettoExclBtw'], 2, ',', '.'); ?></td>
+                    <td class="text-right">&euro;&nbsp;<?php echo number_format($row['btw'], 2, ',', '.'); ?></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+            <tfoot>
+            <tr class="active">
+                <td colspan="4"><strong>Subtotaal</strong></td>
+                <td class="text-right"><strong>&euro;&nbsp;<?php echo number_format($teamFinancials['totaalOmzetInclBtw'], 2, ',', '.'); ?></strong></td>
+                <td class="text-right"><strong>&euro;&nbsp;<?php echo number_format($teamFinancials['totaalOmzetExclBtw'], 2, ',', '.'); ?></strong></td>
+                <td class="text-right"><strong>&euro;&nbsp;<?php echo number_format($teamFinancials['totaalBtw'], 2, ',', '.'); ?></strong></td>
+            </tr>
+            </tfoot>
+        </table>
+        <?php endif; ?>
+    </div>
+</div>
+
+<!-- ================================================================
+     BTW-AANGIFTE (gecombineerd)
+     ================================================================ -->
+<div class="panel panel-warning">
+    <div class="panel-heading">
+        <strong><i class="fa fa-calculator"></i> BTW-aangifte – Kwartaal <?php echo $quarter; ?> <?php echo $year; ?> (gecombineerd)</strong>
+    </div>
+    <div class="panel-body">
+        <p class="text-muted" style="margin-bottom: 15px;">
+            Combinatie van factuur-quizzen en team-quizzen. Gebruik dit voor de kwartaalaangifte bij de Belastingdienst.<br>
+            <em>Factuur-quizzen: priceInvoice excl. BTW. Team-quizzen: team.amount incl. BTW (teruggerekend).</em>
+        </p>
+
+        <table class="table" style="max-width: 680px;">
+            <thead>
+            <tr>
+                <th></th>
+                <th class="text-right">Factuur-quizzen</th>
+                <th class="text-right">Team-quizzen</th>
+                <th class="text-right"><strong>Totaal</strong></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Omzet excl. BTW</td>
+                <td class="text-right">&euro;&nbsp;<?php echo number_format($factuurFinancials['totaalOmzetExclBtw'], 2, ',', '.'); ?></td>
+                <td class="text-right">&euro;&nbsp;<?php echo number_format($teamFinancials['totaalOmzetExclBtw'], 2, ',', '.'); ?></td>
+                <td class="text-right"><strong>&euro;&nbsp;<?php echo number_format($totaalExclBtw, 2, ',', '.'); ?></strong></td>
+            </tr>
+            <tr>
+                <td>BTW <?php echo number_format($btwTarief * 100, 0); ?>% (rubriek 1a)</td>
+                <td class="text-right">&euro;&nbsp;<?php echo number_format($factuurFinancials['totaalBtw'], 2, ',', '.'); ?></td>
+                <td class="text-right">&euro;&nbsp;<?php echo number_format($teamFinancials['totaalBtw'], 2, ',', '.'); ?></td>
+                <td class="text-right"><strong>&euro;&nbsp;<?php echo number_format($totaalBtw, 2, ',', '.'); ?></strong></td>
+            </tr>
+            <tr>
+                <td>Totaal incl. BTW</td>
+                <td class="text-right">&euro;&nbsp;<?php echo number_format($factuurFinancials['totaalOmzetInclBtw'], 2, ',', '.'); ?></td>
+                <td class="text-right">&euro;&nbsp;<?php echo number_format($teamFinancials['totaalOmzetInclBtw'], 2, ',', '.'); ?></td>
+                <td class="text-right"><strong>&euro;&nbsp;<?php echo number_format($totaalInclBtw, 2, ',', '.'); ?></strong></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr class="warning">
+                <td colspan="3"><strong>Te betalen BTW (rubriek 1a)</strong></td>
+                <td class="text-right"><strong class="text-warning">&euro;&nbsp;<?php echo number_format($totaalBtw, 2, ',', '.'); ?></strong></td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<?php endif; ?>
+

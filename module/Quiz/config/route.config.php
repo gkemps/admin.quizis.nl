@@ -14,6 +14,18 @@ return [
                 ],
             ],
 
+            'finance' => [
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'may_terminate' => true,
+                'options' => [
+                    'route' => '/finance',
+                    'defaults' => [
+                        'controller' => 'Quiz\Controller\Finance',
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+
             'category' => [
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => [

@@ -5,6 +5,7 @@ return [
             'Quiz\Service\Brainstorm' => 'Quiz\Service\BrainstormServiceFactory',
             'Quiz\Service\Category' => 'Quiz\Service\CategoryFactory',
             'Quiz\Service\Customer' => 'Quiz\Service\CustomerFactory',
+            'Quiz\Service\Finance'   => 'Quiz\Service\FinanceFactory',
             'Quiz\Service\Tag' => 'Quiz\Service\TagFactory',
             \Quiz\Service\ThemeRoundService::class => \Quiz\Service\ThemeRoundServiceFactory::class,
             'Quiz\Service\ThemeRoundQuestionService' => 'Quiz\Service\ThemeRoundQuestionServiceFactory',
